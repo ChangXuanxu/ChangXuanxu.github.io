@@ -666,30 +666,35 @@ function updateStatusDisplay() {
     }
 }
 
-// 渲染棋盘
-function renderBoard(circle = gameState.currentCircle) {
+// 渲染棋盘 - 核心修复：始终渲染当前圈层的棋盘
+function renderBoard() {
     const boardContainer = document.getElementById("board-container");
     const boardTitle = document.getElementById("board-title");
     
-    // 设置标题
-    if (circle === "outer") {
+    // 设置标题 - 根据当前圈层动态更新
+    if (gameState.currentCircle === "outer") {
         boardTitle.textContent = "第一圈（外圈）：科举出身+地方基层官";
-    } else if (circle === "middle") {
+    } else if (gameState.currentCircle === "middle") {
         boardTitle.textContent = "第二圈（中圈）：省级官+中央核心官";
     } else {
         boardTitle.textContent = "第三圈（内圈）：极品荣誉衔";
     }
     
-    // 获取对应圈层的格子
+    // 获取当前圈层的所有格子
     let grids = [];
-    if (circle === "outer") grids = officialGrid.outer;
-    else if (circle === "middle") grids = officialGrid.middle;
-    else grids = officialGrid.inner;
+    if (gameState.currentCircle === "outer") {
+        grids = officialGrid.outer;
+    } else if (gameState.currentCircle === "middle") {
+        grids = officialGrid.middle;
+    } else {
+        grids = officialGrid.inner;
+    }
     
     // 渲染格子
     boardContainer.innerHTML = "";
     grids.forEach(grid => {
         const gridItem = document.createElement("div");
+        // 关键修复：current类只给当前选中的格子
         gridItem.className = `grid-item ${grid.circle} ${grid.type === "special" ? "special" : ""} ${grid.id === gameState.currentId ? "current" : ""}`;
         
         gridItem.innerHTML = `
@@ -785,6 +790,42 @@ function gameSettlement(isWin = false) {
 }
 
 // ===================== 核心游戏逻辑 =====================
+// 核心修复：根据ID获取对应的圈层
+function getCircleById(gridId) {
+    if (gridId >= 1 && gridId <= 38) return "outer";
+    if (gridId >= 39 && gridId <= 69) return "middle";
+    if (gridId >= 70 && gridId <= 77) return "inner";
+    return "outer"; // 默认外圈
+}
+
+// 核心修复：处理特殊跨圈规则
+function handleSpecialCrossCircle(currentId, pointType) {
+    const currentGrid = gameState.allGrids.find(g => g.id === currentId);
+    
+    // 1. 状元（ID15）必须升1级到知县（ID16）
+    if (currentId === 15) {
+        return 16;
+    }
+    
+    // 2. 知府（ID33）必须进入中圈，默认到布政使参政（ID39）
+    if (currentId === 33) {
+        return 39;
+    }
+    
+    // 3. 殿阁大学士（ID64）必须进入内圈，默认到太子太师（ID70）
+    if (currentId === 64) {
+        return 70;
+    }
+    
+    // 4. 太傅（ID76）掷德直接到太师（ID77）
+    if (currentId === 76 && pointType === "de") {
+        return 77;
+    }
+    
+    // 无特殊规则，返回原ID
+    return currentId;
+}
+
 // 根据掷点获取目标格子ID
 function getTargetIdByPoint(pointType) {
     const currentGrid = getCurrentGrid();
@@ -792,6 +833,7 @@ function getTargetIdByPoint(pointType) {
     
     // 记录操作前的官职
     const prevGrid = { ...currentGrid };
+    const prevId = currentGrid.id;
     
     // 处理特殊规则
     // 1. 首次掷骰子（白丁）
@@ -808,7 +850,7 @@ function getTargetIdByPoint(pointType) {
         const resultText = `触发贪墨！从【${prevGrid.name}】贬为【白丁】，重新开始！剩余次数：${gameState.diceRemain}/100`;
         updateResultDetail(resultText);
         updateRecentResults(resultText, "fail");
-        gameState.currentCircle = "outer";
+        gameState.currentCircle = "outer"; // 重置为外圈
         gameState.addTitleBonus = false;
         return 1;
     }
@@ -847,18 +889,15 @@ function getTargetIdByPoint(pointType) {
     // 计算目标ID
     let targetId = currentGrid.id + step;
     
+    // 处理特殊跨圈规则
+    targetId = handleSpecialCrossCircle(targetId, pointType);
+    
     // 边界处理
     if (targetId < 1) targetId = 1;
     if (targetId > 77) targetId = 77;
     
-    // 圈层切换 - 修正判断逻辑
-    if (targetId >= 1 && targetId <= 38) {
-        gameState.currentCircle = "outer";
-    } else if (targetId >= 39 && targetId <= 69) {
-        gameState.currentCircle = "middle";
-    } else if (targetId >= 70 && targetId <= 77) {
-        gameState.currentCircle = "inner";
-    }
+    // 核心修复：更新圈层（根据最终目标ID）
+    gameState.currentCircle = getCircleById(targetId);
     
     // 处理特殊格子
     const targetGrid = gameState.allGrids.find(g => g.id === targetId) || currentGrid;
@@ -874,21 +913,21 @@ function getTargetIdByPoint(pointType) {
             const randomPoint = ["de", "cai", "gong", "zang"][Math.floor(Math.random() * 4)];
             const pointText = {de: "德", cai: "才", gong: "功", zang: "赃"}[randomPoint];
             specialText = `（触发京察：随机掷出${pointText}，${randomPoint === "de" || randomPoint === "cai" ? "升1级" : "降1级"}）`;
-            targetId = randomPoint === "de" || randomPoint === "cai" ? targetId + 1 : targetId - 1;
-            // 修正圈层判断
-            if (targetId >= 1 && targetId <= 38) gameState.currentCircle = "outer";
-            else if (targetId >= 39 && targetId <= 69) gameState.currentCircle = "middle";
-            else if (targetId >= 70 && targetId <= 77) gameState.currentCircle = "inner";
+            
+            // 京察升降处理
+            const newStep = randomPoint === "de" || randomPoint === "cai" ? 1 : -1;
+            targetId += newStep;
+            
+            // 边界和圈层检查
+            if (targetId < 1) targetId = 1;
+            if (targetId > 77) targetId = 77;
+            gameState.currentCircle = getCircleById(targetId);
             
             resultType = randomPoint === "de" || randomPoint === "cai" ? "success" : "fail";
         } else if (targetGrid.name === "外放") {
             specialText = "（触发外放：降3级）";
             targetId = Math.max(1, targetId - 3);
-            // 修正圈层判断
-            if (targetId >= 1 && targetId <= 38) gameState.currentCircle = "outer";
-            else if (targetId >= 39 && targetId <= 69) gameState.currentCircle = "middle";
-            else if (targetId >= 70 && targetId <= 77) gameState.currentCircle = "inner";
-            
+            gameState.currentCircle = getCircleById(targetId);
             resultType = "fail";
         } else if (targetGrid.name === "贪墨") {
             specialText = "（触发贪墨：贬为白丁）";
@@ -904,7 +943,8 @@ function getTargetIdByPoint(pointType) {
     // 生成结果文本
     let resultText = "";
     const pointName = {de: "德", cai: "才", gong: "功", zang: "赃"}[pointType] || "未知";
-    const circleText = gameState.currentCircle !== prevGrid.circle ? `（进入${gameState.currentCircle === "outer" ? "外圈" : gameState.currentCircle === "middle" ? "中圈" : "内圈"}）` : "";
+    const circleText = gameState.currentCircle !== prevGrid.circle ? 
+        `（进入${gameState.currentCircle === "outer" ? "外圈" : gameState.currentCircle === "middle" ? "中圈" : "内圈"}）` : "";
     
     if (step > 0 || (pointType === "gong" && step === 0)) {
         resultText = `掷出${pointName}${bonusText}：从【${prevGrid.name}】升至【${finalTargetGrid.name}】${circleText}${specialText}！剩余次数：${gameState.diceRemain}/100`;
@@ -976,7 +1016,7 @@ function rollDice() {
         
         // 更新显示
         updateStatusDisplay();
-        renderBoard();
+        renderBoard(); // 核心修复：每次操作后重新渲染棋盘
         
         // 检查次数是否用尽
         if (gameState.diceRemain <= 0 && !gameState.gameWon) {
@@ -989,7 +1029,7 @@ function rollDice() {
                 const tanmoTarget = getTargetIdByPoint("tanmo");
                 gameState.currentId = tanmoTarget;
                 updateStatusDisplay();
-                renderBoard();
+                renderBoard(); // 贪墨后也重新渲染棋盘
             }, 1500);
         }
         
@@ -999,6 +1039,7 @@ function rollDice() {
         }
     });
 }
+
 // 重新开始游戏
 function resetGame() {
     gameState.currentId = 1;
@@ -1019,8 +1060,7 @@ function resetGame() {
     updateStatusDisplay();
     updateResultDetail("点击「掷骰子」开始游戏，首次掷骰子自动升至童生 | 每局限100次掷骰子");
     updateRecentResults("游戏重置，等待开始");
-    renderBoard();
-    
+    renderBoard(); // 重置后重新渲染外圈棋盘
 }
 
 // ===================== 事件绑定 =====================
