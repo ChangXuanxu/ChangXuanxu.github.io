@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博饼小游戏 - 士多啤梨除草机</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏 - 保持风格统一 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .navbar-content {
+            width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .nav-menu a {
+            margin: 0 12px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .nav-menu a:hover {
+            color: #007bff;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            padding: 8px 16px;
+            background: #6c757d;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        /* 游戏主容器 */
+        .game-container {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        /* 游戏标题 */
+        .game-title {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* 骰子容器 */
+        .dice-container {
+            display: flex;
+            gap: 20px;
+            margin: 30px 0;
+            perspective: 1000px;
+        }
+
+        /* 骰子样式 */
+        .dice {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #dc3545;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.5s ease;
+            user-select: none;
+        }
+
+        /* 骰子滚动动画 */
+        .dice.rolling {
+            transform: rotateX(360deg) rotateY(360deg);
+        }
+
+        /* 结果展示区 */
+        .result-area {
+            text-align: center;
+            margin: 20px 0;
+            min-height: 80px;
+        }
+
+        .prize-text {
+            font-size: 28px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .desc-text {
+            font-size: 18px;
+            color: #666;
+        }
+
+        /* 控制按钮 */
+        .roll-btn {
+            padding: 14px 48px;
+            font-size: 20px;
+            border: none;
+            border-radius: 8px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+
+        .roll-btn:hover {
+            background: #0056b3;
+        }
+
+        .roll-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        /* 规则说明 */
+        .rule-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .rule-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .rule-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .rule-item {
+            padding: 8px;
+            border-left: 3px solid #007bff;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .dice-container {
+                gap: 10px;
+            }
+            .dice {
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
+            }
+            .game-title {
+                font-size: 28px;
+            }
+            .prize-text {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="logo">士多啤梨除草机</a>
+            <div class="nav-menu">
+                <a href="index.html">首页</a>
+                <a href="fun-tools.html">趣味组件</a>
+                <a href="blog.html">个人博客</a>
+                <a href="games.html">小游戏</a>
+                <a href="#">联系我</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 返回按钮 -->
+    <a href="games.html" class="back-btn">← 返回小游戏合集</a>
+
+    <!-- 游戏容器 -->
+    <div class="game-container">
+        <h1 class="game-title">闽南博饼小游戏</h1>
+
+        <!-- 骰子区域 -->
+        <div class="dice-container" id="diceContainer">
+            <div class="dice" id="dice1">⚀</div>
+            <div class="dice" id="dice2">⚀</div>
+            <div class="dice" id="dice3">⚀</div>
+            <div class="dice" id="dice4">⚀</div>
+            <div class="dice" id="dice5">⚀</div>
+            <div class="dice" id="dice6">⚀</div>
+        </div>
+
+        <!-- 结果区域 -->
+        <div class="result-area" id="resultArea">
+            <div class="prize-text" id="prizeText">点击摇骰子开始博饼</div>
+            <div class="desc-text" id="descText">试试手气，看看能博到什么奖品～</div>
+        </div>
+
+        <!-- 摇骰子按钮 -->
+        <button class="roll-btn" id="rollBtn">摇骰子</button>
+
+        <!-- 规则说明 -->
+        <div class="rule-container">
+            <div class="rule-title">博饼规则（传统6骰子）</div>
+            <ul class="rule-list">
+                <li class="rule-item">状元：4个4点（四红）/ 5个相同点 / 6个相同点 / 五红 / 六博红</li>
+                <li class="rule-item">对堂：1-6点各一个（全围）</li>
+                <li class="rule-item">三红：3个4点</li>
+                <li class="rule-item">四进：4个相同点（除4点外）</li>
+                <li class="rule-item">二举：2个4点</li>
+                <li class="rule-item">一秀：1个4点</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 核心变量
+        const game = {
+            // DOM元素
+            diceContainer: document.getElementById('diceContainer'),
+            diceElements: [
+                document.getElementById('dice1'),
+                document.getElementById('dice2'),
+                document.getElementById('dice3'),
+                document.getElementById('dice4'),
+                document.getElementById('dice5'),
+                document.getElementById('dice6')
+            ],
+            prizeText: document.getElementById('prizeText'),
+            descText: document.getElementById('descText'),
+            rollBtn: document.getElementById('rollBtn'),
+            
+            // 骰子相关
+            diceValues: [1, 1, 1, 1, 1, 1], // 骰子点数
+            diceIcons: ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'], // 骰子图标
+            
+            // 博饼奖品等级（从高到低）
+            prizes: [
+                {
+                    name: '状元插金花',
+                    desc: '6个骰子中5个4点 + 1个1点，最高级状元！',
+                    check: (counts) => counts[4] === 5 && counts[1] === 1
+                },
+                {
+                    name: '六博红',
+                    desc: '6个4点，顶级状元！',
+                    check: (counts) => counts[4] === 6
+                },
+                {
+                    name: '六博黑',
+                    desc: '6个相同点（除4点外），状元！',
+                    check: (counts) => [1,2,3,5,6].some(num => counts[num] === 6)
+                },
+                {
+                    name: '五红',
+                    desc: '5个4点，状元！',
+                    check: (counts) => counts[4] === 5
+                },
+                {
+                    name: '五子登科',
+                    desc: '5个相同点（除4点外），状元！',
+                    check: (counts) => [1,2,3,5,6].some(num => counts[num] === 5)
+                },
+                {
+                    name: '四红',
+                    desc: '4个4点，状元！',
+                    check: (counts) => counts[4] === 4
+                },
+                {
+                    name: '对堂',
+                    desc: '1-6点各一个，全围！',
+                    check: (counts) => counts[1] === 1 && counts[2] === 1 && counts[3] === 1 && counts[4] === 1 && counts[5] === 1 && counts[6] === 1
+                },
+                {
+                    name: '三红',
+                    desc: '3个4点，恭喜！',
+                    check: (counts) => counts[4] === 3
+                },
+                {
+                    name: '四进',
+                    desc: '4个相同点（除4点外），不错哦！',
+                    check: (counts) => [1,2,3,5,6].some(num => counts[num] === 4)
+                },
+                {
+                    name: '二举',
+                    desc: '2个4点，继续加油！',
+                    check: (counts) => counts[4] === 2
+                },
+                {
+                    name: '一秀',
+                    desc: '1个4点，小幸运！',
+                    check: (counts) => counts[4] === 1
+                },
+                {
+                    name: '无奖',
+                    desc: '没有博到奖品，再试一次吧～',
+                    check: (counts) => true // 兜底
+                }
+            ],
+            
+            // 初始化
+            init() {
+                // 绑定摇骰子按钮事件
+                this.rollBtn.addEventListener('click', () => this.rollDice());
+            },
+            
+            // 摇骰子核心逻辑
+            rollDice() {
+                // 禁用按钮，防止重复点击
+                this.rollBtn.disabled = true;
+                this.rollBtn.textContent = '摇骰子中...';
+                
+                // 清空结果
+                this.prizeText.textContent = '摇骰子中...';
+                this.descText.textContent = '请稍候...';
+                
+                // 添加骰子滚动动画
+                this.diceElements.forEach(dice => {
+                    dice.classList.add('rolling');
+                });
+                
+                // 模拟骰子滚动（1.5秒后出结果）
+                setTimeout(() => {
+                    // 生成6个随机骰子点数（1-6）
+                    this.diceValues = this.diceElements.map(() => Math.floor(Math.random() * 6) + 1);
+                    
+                    // 更新骰子显示
+                    this.updateDiceDisplay();
+                    
+                    // 移除滚动动画
+                    this.diceElements.forEach(dice => {
+                        dice.classList.remove('rolling');
+                    });
+                    
+                    // 判定奖品
+                    this.judgePrize();
+                    
+                    // 启用按钮
+                    this.rollBtn.disabled = false;
+                    this.rollBtn.textContent = '再摇一次';
+                }, 1500);
+            },
+            
+            // 更新骰子显示
+            updateDiceDisplay() {
+                this.diceValues.forEach((value, index) => {
+                    this.diceElements[index].textContent = this.diceIcons[value - 1];
+                    // 4点用红色突出显示
+                    this.diceElements[index].style.color = value === 4 ? '#dc3545' : '#333';
+                });
+            },
+            
+            // 判定奖品
+            judgePrize() {
+                // 统计每个点数出现的次数
+                const counts = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0};
+                this.diceValues.forEach(val => counts[val]++);
+                
+                // 从最高奖开始判定
+                for (const prize of this.prizes) {
+                    if (prize.check(counts)) {
+                        this.prizeText.textContent = `🎉 恭喜博到：${prize.name}`;
+                        this.descText.textContent = prize.desc;
+                        // 给状元类奖品加特殊颜色
+                        if (prize.name.includes('状元')) {
+                            this.prizeText.style.color = '#dc3545';
+                        } else if (prize.name === '对堂') {
+                            this.prizeText.style.color = '#28a745';
+                        } else {
+                            this.prizeText.style.color = '#007bff';
+                        }
+                        break;
+                    }
+                }
+            }
+        };
+
+        // 初始化游戏
+        game.init();
+    </script>
+</body>
+</html>
