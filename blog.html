@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人博客 - ChangXuanxu 的个人网站</title>
+    <title>个人博客 - 士多啤梨除草机</title>
     <style>
         /* 全局重置与基础样式 */
         * {
@@ -100,41 +100,6 @@
             opacity: 0.9;
         }
 
-        /* 博客筛选栏 */
-        .blog-filter {
-            background-color: rgba(255, 255, 255, 0.85);
-            padding: 15px 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .blog-filter span {
-            font-size: 16px;
-            color: #666;
-        }
-
-        .blog-filter .filter-tag {
-            padding: 6px 12px;
-            background-color: #007bff;
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .blog-filter .filter-tag:hover {
-            background-color: #0056b3;
-        }
-
-        .blog-filter .filter-tag.active {
-            background-color: #28a745;
-        }
-
         /* 博客文章列表 */
         .blog-list {
             display: flex;
@@ -156,25 +121,9 @@
             transform: translateY(-2px);
         }
 
-        .blog-card .blog-meta {
-            display: flex;
-            gap: 15px;
-            color: #888;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .blog-card .blog-category {
-            background-color: #e8f4fd;
-            color: #007bff;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-
         .blog-card h2 {
             font-size: 22px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             color: #2c3e50;
         }
 
@@ -186,16 +135,6 @@
 
         .blog-card h2 a:hover {
             color: #007bff;
-        }
-
-        .blog-card .blog-excerpt {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
         }
 
         .blog-card .blog-read {
@@ -210,6 +149,15 @@
 
         .blog-card .blog-read:hover {
             background-color: #0056b3;
+        }
+
+        /* 加载提示 */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+            color: #fff;
+            text-shadow: 0 0 5px #000;
         }
 
         /* 回到顶部按钮 */
@@ -243,11 +191,6 @@
                 font-size: 28px;
             }
 
-            .blog-filter {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
             .blog-card h2 {
                 font-size: 20px;
             }
@@ -255,7 +198,7 @@
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
+    <!-- 导航栏（logo改为士多啤梨除草机） -->
     <nav class="navbar">
         <div class="navbar-container">
             <a href="index.html" class="navbar-logo">士多啤梨除草机</a>
@@ -276,76 +219,50 @@
             <p>记录学习点滴，分享技术与生活 📝</p>
         </div>
 
-        <div class="blog-filter">
-            <span>筛选分类：</span>
-            <div class="filter-tag active">全部</div>
-            <div class="filter-tag">小故事</div>
-        </div>
-
         <div class="blog-list" id="blogList">
-            <!-- 这里的内容会自动加载，无需手动写 -->
+            <div class="loading">正在加载博客列表...</div>
         </div>
     </div>
 
     <button id="backToTop">↑</button>
 
     <script>
-        // 博客列表数据（新增/修改博客只需改这里，或直接加文件）
-        const blogData = [
-            {
-                filename: "flower.html",
-                title: "花",
-                date: "2025-08-24",
-                category: "小故事",
-                read: 91,
-                excerpt: "学校的春光应是极美的，眼看着千朵万朵花儿渐次盛放。F先生却自那个大雪纷飞的夜晚后变得沉默寡言，高三的一模、考场的飞雪、诗人的赠书……终在书页间见得“花落春仍在”。"
-            }
+        // 博客文件列表（只需在这里加文件名，不用改其他）
+        const blogFiles = [
+            "GitHub Pages搭建个人网站.html",
+            "JavaScript随机数生成技巧.html",
+            "西湖游记.html",
+            "花落春仍在.html"
         ];
 
         // 页面加载后自动生成博客列表
         window.onload = function() {
             document.body.style.opacity = 1;
-            renderBlogList(blogData);
+            renderBlogList();
         };
 
-        // 渲染博客列表
-        function renderBlogList(blogs) {
+        // 渲染博客列表（自动从文件名提取标题）
+        function renderBlogList() {
             const blogListEl = document.getElementById('blogList');
             blogListEl.innerHTML = '';
 
-            blogs.forEach(blog => {
+            if (blogFiles.length === 0) {
+                blogListEl.innerHTML = '<div class="loading">暂无博客文章</div>';
+                return;
+            }
+
+            blogFiles.forEach(filename => {
+                // 从文件名提取标题（去掉.html后缀）
+                const title = filename.replace('.html', '');
                 const card = document.createElement('div');
                 card.className = 'blog-card';
-                card.dataset.category = blog.category;
                 card.innerHTML = `
-                    <div class="blog-meta">
-                        <span>${blog.date}</span>
-                        <span>阅读：${blog.read}</span>
-                        <span class="blog-category">${blog.category}</span>
-                    </div>
-                    <h2><a href="blog-detail.html?file=${encodeURIComponent(blog.filename)}">${blog.title}</a></h2>
-                    <div class="blog-excerpt">${blog.excerpt}</div>
-                    <a href="blog-detail.html?file=${encodeURIComponent(blog.filename)}" class="blog-read">阅读全文</a>
+                    <h2><a href="blog-detail.html?file=${encodeURIComponent(filename)}">${title}</a></h2>
+                    <a href="blog-detail.html?file=${encodeURIComponent(filename)}" class="blog-read">阅读全文</a>
                 `;
                 blogListEl.appendChild(card);
             });
         }
-
-        // 分类筛选功能
-        const filterTags = document.querySelectorAll('.blog-filter .filter-tag');
-        filterTags.forEach(tag => {
-            tag.addEventListener('click', function() {
-                filterTags.forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
-                const filterText = this.textContent;
-                let filteredBlogs = blogData;
-                if (filterText !== '全部') {
-                    filteredBlogs = blogData.filter(blog => blog.category === filterText);
-                }
-                renderBlogList(filteredBlogs);
-            });
-        });
 
         // 回到顶部功能
         const backToTopBtn = document.getElementById('backToTop');
