@@ -950,9 +950,22 @@ function rollDice() {
         // 减少剩余次数（修复计数器bug：先减次数再计算）
         gameState.diceRemain--;
         
-        // 随机选择德才功赃（模拟真实掷骰子）
-        const randomPoints = ["de", "cai", "gong", "zang"];
-        const randomPoint = randomPoints[Math.floor(Math.random() * 4)];
+        // ========== 核心修改：自定义四种属性的触发概率 ==========
+        // 生成 0-99 的随机数（对应100%概率区间）
+        const random = Math.floor(Math.random() * 100);
+        let randomPoint = "";
+        
+        // 概率分配：德20%、才30%、功40%、赃10%
+        if (random < 20) {
+            randomPoint = "de";    // 0-19 → 德（20%）
+        } else if (random < 50) {
+            randomPoint = "cai";   // 20-49 → 才（30%）
+        } else if (random < 90) {
+            randomPoint = "gong";  // 50-89 → 功（40%）
+        } else {
+            randomPoint = "zang";  // 90-99 → 赃（10%）
+        }
+        // ========== 概率逻辑修改结束 ==========
         
         // 获取目标ID
         const targetId = getTargetIdByPoint(randomPoint);
@@ -986,7 +999,6 @@ function rollDice() {
         }
     });
 }
-
 // 重新开始游戏
 function resetGame() {
     gameState.currentId = 1;
