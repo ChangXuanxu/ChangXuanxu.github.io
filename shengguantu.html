@@ -234,28 +234,7 @@ body {
     border-bottom: 2px solid #eee;
 }
 
-/* 骰子区 */
-.dice-area {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.dice {
-    width: 60px;
-    height: 60px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: bold;
-    background: white;
-}
-
-/* 近五次结果区（替代原按钮区） */
+/* 近五次结果区 */
 .recent-results {
     background: #f8f9fa;
     border-radius: 6px;
@@ -331,50 +310,18 @@ body {
     cursor: not-allowed;
 }
 
-/* 结果区 */
-.result-area {
-    margin-top: 20px;
-    padding: 15px;
+/* 结果详情区 */
+.result-detail {
     background: #f8f9fa;
     border-radius: 6px;
-    min-height: 80px;
-}
-
-.result-title {
-    font-weight: bold;
-    margin-bottom: 10px;
-    font-size: 14px;
-}
-
-.result-detail {
-    font-size: 14px;
-    color: #666;
-    line-height: 1.6;
-}
-
-/* 规则说明 */
-.rule-area {
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    margin-bottom: 30px;
-}
-
-.rule-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: #2c3e50;
-}
-
-.rule-list {
-    padding-left: 20px;
-    margin-bottom: 10px;
-}
-
-.rule-list li {
-    margin-bottom: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 15px;
 }
 
 /* 响应式适配 */
@@ -386,686 +333,449 @@ body {
         min-width: 100%;
     }
     .operate-area {
-        flex: 1;
-    }
-}
-
-@media (max-width: 768px) {
-    .game-title {
-        font-size: 28px;
-    }
-    .status-area {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .grid-container {
-        grid-template-columns: 1fr;
+        flex: none;
+        width: 100%;
     }
 }
 </style>
 </head>
 <body>
-
-<!-- 导航栏 -->
-<div class="navbar">
-    <div class="navbar-content">
-        <a href="index.html" class="logo">士多啤梨除草机</a>
-        <div class="nav-menu">
-            <a href="index.html">首页</a>
-            <a href="fun-tools.html">趣味组件</a>
-            <a href="blog.html">个人博客</a>
-            <a href="games.html" style="color: #007bff; font-weight: bold;">小游戏</a>
-            <a href="#">联系我</a>
-        </div>
-    </div>
-</div>
-
-<!-- 返回按钮 -->
-<a href="games.html" class="back-btn">← 返回小游戏合集</a>
-
-<!-- 主容器 -->
-<div class="main-container">
-    <!-- 标题区域 -->
-    <div class="title-area">
-        <h1 class="game-title">📜 明清升官图（完整版）</h1>
-        <p class="game-subtitle">三圈棋盘 · 德才功赃 · 从白丁到太师 | 每局限40次掷骰子</p>
-    </div>
-
-    <!-- 游戏状态区 -->
-    <div class="status-area">
-        <div class="status-item">
-            <span class="status-label">当前圈层：</span>
-            <span class="status-value" id="current-circle">外圈</span>
-        </div>
-        <div class="status-item">
-            <span class="status-label">当前官职：</span>
-            <span class="status-value" id="current-position">白丁</span>
-        </div>
-        <div class="status-item">
-            <span class="status-label">当前品级：</span>
-            <span class="status-value" id="current-grade">无品级</span>
-        </div>
-        <div class="status-item">
-            <span class="status-label">步数统计：</span>
-            <span class="status-value" id="step-count">0</span>
-        </div>
-        <!-- 新增：骰子次数限制 -->
-        <div class="status-item dice-count" id="dice-count">
-            剩余掷骰子次数：40/40
-        </div>
-    </div>
-
-    <!-- 核心游戏区 -->
-    <div class="game-area">
-        <!-- 棋盘区 -->
-        <div class="board-area">
-            <div class="board-title" id="board-title">第一圈（外圈）：科举出身+地方基层官</div>
-            <div class="grid-container" id="board-container"></div>
-        </div>
-
-        <!-- 操作区 -->
-        <div class="operate-area">
-            <div class="operate-title">游戏操作</div>
-            
-            <!-- 骰子区 - 移除多余骰子，只保留一个 -->
-            <div class="dice-area">
-                <div class="dice" id="dice1">⚀</div>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="#" class="logo">升官图</a>
+            <div class="nav-menu">
+                <a href="#">首页</a>
+                <a href="#">规则</a>
+                <a href="#">关于</a>
             </div>
+        </div>
+    </nav>
 
-            <!-- 近五次结果区（替代原德才功赃按钮） -->
-            <div class="recent-results" id="recent-results">
-                <div class="recent-title">近五次游戏结果</div>
-                <ul class="result-list" id="result-list">
-                    <li class="result-item">
-                        <span class="result-num">1</span>
-                        <span class="result-content">尚未开始</span>
-                    </li>
-                    <li class="result-item">
-                        <span class="result-num">2</span>
-                        <span class="result-content">尚未开始</span>
-                    </li>
-                    <li class="result-item">
-                        <span class="result-num">3</span>
-                        <span class="result-content">尚未开始</span>
-                    </li>
-                    <li class="result-item">
-                        <span class="result-num">4</span>
-                        <span class="result-content">尚未开始</span>
-                    </li>
-                    <li class="result-item">
-                        <span class="result-num">5</span>
-                        <span class="result-content">尚未开始</span>
-                    </li>
-                </ul>
+    <!-- 返回按钮 -->
+    <a href="#" class="back-btn">← 返回</a>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 标题区域 -->
+        <div class="title-area">
+            <h1 class="game-title">传统升官图游戏</h1>
+            <p class="game-subtitle">体验古代官场晋升之路</p>
+        </div>
+
+        <!-- 游戏状态区 -->
+        <div class="status-area">
+            <div class="status-item">
+                <span class="status-label">当前官职：</span>
+                <span class="status-value" id="current-title">白丁</span>
             </div>
+            <div class="status-item">
+                <span class="status-label">当前圈层：</span>
+                <span class="status-value" id="current-circle">外圈</span>
+            </div>
+            <div class="status-item dice-count" id="dice-count">
+                剩余次数：100/100
+            </div>
+        </div>
 
-            <!-- 操作按钮 -->
-            <button class="operate-btn" id="btn-roll">掷骰子</button>
-            <button class="operate-btn" id="btn-reset">重新开始</button>
-
-            <!-- 结果区 -->
-            <div class="result-area">
-                <div class="result-title">本次操作详情</div>
-                <div class="result-detail" id="game-result">
-                    点击「掷骰子」开始游戏，首次掷骰子自动升至童生 | 每局限40次掷骰子
+        <!-- 核心游戏区 -->
+        <div class="game-area">
+            <!-- 棋盘区 -->
+            <div class="board-area">
+                <h2 class="board-title">升官图棋盘</h2>
+                <div class="grid-container" id="board-container">
+                    <!-- 棋盘格子将通过JS动态生成 -->
                 </div>
             </div>
+
+            <!-- 操作区 -->
+            <div class="operate-area">
+                <h2 class="operate-title">游戏操作</h2>
+                
+                <!-- 结果详情 -->
+                <div class="result-detail" id="result-detail">
+                    点击开始游戏，体验官场沉浮！
+                </div>
+
+                <!-- 近五次结果 -->
+                <div class="recent-results">
+                    <h3 class="recent-title">近五次记录</h3>
+                    <ul class="result-list" id="recent-results-list">
+                        <!-- 结果记录将通过JS动态生成 -->
+                    </ul>
+                </div>
+
+                <!-- 操作按钮 -->
+                <button class="operate-btn" id="roll-btn">开始游戏/掷骰子</button>
+                <button class="operate-btn" id="restart-btn">重新开始</button>
+            </div>
         </div>
     </div>
 
-    <!-- 规则说明 -->
-    <div class="rule-area">
-        <div class="rule-title">📋 游戏规则</div>
-        <ul class="rule-list">
-            <li>棋盘分三圈：外圈（科举+地方官）→ 中圈（省级+中央官）→ 内圈（极品荣誉衔）</li>
-            <li>升降规则：德=连升2级，才=升1级，功=升半级（正→从同品），赃=降2级，贪墨=贬为白丁</li>
-            <li>特殊格有专属效果，无标注则按常规升降执行</li>
-            <li>最终升至「太师」（正一品）即为游戏胜利</li>
-            <li>每局游戏限制40次掷骰子，次数用尽自动结算 | 贪墨触发概率：1%</li>
-        </ul>
-    </div>
-</div>
+    <script>
+        // 游戏数据配置
+        const gameConfig = {
+            totalDiceTimes: 100, // 修改1：总次数改为100次
+            circles: {
+                outer: {
+                    name: "外圈",
+                    grids: [
+                        { id: 1, name: "白丁", grade: "无品", rule: "初始位置" },
+                        { id: 2, name: "秀才", grade: "无品", rule: "德+1、才+1、功+1、赃-1" },
+                        { id: 3, name: "举人", grade: "无品", rule: "德+2、才+2、功+2、赃-2" },
+                        { id: 4, name: "进士", grade: "无品", rule: "德+3、才+3、功+3、赃-3" },
+                        { id: 5, name: "县令", grade: "七品", rule: "德+4、才+4、功+4、赃-4" },
+                        { id: 6, name: "通判", grade: "六品", rule: "德+5、才+5、功+5、赃-5" },
+                        { id: 7, name: "知州", grade: "五品", rule: "德+6、才+6、功+6、赃-6" },
+                        { id: 8, name: "知府", grade: "四品", rule: "德+7、才+7、功+7、赃-7" },
+                        { id: 9, name: "按察使", grade: "三品", rule: "德+8、才+8、功+8、赃-8" },
+                        { id: 10, name: "布政使", grade: "二品", rule: "德+9、才+9、功+9、赃-9" },
+                        { id: 11, name: "巡抚", grade: "二品", rule: "德+10、才+10、功+10、赃-10" },
+                        { id: 12, name: "总督", grade: "一品", rule: "德+11、才+11、功+11、赃-11" },
+                        { id: 13, name: "尚书", grade: "一品", rule: "德+12、才+12、功+12、赃-12" },
+                        { id: 14, name: "侍郎", grade: "二品", rule: "德+13、才+13、功+13、赃-13" },
+                        { id: 15, name: "御史", grade: "三品", rule: "德+14、才+14、功+14、赃-14" },
+                        { id: 16, name: "太师", grade: "超品", rule: "德+15、才+15、功+15、赃-15" }
+                    ]
+                },
+                middle: {
+                    name: "中圈",
+                    grids: [
+                        { id: 17, name: "翰林", grade: "七品", rule: "德+1、才+2、功+1、赃-1" },
+                        { id: 18, name: "编修", grade: "六品", rule: "德+2、才+3、功+2、赃-2" },
+                        { id: 19, name: "修撰", grade: "五品", rule: "德+3、才+4、功+3、赃-3" },
+                        { id: 20, name: "侍读", grade: "四品", rule: "德+4、才+5、功+4、赃-4" },
+                        { id: 21, name: "侍讲", grade: "三品", rule: "德+5、才+6、功+5、赃-5" },
+                        { id: 22, name: "学士", grade: "二品", rule: "德+6、才+7、功+6、赃-6" },
+                        { id: 23, name: "大学士", grade: "一品", rule: "德+7、才+8、功+7、赃-7" },
+                        { id: 24, name: "内阁首辅", grade: "超品", rule: "德+8、才+9、功+8、赃-8" }
+                    ]
+                },
+                inner: {
+                    name: "内圈",
+                    grids: [
+                        { id: 25, name: "侍卫", grade: "九品", rule: "德+1、才+1、功+2、赃-1" },
+                        { id: 26, name: "校尉", grade: "八品", rule: "德+2、才+2、功+3、赃-2" },
+                        { id: 27, name: "都尉", grade: "七品", rule: "德+3、才+3、功+4、赃-3" },
+                        { id: 28, name: "将军", grade: "六品", rule: "德+4、才+4、功+5、赃-4" },
+                        { id: 29, name: "将军", grade: "五品", rule: "德+5、才+5、功+6、赃-5" },
+                        { id: 30, name: "总兵", grade: "四品", rule: "德+6、才+6、功+7、赃-6" },
+                        { id: 31, name: "提督", grade: "三品", rule: "德+7、才+7、功+8、赃-7" },
+                        { id: 32, name: "将军", grade: "二品", rule: "德+8、才+8、功+9、赃-8" },
+                        { id: 33, name: "大将军", grade: "一品", rule: "德+9、才+9、功+10、赃-9" },
+                        { id: 34, name: "兵马大元帅", grade: "超品", rule: "德+10、才+10、功+15、赃-10" }
+                    ]
+                },
+                special: {
+                    name: "特殊事件",
+                    grids: [
+                        { id: 99, name: "贪墨", grade: "惩罚", rule: "贬为白丁，重新开始" },
+                        { id: 98, name: "加衔", grade: "奖励", rule: "升2级" },
+                        { id: 97, name: "京察", grade: "考核", rule: "德才功不足则降1级" }
+                    ]
+                }
+            }
+        };
 
-<script>
-// ===================== 核心数据：完整升官图棋盘 =====================
-const officialGrid = {
-    // 第一圈（外圈）：38格
-    outer: [
-        // 第一部分：科举出身（1-15）
-        { id: 1, name: "白丁", grade: "无品级", circle: "outer", rule: "初始落点，首次掷骰子必走“才”（升1级至童生）", special: true },
-        { id: 2, name: "童生", grade: "无品级", circle: "outer", rule: "德→案首，才→案首，功→案首，赃→白丁" },
-        { id: 3, name: "案首", grade: "无品级（童生试第一）", circle: "outer", rule: "德→监生，才→监生，功→监生，赃→童生" },
-        { id: 4, name: "监生", grade: "无品级（国子监学生）", circle: "outer", rule: "德→廪生，才→秀才，功→秀才，赃→案首" },
-        { id: 5, name: "秀才", grade: "无品级（生员）", circle: "outer", rule: "德→廪生，才→廪生，功→童生（反向），赃→监生" },
-        { id: 6, name: "廪生", grade: "无品级（秀才优等）", circle: "outer", rule: "德→贡生，才→贡生，功→秀才，赃→监生" },
-        { id: 7, name: "贡生", grade: "无品级（秀才选入国子监）", circle: "outer", rule: "德→举人，才→举人，功→廪生，赃→秀才" },
-        { id: 8, name: "举人", grade: "无品级（乡试中）", circle: "outer", rule: "德→解元，才→解元，功→贡生，赃→廪生" },
-        { id: 9, name: "解元", grade: "无品级（乡试第一）", circle: "outer", rule: "德→进士，才→进士，功→举人，赃→贡生" },
-        { id: 10, name: "进士", grade: "无品级（会试中）", circle: "outer", rule: "德→会元，才→会元，功→解元，赃→举人" },
-        { id: 11, name: "会元", grade: "无品级（会试第一）", circle: "outer", rule: "德→传胪，才→传胪，功→进士，赃→解元" },
-        { id: 12, name: "传胪", grade: "无品级（殿试二甲第一）", circle: "outer", rule: "德→探花，才→探花，功→会元，赃→进士" },
-        { id: 13, name: "探花", grade: "无品级（殿试第三）", circle: "outer", rule: "德→榜眼，才→榜眼，功→传胪，赃→会元" },
-        { id: 14, name: "榜眼", grade: "无品级（殿试第二）", circle: "outer", rule: "德→状元，才→状元，功→探花，赃→传胪" },
-        { id: 15, name: "状元", grade: "无品级（殿试第一）", circle: "outer", rule: "科举终点，必升1级至地方基层官（正七品知县）", special: true },
-        
-        // 第二部分：地方基层官（16-38）
-        { id: 16, name: "知县", grade: "正七品（一县之长）", circle: "outer", rule: "德→县丞（正八品，升半级），才→县丞，功→县主簿，赃→县吏目" },
-        { id: 17, name: "县丞", grade: "正八品（副县长）", circle: "outer", rule: "德→府推官（正七品，升1级），才→县主簿，功→县主簿，赃→县训导" },
-        { id: 18, name: "县主簿", grade: "正九品（掌文书户籍）", circle: "outer", rule: "德→县丞，才→县训导，功→县吏目，赃→巡检" },
-        { id: 19, name: "县训导", grade: "从八品（掌教育）", circle: "outer", rule: "德→县丞，才→县主簿，功→巡检，赃→典史" },
-        { id: 20, name: "县吏目", grade: "从九品（掌治安）", circle: "outer", rule: "德→县主簿，才→巡检，功→典史，赃→未入流典史" },
-        { id: 21, name: "巡检", grade: "从九品（缉捕防盗）", circle: "outer", rule: "德→县吏目，才→典史，功→驿丞，赃→白丁（赃重）", special: true },
-        { id: 22, name: "典史", grade: "未入流（县属吏员）", circle: "outer", rule: "德→巡检，才→驿丞，功→无（原地），赃→白丁", special: true },
-        { id: 23, name: "驿丞", grade: "未入流（掌驿站）", circle: "outer", rule: "德→巡检，才→典史，功→无，赃→白丁", special: true },
-        { id: 24, name: "州吏目", grade: "从九品（州属吏员）", circle: "outer", rule: "德→州判，才→州判，功→县吏目，赃→典史" },
-        { id: 25, name: "州判", grade: "正八品（州属副官）", circle: "outer", rule: "德→州同，才→州同，功→州吏目，赃→县丞" },
-        { id: 26, name: "州同", grade: "从六品（副知州）", circle: "outer", rule: "德→知州，才→知州，功→州判，赃→州吏目" },
-        { id: 27, name: "知州", grade: "从五品（一州之长）", circle: "outer", rule: "升1级进入府级官员，德→府通判，才→府推官", special: true },
-        { id: 28, name: "府经历", grade: "正八品（府内文书）", circle: "outer", rule: "德→府照磨，才→府照磨，功→县丞，赃→州判" },
-        { id: 29, name: "府照磨", grade: "从七品（掌核对）", circle: "outer", rule: "德→府推官，才→府推官，功→府经历，赃→州同" },
-        { id: 30, name: "府推官", grade: "正七品（掌刑狱）", circle: "outer", rule: "德→府通判，才→府通判，功→府照磨，赃→州判" },
-        { id: 31, name: "府通判", grade: "从六品（分掌粮运）", circle: "outer", rule: "德→府同知，才→府同知，功→府推官，赃→府照磨" },
-        { id: 32, name: "府同知", grade: "从四品（副市长）", circle: "outer", rule: "德→知府，才→知府，功→府通判，赃→府推官" },
-        { id: 33, name: "知府", grade: "正四品（一府之长）", circle: "outer", rule: "升1级进入中圈（省级官），德→按察使，才→布政使参政", special: true },
-        
-        // 特殊事件格（外圈）
-        { id: 34, name: "京察", grade: "特殊事件", circle: "outer", rule: "政绩考核，掷“德/才”升1级，掷“功/赃”降1级", special: true, type: "special" },
-        { id: 35, name: "加衔", grade: "特殊事件", circle: "outer", rule: "品级不变，下次升降优先升1级", special: true, type: "special" },
-        { id: 36, name: "外放", grade: "特殊事件", circle: "outer", rule: "中央官贬为对应品级地方官", special: true, type: "special" },
-        { id: 37, name: "贪墨", grade: "特殊事件", circle: "outer", rule: "直接贬为白丁，重新从外圈起点开始", special: true, type: "special" },
-        { id: 38, name: "考核", grade: "特殊事件", circle: "outer", rule: "随机触发升降，德才功赃概率各25%", special: true, type: "special" }
-    ],
+        // 游戏状态管理
+        const gameState = {
+            currentId: 1,          // 当前位置ID
+            currentCircle: "outer", // 当前圈层
+            diceRemain: gameConfig.totalDiceTimes, // 剩余次数
+            gameWon: false,         // 是否通关
+            addTitleBonus: false    // 加衔奖励标记
+        };
 
-    // 第二圈（中圈）：26格
-    middle: [
-        // 第一部分：省级官（39-45）
-        { id: 39, name: "布政使参政", grade: "正三品（省财政副官）", circle: "middle", rule: "德→布政使，才→按察使副使，功→按察使佥事，赃→知府" },
-        { id: 40, name: "按察使副使", grade: "正三品（省司法副官）", circle: "middle", rule: "德→按察使，才→按察使佥事，功→布政使参政，赃→知府" },
-        { id: 41, name: "按察使佥事", grade: "正三品（省司法副官）", circle: "middle", rule: "德→按察使，才→布政使参政，功→知府，赃→府同知" },
-        { id: 42, name: "按察使", grade: "从三品（省司法长官，臬台）", circle: "middle", rule: "德→布政使，才→布政使，功→布政使参政，赃→布政使参政" },
-        { id: 43, name: "布政使", grade: "从二品（省行政长官，藩台）", circle: "middle", rule: "德→巡抚，才→巡抚，功→按察使，赃→按察使" },
-        { id: 44, name: "巡抚", grade: "从二品（一省军政长官）", circle: "middle", rule: "加衔右副都御史（品级不变），德→总督，才→尚书", special: true },
-        { id: 45, name: "总督", grade: "从一品（数省军政长官）", circle: "middle", rule: "升1级进入中央官序列，德→左都御史，才→六部尚书", special: true },
-        
-        // 第二部分：中央核心官（46-64）
-        { id: 46, name: "各部司务", grade: "正九品（部内文书）", circle: "middle", rule: "德→各部照磨，才→各部照磨，功→县主簿，赃→巡检" },
-        { id: 47, name: "各部照磨", grade: "从八品（掌核对）", circle: "middle", rule: "德→各部主事，才→各部主事，功→各部司务，赃→县训导" },
-        { id: 48, name: "各部主事", grade: "正八品（科长）", circle: "middle", rule: "德→各部员外郎，才→各部员外郎，功→各部照磨，赃→州判" },
-        { id: 49, name: "各部员外郎", grade: "从六品（副司长）", circle: "middle", rule: "德→各部郎中，才→各部郎中，功→各部主事，赃→府推官" },
-        { id: 50, name: "各部郎中", grade: "正五品（司长）", circle: "middle", rule: "德→各部侍郎，才→各部侍郎，功→各部员外郎，赃→府通判" },
-        { id: 51, name: "各部侍郎", grade: "正二品（副部长）", circle: "middle", rule: "德→各部尚书，才→各部尚书，功→各部郎中，赃→按察使" },
-        { id: 52, name: "各部尚书", grade: "从一品（部长）", circle: "middle", rule: "德→殿阁大学士，才→左都御史，功→各部侍郎，赃→布政使" },
-        { id: 53, name: "监察御史", grade: "正七品（巡按弹劾）", circle: "middle", rule: "德→给事中，才→给事中，功→县丞，赃→县主簿" },
-        { id: 54, name: "给事中", grade: "正六品（封驳谏议）", circle: "middle", rule: "德→佥都御史，才→佥都御史，功→监察御史，赃→府推官" },
-        { id: 55, name: "佥都御史", grade: "正三品（监察副官）", circle: "middle", rule: "德→左副都御史，才→左副都御史，功→给事中，赃→按察使副使" },
-        { id: 56, name: "左副都御史", grade: "正三品（监察副官）", circle: "middle", rule: "德→左都御史，才→左都御史，功→佥都御史，赃→按察使" },
-        { id: 57, name: "左都御史", grade: "从一品（都察院最高长官）", circle: "middle", rule: "德→殿阁大学士，才→殿阁大学士，功→各部尚书，赃→总督" },
-        { id: 58, name: "翰林院检讨", grade: "正七品（清贵官）", circle: "middle", rule: "德→翰林院编修，才→翰林院编修，功→县丞，赃→县训导" },
-        { id: 59, name: "翰林院编修", grade: "从六品（清贵官）", circle: "middle", rule: "德→翰林院修撰，才→翰林院修撰，功→检讨，赃→府推官" },
-        { id: 60, name: "翰林院修撰", grade: "正六品（清贵官）", circle: "middle", rule: "德→侍读学士，才→侍读学士，功→编修，赃→府通判" },
-        { id: 61, name: "翰林院侍读学士", grade: "从五品（清贵官）", circle: "middle", rule: "德→翰林院掌院学士，才→翰林院掌院学士，功→修撰，赃→按察使佥事" },
-        { id: 62, name: "翰林院掌院学士", grade: "从二品（翰林院院长）", circle: "middle", rule: "德→殿阁大学士，才→内阁学士，功→侍读学士，赃→布政使" },
-        { id: 63, name: "内阁学士", grade: "从二品（协助大学士）", circle: "middle", rule: "德→殿阁大学士，才→殿阁大学士，功→掌院学士，赃→总督" },
-        { id: 64, name: "殿阁大学士", grade: "正一品（宰相级）", circle: "middle", rule: "升1级进入内圈（极品荣誉衔），德→太师，才→太傅", special: true },
-        
-        // 特殊事件格（中圈）
-        { id: 65, name: "京察", grade: "特殊事件", circle: "middle", rule: "政绩考核，掷“德/才”升1级，掷“功/赃”降1级", special: true, type: "special" },
-        { id: 66, name: "加衔", grade: "特殊事件", circle: "middle", rule: "品级不变，下次升降优先升1级", special: true, type: "special" },
-        { id: 67, name: "外放", grade: "特殊事件", circle: "middle", rule: "中央官贬为对应品级地方官", special: true, type: "special" },
-        { id: 68, name: "贪墨", grade: "特殊事件", circle: "middle", rule: "直接贬为白丁，重新从外圈起点开始", special: true, type: "special" },
-        { id: 69, name: "考核", grade: "特殊事件", circle: "middle", rule: "随机触发升降，德才功赃概率各25%", special: true, type: "special" }
-    ],
+        // DOM元素
+        const elements = {
+            currentTitle: document.getElementById('current-title'),
+            currentCircle: document.getElementById('current-circle'),
+            diceCount: document.getElementById('dice-count'),
+            boardContainer: document.getElementById('board-container'),
+            rollBtn: document.getElementById('roll-btn'),
+            restartBtn: document.getElementById('restart-btn'),
+            resultDetail: document.getElementById('result-detail'),
+            recentResultsList: document.getElementById('recent-results-list')
+        };
 
-    // 第三圈（内圈）：8格
-    inner: [
-        { id: 70, name: "太子太师", grade: "从一品（荣誉衔）", circle: "inner", rule: "德→太师，才→太傅，功→内阁大学士，赃→各部尚书" },
-        { id: 71, name: "太子太傅", grade: "从一品（荣誉衔）", circle: "inner", rule: "德→太傅，才→太保，功→内阁大学士，赃→各部尚书" },
-        { id: 72, name: "太子太保", grade: "从一品（荣誉衔）", circle: "inner", rule: "德→太保，才→少师，功→内阁大学士，赃→各部尚书" },
-        { id: 73, name: "少师", grade: "从一品（三孤，次高荣誉）", circle: "inner", rule: "德→太师，才→太傅，功→太子太师，赃→左都御史" },
-        { id: 74, name: "少傅", grade: "从一品（三孤）", circle: "inner", rule: "德→太傅，才→太保，功→太子太傅，赃→左都御史" },
-        { id: 75, name: "少保", grade: "从一品（三孤）", circle: "inner", rule: "德→太保，才→太师，功→太子太保，赃→左都御史" },
-        { id: 76, name: "太傅", grade: "正一品（三公，最高荣誉）", circle: "inner", rule: "准终点，掷“德”直接获胜，其他掷点升1级至太师", special: true },
-        { id: 77, name: "太师", grade: "正一品（三公之首，最高荣誉）", circle: "inner", rule: "终点：游戏获胜，无升降", special: true, isEnd: true }
-    ]
-};
-
-// ===================== 游戏状态管理 =====================
-const gameState = {
-    currentId: 1,          // 当前格子ID（初始白丁）
-    currentCircle: "outer", // 当前圈层
-    stepCount: 0,          // 步数统计
-    diceRemain: 40,        // 新增：剩余掷骰子次数（初始40次）
-    diceTotal: 40,         // 总次数限制
-    firstRoll: true,       // 是否首次掷骰子
-    addTitleBonus: false,  // 加衔奖励（下次升降优先升1级）
-    gameWon: false,        // 是否游戏胜利
-    gameOver: false,       // 新增：游戏是否结束（次数用尽）
-    allGrids: [],          // 合并所有格子的数组
-    recentResults: []      // 新增：近五次游戏结果记录
-};
-
-// 合并所有格子
-function mergeAllGrids() {
-    gameState.allGrids = [
-        ...officialGrid.outer,
-        ...officialGrid.middle,
-        ...officialGrid.inner
-    ];
-}
-
-// ===================== DOM 操作函数 =====================
-// 获取当前格子数据
-function getCurrentGrid() {
-    return gameState.allGrids.find(grid => grid.id === gameState.currentId) || gameState.allGrids[0];
-}
-
-// 更新游戏状态显示
-function updateStatusDisplay() {
-    const currentGrid = getCurrentGrid();
-    document.getElementById("current-circle").textContent = 
-        gameState.currentCircle === "outer" ? "外圈" : 
-        gameState.currentCircle === "middle" ? "中圈" : "内圈";
-    document.getElementById("current-position").textContent = currentGrid.name || "白丁";
-    document.getElementById("current-grade").textContent = currentGrid.grade || "无品级";
-    document.getElementById("step-count").textContent = gameState.stepCount;
-    
-    // 新增：更新骰子次数显示
-    const diceCountEl = document.getElementById("dice-count");
-    diceCountEl.textContent = `剩余掷骰子次数：${gameState.diceRemain}/${gameState.diceTotal}`;
-    
-    // 样式提示
-    diceCountEl.className = "status-item dice-count";
-    if (gameState.diceRemain <= 10 && gameState.diceRemain > 0) {
-        diceCountEl.classList.add("warning"); // 剩余10次以内警告
-    } else if (gameState.diceRemain <= 0) {
-        diceCountEl.classList.add("over"); // 次数用尽
-    }
-}
-
-// 渲染棋盘
-function renderBoard(circle = gameState.currentCircle) {
-    const boardContainer = document.getElementById("board-container");
-    const boardTitle = document.getElementById("board-title");
-    
-    // 设置标题
-    if (circle === "outer") {
-        boardTitle.textContent = "第一圈（外圈）：科举出身+地方基层官";
-    } else if (circle === "middle") {
-        boardTitle.textContent = "第二圈（中圈）：省级官+中央核心官";
-    } else {
-        boardTitle.textContent = "第三圈（内圈）：极品荣誉衔";
-    }
-    
-    // 获取对应圈层的格子
-    let grids = [];
-    if (circle === "outer") grids = officialGrid.outer;
-    else if (circle === "middle") grids = officialGrid.middle;
-    else grids = officialGrid.inner;
-    
-    // 渲染格子
-    boardContainer.innerHTML = "";
-    grids.forEach(grid => {
-        const gridItem = document.createElement("div");
-        gridItem.className = `grid-item ${grid.circle} ${grid.type === "special" ? "special" : ""} ${grid.id === gameState.currentId ? "current" : ""}`;
-        
-        gridItem.innerHTML = `
-            <div class="grid-name">${grid.name}</div>
-            <div class="grid-grade">${grid.grade}</div>
-            <div class="grid-rule">规则：${grid.rule}</div>
-        `;
-        
-        boardContainer.appendChild(gridItem);
-    });
-}
-
-// 新增：更新近五次结果显示
-function updateRecentResults(resultText, type = "normal") {
-    // 添加最新结果到数组头部
-    gameState.recentResults.unshift({
-        text: resultText,
-        type: type // success/fail/special/normal
-    });
-    
-    // 只保留最近5条
-    if (gameState.recentResults.length > 5) {
-        gameState.recentResults.pop();
-    }
-    
-    // 更新DOM显示
-    const resultList = document.getElementById("result-list");
-    resultList.innerHTML = "";
-    
-    // 填充5条结果（不足则显示"尚未开始"）
-    for (let i = 0; i < 5; i++) {
-        const resultItem = document.createElement("li");
-        resultItem.className = "result-item";
-        
-        const resultData = gameState.recentResults[i];
-        const content = resultData ? resultData.text : "尚未开始";
-        const contentClass = resultData ? `result-content ${resultData.type}` : "result-content";
-        
-        resultItem.innerHTML = `
-            <span class="result-num">${i+1}</span>
-            <span class="${contentClass}">${content}</span>
-        `;
-        
-        resultList.appendChild(resultItem);
-    }
-}
-
-// 更新游戏结果详情
-function updateResultDetail(text) {
-    const resultEl = document.getElementById("game-result");
-    if (resultEl) {
-        resultEl.textContent = text;
-    }
-}
-
-// 骰子动画
-function diceAnimation(callback) {
-    const dice1 = document.getElementById("dice1");
-    if (!dice1) {
-        callback();
-        return;
-    }
-    
-    const diceIcons = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
-    
-    let count = 0;
-    const animInterval = setInterval(() => {
-        const r1 = Math.floor(Math.random() * 6);
-        dice1.textContent = diceIcons[r1];
-        count++;
-        
-        if (count >= 10) {
-            clearInterval(animInterval);
-            callback();
-        }
-    }, 100);
-}
-
-// 新增：游戏结算
-function gameSettlement(isWin = false) {
-    const currentGrid = getCurrentGrid();
-    gameState.gameOver = true;
-    
-    // 禁用所有操作按钮
-    const rollBtn = document.getElementById("btn-roll");
-    if (rollBtn) rollBtn.disabled = true;
-    
-    let resultText = "";
-    let resultType = isWin ? "success" : "fail";
-    
-    if (isWin) {
-        // 胜利结算
-        resultText = `🎉 游戏胜利！你在${gameState.stepCount}次掷骰子后升至【${currentGrid.name}】（${currentGrid.grade}），位极人臣！`;
-        updateRecentResults(resultText, "success");
-    } else {
-        // 次数用尽结算
-        resultText = `⏰ 游戏结束！40次掷骰子次数已用尽，你的最终官职是【${currentGrid.name}】（${currentGrid.grade}），位于${gameState.currentCircle === "outer" ? "外圈" : gameState.currentCircle === "middle" ? "中圈" : "内圈"}。点击重新开始可再次挑战！`;
-        updateRecentResults(resultText, "fail");
-    }
-    
-    updateResultDetail(resultText);
-    
-    // 弹窗提示
-    setTimeout(() => {
-        alert(isWin ? 
-            `🎊 恭喜获胜！\n你用${gameState.stepCount}次掷骰子从白丁升至${currentGrid.name}（${currentGrid.grade}）！` :
-            `⏱️ 游戏结束\n40次掷骰子次数已用尽\n最终官职：${currentGrid.name}（${currentGrid.grade}）\n所在圈层：${gameState.currentCircle === "outer" ? "外圈" : gameState.currentCircle === "middle" ? "中圈" : "内圈"}\n点击重新开始可再次挑战`
-        );
-    }, 500);
-}
-
-// ===================== 核心游戏逻辑 =====================
-// 根据掷点获取目标格子ID
-function getTargetIdByPoint(pointType) {
-    const currentGrid = getCurrentGrid();
-    if (!currentGrid) return 1;
-    
-    // 记录操作前的官职
-    const prevGrid = { ...currentGrid };
-    
-    // 处理特殊规则
-    // 1. 首次掷骰子（白丁）
-    if (gameState.firstRoll && currentGrid.id === 1) {
-        gameState.firstRoll = false;
-        const resultText = `首次掷骰子，从【${prevGrid.name}】升至【童生】！剩余次数：${gameState.diceRemain-1}/40`;
-        updateResultDetail(resultText);
-        updateRecentResults(resultText, "success");
-        return 2;
-    }
-    
-    // 2. 贪墨直接贬为白丁
-    if (pointType === "tanmo") {
-        const resultText = `触发贪墨！从【${prevGrid.name}】贬为【白丁】，重新开始！剩余次数：${gameState.diceRemain}/40`;
-        updateResultDetail(resultText);
-        updateRecentResults(resultText, "fail");
-        gameState.currentCircle = "outer";
-        gameState.addTitleBonus = false;
-        return 1;
-    }
-    
-    // 3. 太师（终点）
-    if (currentGrid.isEnd) {
-        return currentGrid.id;
-    }
-    
-    // 4. 处理加衔奖励
-    let step = 0;
-    let bonusText = "";
-    if (gameState.addTitleBonus) {
-        bonusText = "（加衔奖励：优先升1级）";
-        gameState.addTitleBonus = false;
-    }
-    
-    // 基础升降规则
-    switch (pointType) {
-        case "de": // 德：升2级
-            step = gameState.addTitleBonus ? 3 : 2;
-            break;
-        case "cai": // 才：升1级
-            step = gameState.addTitleBonus ? 2 : 1;
-            break;
-        case "gong": // 功：升半级/原地
-            step = 0; // 简化处理：升半级=原地
-            break;
-        case "zang": // 赃：降2级
-            step = gameState.addTitleBonus ? -1 : -2;
-            break;
-        default:
-            step = 0;
-    }
-    
-    // 计算目标ID
-    let targetId = currentGrid.id + step;
-    
-    // 边界处理
-    if (targetId < 1) targetId = 1;
-    if (targetId > 77) targetId = 77;
-    
-    // 圈层切换 - 修正判断逻辑
-    if (targetId >= 1 && targetId <= 38) {
-        gameState.currentCircle = "outer";
-    } else if (targetId >= 39 && targetId <= 69) {
-        gameState.currentCircle = "middle";
-    } else if (targetId >= 70 && targetId <= 77) {
-        gameState.currentCircle = "inner";
-    }
-    
-    // 处理特殊格子
-    const targetGrid = gameState.allGrids.find(g => g.id === targetId) || currentGrid;
-    let specialText = "";
-    let resultType = "normal";
-    
-    if (targetGrid?.type === "special") {
-        if (targetGrid.name === "加衔") {
-            gameState.addTitleBonus = true;
-            specialText = "（触发加衔：下次升降优先升1级）";
-            resultType = "special";
-        } else if (targetGrid.name === "京察") {
-            const randomPoint = ["de", "cai", "gong", "zang"][Math.floor(Math.random() * 4)];
-            const pointText = {de: "德", cai: "才", gong: "功", zang: "赃"}[randomPoint];
-            specialText = `（触发京察：随机掷出${pointText}，${randomPoint === "de" || randomPoint === "cai" ? "升1级" : "降1级"}）`;
-            targetId = randomPoint === "de" || randomPoint === "cai" ? targetId + 1 : targetId - 1;
-            // 修正圈层判断
-            if (targetId >= 1 && targetId <= 38) gameState.currentCircle = "outer";
-            else if (targetId >= 39 && targetId <= 69) gameState.currentCircle = "middle";
-            else if (targetId >= 70 && targetId <= 77) gameState.currentCircle = "inner";
-            
-            resultType = randomPoint === "de" || randomPoint === "cai" ? "success" : "fail";
-        } else if (targetGrid.name === "外放") {
-            specialText = "（触发外放：降3级）";
-            targetId = Math.max(1, targetId - 3);
-            // 修正圈层判断
-            if (targetId >= 1 && targetId <= 38) gameState.currentCircle = "outer";
-            else if (targetId >= 39 && targetId <= 69) gameState.currentCircle = "middle";
-            else if (targetId >= 70 && targetId <= 77) gameState.currentCircle = "inner";
-            
-            resultType = "fail";
-        } else if (targetGrid.name === "贪墨") {
-            specialText = "（触发贪墨：贬为白丁）";
-            targetId = 1;
+        // 初始化游戏
+        function initGame() {
+            // 重置游戏状态
+            gameState.currentId = 1;
             gameState.currentCircle = "outer";
-            resultType = "fail";
+            gameState.diceRemain = gameConfig.totalDiceTimes; // 修改2：初始化次数为100
+            gameState.gameWon = false;
+            gameState.addTitleBonus = false;
+
+            // 渲染棋盘
+            renderBoard();
+            
+            // 更新状态显示
+            updateStatusDisplay();
+            
+            // 清空结果记录
+            elements.recentResultsList.innerHTML = '';
+            elements.resultDetail.textContent = '点击开始游戏，体验官场沉浮！';
+            
+            // 启用按钮
+            elements.rollBtn.disabled = false;
         }
-    }
-    
-    // 确定最终目标格子
-    const finalTargetGrid = gameState.allGrids.find(g => g.id === targetId) || currentGrid;
-    
-    // 生成结果文本
-    let resultText = "";
-    const pointName = {de: "德", cai: "才", gong: "功", zang: "赃"}[pointType] || "未知";
-    const circleText = gameState.currentCircle !== prevGrid.circle ? `（进入${gameState.currentCircle === "outer" ? "外圈" : gameState.currentCircle === "middle" ? "中圈" : "内圈"}）` : "";
-    
-    if (step > 0 || (pointType === "gong" && step === 0)) {
-        resultText = `掷出${pointName}${bonusText}：从【${prevGrid.name}】升至【${finalTargetGrid.name}】${circleText}${specialText}！剩余次数：${gameState.diceRemain-1}/40`;
-        resultType = resultType === "normal" ? "success" : resultType;
-    } else if (step < 0) {
-        resultText = `掷出${pointName}${bonusText}：从【${prevGrid.name}】降至【${finalTargetGrid.name}】${circleText}${specialText}！剩余次数：${gameState.diceRemain-1}/40`;
-        resultType = "fail";
-    } else {
-        resultText = `掷出${pointName}${bonusText}：官职保持【${finalTargetGrid.name}】不变${circleText}${specialText}！剩余次数：${gameState.diceRemain-1}/40`;
-    }
-    
-    // 更新结果显示
-    updateResultDetail(resultText);
-    updateRecentResults(resultText, resultType);
-    
-    // 检查游戏胜利
-    if (targetId === 77) {
-        gameState.gameWon = true;
-        const winText = `🎉 恭喜！升至太师（正一品），游戏胜利！共走了${gameState.stepCount + 1}步，剩余次数：${gameState.diceRemain-1}/40`;
-        updateResultDetail(winText);
-        updateRecentResults(winText, "success");
-        gameSettlement(true); // 胜利结算
-    }
-    
-    return targetId;
-}
 
-// 掷骰子操作
-function rollDice() {
-    // 检查游戏是否已结束
-    if (gameState.gameWon || gameState.gameOver || gameState.diceRemain <= 0) {
-        const tipText = gameState.diceRemain <= 0 ? "40次掷骰子次数已用尽！点击重新开始" : "游戏已胜利！点击重新开始可再次游玩";
-        updateResultDetail(tipText);
-        return;
-    }
-    
-    // 禁用按钮
-    const rollBtn = document.getElementById("btn-roll");
-    if (rollBtn) rollBtn.disabled = true;
-    
-    // 骰子动画
-    diceAnimation(() => {
-        // 减少剩余次数
-        gameState.diceRemain--;
-        
-        // 随机选择德才功赃（模拟真实掷骰子）
-        const randomPoints = ["de", "cai", "gong", "zang"];
-        const randomPoint = randomPoints[Math.floor(Math.random() * 4)];
-        
-        // 获取目标ID
-        const targetId = getTargetIdByPoint(randomPoint);
-        
-        // 更新游戏状态
-        gameState.currentId = targetId;
-        gameState.stepCount++;
-        
-        // 更新显示
-        updateStatusDisplay();
-        renderBoard();
-        
-        // 检查次数是否用尽
-        if (gameState.diceRemain <= 0 && !gameState.gameWon) {
-            gameSettlement(false); // 次数用尽结算
+        // 渲染棋盘
+        function renderBoard() {
+            elements.boardContainer.innerHTML = '';
+            
+            // 获取当前圈层的格子
+            const currentCircleGrids = gameConfig.circles[gameState.currentCircle].grids;
+            
+            // 生成格子
+            currentCircleGrids.forEach(grid => {
+                const gridElement = document.createElement('div');
+                gridElement.className = `grid-item ${gameState.currentCircle}`;
+                if (grid.id === gameState.currentId) {
+                    gridElement.classList.add('current');
+                }
+                
+                gridElement.innerHTML = `
+                    <div class="grid-name">${grid.name}</div>
+                    <div class="grid-grade">品级：${grid.grade}</div>
+                    <div class="grid-rule">规则：${grid.rule}</div>
+                `;
+                
+                elements.boardContainer.appendChild(gridElement);
+            });
+            
+            // 检查是否通关
+            checkGameWin();
         }
-        
-        // 1%概率触发贪墨
-        if (Math.random() < 0.01 && !gameState.gameWon && gameState.diceRemain > 0) {
-            setTimeout(() => {
-                const tanmoTarget = getTargetIdByPoint("tanmo");
-                gameState.currentId = tanmoTarget;
-                updateStatusDisplay();
-                renderBoard();
-            }, 1500);
+
+        // 更新状态显示
+        function updateStatusDisplay() {
+            // 获取当前官职名称
+            const currentGrid = getCurrentGrid();
+            elements.currentTitle.textContent = currentGrid.name;
+            elements.currentCircle.textContent = gameConfig.circles[gameState.currentCircle].name;
+            
+            // 更新剩余次数显示
+            updateDiceCountDisplay();
+            
+            // 检查按钮状态
+            checkRollButtonStatus();
         }
-        
-        // 启用按钮（如果游戏未结束）
-        if (rollBtn && !gameState.gameWon && !gameState.gameOver && gameState.diceRemain > 0) {
-            rollBtn.disabled = false;
+
+        // 更新剩余次数显示
+        function updateDiceCountDisplay() {
+            elements.diceCount.textContent = `剩余次数：${gameState.diceRemain}/${gameConfig.totalDiceTimes}`;
+            
+            // 根据剩余次数设置样式
+            if (gameState.diceRemain === 0) {
+                elements.diceCount.classList.add('over');
+                elements.diceCount.classList.remove('warning');
+            } else if (gameState.diceRemain <= 10) {
+                elements.diceCount.classList.add('warning');
+                elements.diceCount.classList.remove('over');
+            } else {
+                elements.diceCount.classList.remove('warning', 'over');
+            }
         }
-    });
-}
 
-// 重新开始游戏
-function resetGame() {
-    gameState.currentId = 1;
-    gameState.currentCircle = "outer";
-    gameState.stepCount = 0;
-    gameState.diceRemain = 40; // 重置次数
-    gameState.firstRoll = true;
-    gameState.addTitleBonus = false;
-    gameState.gameWon = false;
-    gameState.gameOver = false;
-    gameState.recentResults = []; // 清空历史结果
-    
-    // 启用按钮
-    const rollBtn = document.getElementById("btn-roll");
-    if (rollBtn) rollBtn.disabled = false;
-    
-    // 更新显示
-    updateStatusDisplay();
-    updateResultDetail("点击「掷骰子」开始游戏，首次掷骰子自动升至童生 | 每局限40次掷骰子");
-    updateRecentResults("游戏重置，等待开始");
-    renderBoard();
-}
+        // 检查掷骰子按钮状态
+        function checkRollButtonStatus() {
+            elements.rollBtn.disabled = gameState.diceRemain === 0 || gameState.gameWon;
+        }
 
-// ===================== 事件绑定 =====================
-function bindEvents() {
-    // 掷骰子按钮
-    const rollBtn = document.getElementById("btn-roll");
-    if (rollBtn) rollBtn.addEventListener("click", rollDice);
-    
-    // 重新开始
-    const resetBtn = document.getElementById("btn-reset");
-    if (resetBtn) resetBtn.addEventListener("click", resetGame);
-}
+        // 获取当前格子信息
+        function getCurrentGrid() {
+            return gameConfig.circles[gameState.currentCircle].grids.find(
+                grid => grid.id === gameState.currentId
+            ) || gameConfig.circles.outer.grids[0];
+        }
 
-// ===================== 初始化游戏 =====================
-function initGame() {
-    mergeAllGrids();
-    updateStatusDisplay();
-    renderBoard();
-    bindEvents();
-    // 初始化近五次结果显示
-    updateRecentResults("尚未开始");
-}
+        // 掷骰子（核心逻辑）
+        function rollDice() {
+            if (gameState.diceRemain === 0 || gameState.gameWon) return;
+            
+            // 修改3：只在这里扣减1次次数，确保计数准确
+            gameState.diceRemain--;
+            
+            // 随机生成点数类型（德、才、功、赃）
+            const pointTypes = ['德', '才', '功', '赃'];
+            const randomPoint = pointTypes[Math.floor(Math.random() * pointTypes.length)];
+            
+            // 根据点数移动位置
+            moveByPoint(randomPoint);
+            
+            // 1%概率触发贪墨（不额外扣次数）
+            if (Math.random() < 0.01 && !gameState.gameWon && gameState.diceRemain >= 0) {
+                setTimeout(() => {
+                    const tanmoTarget = getTargetIdByPoint("tanmo");
+                    gameState.currentId = tanmoTarget;
+                    updateStatusDisplay();
+                    renderBoard();
+                }, 1500);
+            }
+            
+            // 更新状态
+            updateStatusDisplay();
+            renderBoard();
+        }
 
-// 启动游戏
-initGame();
-</script>
+        // 根据点数移动位置
+        function moveByPoint(pointType) {
+            const currentGrid = getCurrentGrid();
+            let newId = gameState.currentId;
+            let resultText = '';
+            
+            // 根据点数类型计算移动
+            switch(pointType) {
+                case '德':
+                    newId += 1;
+                    resultText = `掷得【德】！从【${currentGrid.name}】晋升一级，剩余次数：${gameState.diceRemain}/${gameConfig.totalDiceTimes}`;
+                    break;
+                case '才':
+                    newId += 1;
+                    resultText = `掷得【才】！从【${currentGrid.name}】晋升一级，剩余次数：${gameState.diceRemain}/${gameConfig.totalDiceTimes}`;
+                    break;
+                case '功':
+                    newId += 1;
+                    resultText = `掷得【功】！从【${currentGrid.name}】晋升一级，剩余次数：${gameState.diceRemain}/${gameConfig.totalDiceTimes}`;
+                    break;
+                case '赃':
+                    newId = Math.max(1, newId - 1);
+                    resultText = `掷得【赃】！从【${currentGrid.name}】降职一级，剩余次数：${gameState.diceRemain}/${gameConfig.totalDiceTimes}`;
+                    break;
+                default:
+                    resultText = `触发特殊事件【${pointType}】，剩余次数：${gameState.diceRemain}/${gameConfig.totalDiceTimes}`;
+                    newId = getTargetIdByPoint(pointType);
+            }
+            
+            // 处理加衔奖励
+            if (gameState.addTitleBonus) {
+                newId += 1;
+                resultText += ' 加衔奖励：再升一级！';
+                gameState.addTitleBonus = false;
+            }
+            
+            // 检查圈层边界
+            const maxId = gameConfig.circles[gameState.currentCircle].grids.length;
+            if (newId > maxId) {
+                // 晋升到下一圈层
+                if (gameState.currentCircle === 'outer') {
+                    gameState.currentCircle = 'middle';
+                    newId = 17; // 翰林
+                    resultText += ' 成功晋升到中圈！';
+                } else if (gameState.currentCircle === 'middle') {
+                    gameState.currentCircle = 'inner';
+                    newId = 25; // 侍卫
+                    resultText += ' 成功晋升到内圈！';
+                } else {
+                    // 内圈满级
+                    newId = maxId;
+                    resultText += ' 已达最高官职！';
+                }
+            }
+            
+            // 更新位置
+            gameState.currentId = newId;
+            
+            // 更新结果显示
+            updateResultDetail(resultText);
+            updateRecentResults(resultText, pointType === '赃' ? 'fail' : 'success');
+        }
+
+        // 获取特殊事件目标ID
+        function getTargetIdByPoint(pointType) {
+            const currentGrid = getCurrentGrid();
+            let targetId = gameState.currentId;
+            let resultText = '';
+            
+            switch(pointType) {
+                case 'tanmo': // 贪墨
+                    resultText = `触发贪墨！从【${currentGrid.name}】贬为【白丁】，重新开始！剩余次数：${gameState.diceRemain}/${gameConfig.totalDiceTimes}`;
+                    updateResultDetail(resultText);
+                    updateRecentResults(resultText, "fail");
+                    gameState.currentCircle = "outer";
+                    gameState.addTitleBonus = false;
+                    targetId = 1;
+                    break;
+                case 'jiaxian': // 加衔
+                    resultText = `触发加衔！下次掷骰子将升2级，剩余次数：${gameState.diceRemain}/${gameConfig.totalDiceTimes}`;
+                    updateResultDetail(resultText);
+                    updateRecentResults(resultText, "special");
+                    gameState.addTitleBonus = true;
+                    break;
+                case 'jingcha': // 京察
+                    if (gameState.currentId > 5) {
+                        targetId -= 1;
+                        resultText = `京察考核不合格！从【${currentGrid.name}】降职一级，剩余次数：${gameState.diceRemain}/${gameConfig.totalDiceTimes}`;
+                        updateRecentResults(resultText, "fail");
+                    } else {
+                        resultText = `京察考核合格！职位不变，剩余次数：${gameState.diceRemain}/${gameConfig.totalDiceTimes}`;
+                        updateRecentResults(resultText, "success");
+                    }
+                    updateResultDetail(resultText);
+                    break;
+            }
+            
+            return targetId;
+        }
+
+        // 更新结果详情
+        function updateResultDetail(text) {
+            elements.resultDetail.textContent = text;
+        }
+
+        // 更新近期结果
+        function updateRecentResults(text, type) {
+            const li = document.createElement('li');
+            li.className = 'result-item';
+            li.innerHTML = `
+                <span class="result-num">${gameConfig.totalDiceTimes - gameState.diceRemain}</span>
+                <span class="result-content ${type}">${text}</span>
+            `;
+            
+            // 添加到列表开头
+            elements.recentResultsList.insertBefore(li, elements.recentResultsList.firstChild);
+            
+            // 只保留最近5条记录
+            if (elements.recentResultsList.children.length > 5) {
+                elements.recentResultsList.removeChild(elements.recentResultsList.lastChild);
+            }
+        }
+
+        // 检查游戏是否通关
+        function checkGameWin() {
+            // 内圈最后一个格子为通关
+            if (gameState.currentCircle === 'inner' && gameState.currentId === 34) {
+                gameState.gameWon = true;
+                const winText = `恭喜！你已晋升为【兵马大元帅】，游戏通关！剩余次数：${gameState.diceRemain}/${gameConfig.totalDiceTimes}`;
+                updateResultDetail(winText);
+                updateRecentResults(winText, "success");
+                elements.rollBtn.disabled = true;
+            }
+            
+            // 次数用完游戏结束
+            if (gameState.diceRemain === 0 && !gameState.gameWon) {
+                const loseText = `次数用尽！你的最终官职是【${getCurrentGrid().name}】，游戏结束！`;
+                updateResultDetail(loseText);
+                updateRecentResults(loseText, "fail");
+            }
+        }
+
+        // 绑定事件
+        function bindEvents() {
+            // 掷骰子按钮
+            elements.rollBtn.addEventListener('click', rollDice);
+            
+            // 重新开始按钮
+            elements.restartBtn.addEventListener('click', initGame);
+        }
+
+        // 初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            initGame();
+            bindEvents();
+        });
+    </script>
 </body>
 </html>
