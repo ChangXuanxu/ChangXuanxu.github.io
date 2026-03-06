@@ -94,64 +94,84 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
+            transition: background 0.2s ease;
             z-index: 1;
+            cursor: pointer;
         }
 
-        /* 游戏状态文字 */
-        .status {
-            font-size: 26px;
-            margin-bottom: 20px;
+        /* 游戏状态/结果文字 */
+        .status-text {
+            font-size: 28px;
             color: #333;
+            margin-bottom: 20px;
             z-index: 10;
             pointer-events: none;
+            text-align: center;
         }
 
-        .result {
-            font-size: 34px;
+        .result-area {
+            z-index: 10;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        .current-time {
+            font-size: 42px;
             font-weight: bold;
             color: #dc3545;
             margin: 10px 0;
-            z-index: 10;
-            pointer-events: none;
         }
 
-        .level {
-            font-size: 20px;
+        .avg-time {
+            font-size: 26px;
             color: #007bff;
-            z-index: 10;
-            pointer-events: none;
+            margin: 10px 0;
         }
 
-        /* 按钮 */
-        .btn {
-            padding: 14px 32px;
+        .rank-text {
+            font-size: 20px;
+            color: #28a745;
+            margin: 10px 0;
+        }
+
+        /* 按钮样式 */
+        .game-btn {
+            padding: 12px 30px;
             font-size: 18px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
             margin: 10px;
             z-index: 10;
         }
 
-        .start {
-            background: #007bff;
+        .start-btn {
+            background-color: #007bff;
             color: white;
         }
 
-        .restart {
-            background: #ffc107;
-            color: #333;
+        .start-btn:hover {
+            background-color: #0056b3;
         }
 
-        .hide {
+        .restart-btn {
+            background-color: #ffc107;
+            color: #2c3e50;
+        }
+
+        .restart-btn:hover {
+            background-color: #e0a800;
+        }
+
+        /* 隐藏元素 */
+        .hidden {
             display: none !important;
         }
     </style>
 </head>
-
 <body>
-    <!-- 导航 -->
+    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="navbar-container">
             <a href="index.html" class="navbar-logo">士多啤梨除草机</a>
@@ -165,76 +185,150 @@
         </div>
     </nav>
 
+    <!-- 返回按钮 -->
     <a href="games.html" class="back-btn">← 返回小游戏合集</a>
 
-    <!-- 全屏游戏区 -->
+    <!-- 全屏游戏区域 -->
     <div class="game-full" id="gameArea">
-        <div class="status" id="status">等待开始…</div>
-        <div class="result hide" id="result"></div>
-        <div class="level hide" id="level"></div>
-        <button class="btn start" id="startBtn">开始测试</button>
-        <button class="btn restart hide" id="restartBtn">再来一次</button>
+        <!-- 状态提示 -->
+        <div class="status-text" id="statusText">点击「开始测试」，等待屏幕变蓝后立即点击</div>
+        
+        <!-- 结果区域 -->
+        <div class="result-area hidden" id="resultArea">
+            <div class="current-time" id="currentTime"></div>
+            <div class="avg-time" id="avgTime"></div>
+            <div class="rank-text" id="rankText"></div>
+        </div>
+        
+        <!-- 按钮 -->
+        <button class="game-btn start-btn" id="startBtn">开始测试</button>
+        <button class="game-btn restart-btn hidden" id="restartBtn">再来一次</button>
     </div>
 
     <script>
+        // 获取DOM元素
         const gameArea = document.getElementById('gameArea');
-        const status = document.getElementById('status');
-        const result = document.getElementById('result');
-        const level = document.getElementById('level');
+        const statusText = document.getElementById('statusText');
+        const resultArea = document.getElementById('resultArea');
+        const currentTime = document.getElementById('currentTime');
+        const avgTime = document.getElementById('avgTime');
+        const rankText = document.getElementById('rankText');
         const startBtn = document.getElementById('startBtn');
         const restartBtn = document.getElementById('restartBtn');
 
-        let startTime = 0;
-        let isWaiting = false;
+        // 游戏核心变量
+        let reactionTimes = []; // 存储每轮反应时间
+        let startTime = 0;      // 屏幕变蓝的时间
+        let isTesting = false;  // 是否在测试中（等待变蓝）
+        let isActive = false;   // 屏幕已变蓝，可点击
 
-        // 开始
-        startBtn.onclick = () => {
-            startBtn.classList.add('hide');
-            result.classList.add('hide');
-            level.classList.add('hide');
-            status.textContent = '等待变色…';
+        // 初始化游戏状态
+        function initGame() {
+            reactionTimes = [];
+            isTesting = false;
+            isActive = false;
+            
+            // 重置UI
+            gameArea.style.background = '#ffffff';
+            statusText.textContent = '点击「开始测试」，等待屏幕变蓝后立即点击';
+            resultArea.classList.add('hidden');
+            startBtn.classList.remove('hidden');
+            restartBtn.classList.add('hidden');
+        }
+
+        // 开始测试回合
+        function startTest() {
+            // 隐藏开始按钮，重置状态
+            startBtn.classList.add('hidden');
+            resultArea.classList.add('hidden');
+            isTesting = true;
+            isActive = false;
+            
+            // 提示文本
+            statusText.textContent = '等待屏幕变蓝...';
             gameArea.style.background = '#ffffff';
 
-            const delay = Math.random() * 3000 + 1000;
-            isWaiting = true;
-
+            // 随机延迟（1-5秒）后让屏幕变蓝
+            const randomDelay = Math.floor(Math.random() * 4000) + 1000; // 1000-5000ms
             setTimeout(() => {
-                if (!isWaiting) return;
-                gameArea.style.background = '#007bff'; // 全屏变蓝
+                if (!isTesting) return; // 防止提前退出
+                
+                // 屏幕变蓝，激活点击
+                gameArea.style.background = '#007bff';
+                statusText.textContent = '立即点击屏幕！';
                 startTime = Date.now();
-                status.textContent = '点！';
-            }, delay);
-        };
+                isActive = true;
+            }, randomDelay);
+        }
 
-        // 点击全屏
-        gameArea.onclick = () => {
-            if (!isWaiting) return;
-            isWaiting = false;
+        // 处理屏幕点击
+        function handleAreaClick() {
+            // 1. 未开始测试：点击无效
+            if (!isTesting && !isActive) {
+                return;
+            }
 
-            const time = Date.now() - startTime;
-            result.textContent = `${time} ms`;
-            result.classList.remove('hide');
+            // 2. 提前点击（作弊）：测试中但屏幕未变蓝
+            if (isTesting && !isActive) {
+                isTesting = false;
+                statusText.textContent = '作弊！请等待屏幕变蓝后再点击';
+                startBtn.classList.remove('hidden');
+                return;
+            }
 
-            let text = '';
-            if (time < 180) text = '🏆 超神反应！';
-            else if (time < 250) text = '⚡ 顶尖水平';
-            else if (time < 350) text = '👍 正常偏快';
-            else if (time < 450) text = '🙂 普通人类水平';
-            else text = '💤 再练练～';
+            // 3. 有效点击：屏幕已变蓝
+            if (isActive) {
+                // 计算反应时间（毫秒）
+                const endTime = Date.now();
+                const time = endTime - startTime;
+                reactionTimes.push(time);
+                
+                // 更新UI
+                isTesting = false;
+                isActive = false;
+                gameArea.style.background = '#ffffff';
+                
+                // 显示本轮结果
+                showResult(time);
+            }
+        }
 
-            level.textContent = text;
-            level.classList.remove('hide');
-            status.textContent = '测试完成';
-            restartBtn.classList.remove('hide');
-        };
+        // 显示测试结果（完整功能）
+        function showResult(currentTimeVal) {
+            // 1. 显示本轮反应时间
+            currentTime.textContent = `本轮反应：${currentTimeVal} ms`;
+            
+            // 2. 计算平均反应时间
+            const avgVal = Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length);
+            avgTime.textContent = `平均反应：${avgVal} ms`;
+            
+            // 3. 生成评级文字
+            let rank = '';
+            if (currentTimeVal < 150) rank = '超神！你的反应速度堪比职业电竞选手';
+            else if (currentTimeVal < 200) rank = '优秀！反应速度远超普通人';
+            else if (currentTimeVal < 300) rank = '良好！反应速度处于平均水平之上';
+            else if (currentTimeVal < 400) rank = '及格！反应速度是普通人水平';
+            else rank = '加油！多玩几次能提升反应速度哦';
+            rankText.textContent = rank;
+            
+            // 4. 显示结果区域，隐藏状态文字，显示再来一次按钮
+            statusText.textContent = '测试完成';
+            resultArea.classList.remove('hidden');
+            restartBtn.classList.remove('hidden');
+        }
 
-        // 重置
-        restartBtn.onclick = () => {
-            restartBtn.classList.add('hide');
-            startBtn.classList.remove('hide');
-            gameArea.style.background = '#ffffff';
-            status.textContent = '等待开始…';
-        };
+        // 绑定事件
+        // 开始测试按钮
+        startBtn.addEventListener('click', startTest);
+        
+        // 再来一次按钮
+        restartBtn.addEventListener('click', initGame);
+        
+        // 全屏点击事件
+        gameArea.addEventListener('click', handleAreaClick);
+        
+        // 初始化游戏
+        initGame();
     </script>
 </body>
 </html>
