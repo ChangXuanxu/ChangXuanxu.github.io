@@ -104,8 +104,19 @@
             background: #218838;
         }
 
-        /* 运势结果显示样式 */
-        #fortuneResult {
+        /* Yes/No按钮特殊样式 */
+        #yesnoBtn {
+            padding: 12px 24px;
+            font-size: 18px;
+            background: #6610f2;
+            margin-left: 10px;
+        }
+        #yesnoBtn:hover {
+            background: #520dc2;
+        }
+
+        /* 结果显示通用样式 */
+        .result-box {
             margin-top: 20px;
             padding: 20px;
             border-radius: 8px;
@@ -113,7 +124,16 @@
             font-size: 24px;
             font-weight: bold;
             display: none;
+        }
+
+        /* 运势结果显示样式 */
+        #fortuneResult {
             /* 不同运势的颜色会通过JS动态设置 */
+        }
+
+        /* Yes/No结果显示样式 */
+        #yesnoResult {
+            /* 不同结果的颜色会通过JS动态设置 */
         }
 
         /* 回到顶部按钮样式 */
@@ -146,14 +166,18 @@
     </div>
 
     <div class="content">
-        <h2>今日运势抽取</h2>
-        <p>点击下方按钮，抽取你的今日运势吧！</p>
+        <h2>趣味抽取</h2>
+        <p>选择下方功能，抽取你的专属答案吧！</p>
         
         <!-- 运势抽取按钮 -->
         <button id="fortuneBtn" class="btn">抽取今日运势 🎲</button>
+        <!-- Yes/No抽取按钮（新增） -->
+        <button id="yesnoBtn" class="btn">Yes / No 抽取 🤔</button>
         
         <!-- 运势结果显示区域 -->
-        <div id="fortuneResult"></div>
+        <div id="fortuneResult" class="result-box"></div>
+        <!-- Yes/No结果显示区域（新增） -->
+        <div id="yesnoResult" class="result-box"></div>
 
         <h2 style="margin-top: 30px;">联系方式</h2>
         <p>GitHub：<a href="https://github.com/ChangXuanxu">ChangXuanxu</a></p>
@@ -184,6 +208,9 @@
 
         // 点击抽取运势
         fortuneBtn.addEventListener('click', function() {
+            // 隐藏另一个结果，避免混淆
+            yesnoResult.style.display = 'none';
+            
             // 禁用按钮防止重复点击
             fortuneBtn.disabled = true;
             fortuneBtn.textContent = '抽取中...';
@@ -206,7 +233,44 @@
             }, 1000);
         });
 
-        // 3. 回到顶部按钮交互
+        // 3. Yes/No抽取功能（新增）
+        const yesnoBtn = document.getElementById('yesnoBtn');
+        const yesnoResult = document.getElementById('yesnoResult');
+        
+        // 定义Yes/No列表，等概率
+        const yesnoOptions = [
+            { name: 'Yes', color: '#28a745' },     // 绿色
+            { name: 'No', color: '#dc3545' }       // 红色
+        ];
+
+        // 点击抽取Yes/No
+        yesnoBtn.addEventListener('click', function() {
+            // 隐藏运势结果，避免混淆
+            fortuneResult.style.display = 'none';
+            
+            // 禁用按钮防止重复点击
+            yesnoBtn.disabled = true;
+            yesnoBtn.textContent = '思考中...';
+            
+            // 模拟抽取动画效果（1秒后显示结果）
+            setTimeout(() => {
+                // 随机生成0或1的索引，等概率抽取
+                const randomIndex = Math.floor(Math.random() * yesnoOptions.length);
+                const selectedOption = yesnoOptions[randomIndex];
+                
+                // 设置结果显示样式和内容
+                yesnoResult.style.display = 'block';
+                yesnoResult.style.backgroundColor = selectedOption.color + '20'; // 浅色调背景
+                yesnoResult.style.color = selectedOption.color;
+                yesnoResult.textContent = `答案是：${selectedOption.name}`;
+                
+                // 恢复按钮状态
+                yesnoBtn.disabled = false;
+                yesnoBtn.textContent = '重新抽取 Yes/No 🤔';
+            }, 1000);
+        });
+
+        // 4. 回到顶部按钮交互
         const backToTopBtn = document.getElementById('backToTop');
         // 滚动时显示/隐藏按钮
         window.onscroll = function() {
