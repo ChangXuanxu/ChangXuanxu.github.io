@@ -64,12 +64,6 @@
             color: #007bff;
         }
 
-        .navbar-item a.active {
-            color: #007bff;
-            font-weight: bold;
-            border-bottom: 2px solid #007bff;
-        }
-
         /* 返回合集按钮 */
         .back-btn {
             position: fixed;
@@ -98,14 +92,15 @@
             right: 0;
             bottom: 0;
             background-color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            z-index: 1;
         }
 
         /* 规则说明界面 */
         .rules-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
             padding: 40px;
             max-width: 800px;
@@ -113,6 +108,7 @@
             border-radius: 8px;
             background-color: #fff;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            z-index: 2;
         }
 
         .rules-screen h2 {
@@ -151,6 +147,7 @@
             left: 0;
             right: 0;
             bottom: 0;
+            z-index: 1;
             display: none;
         }
 
@@ -167,6 +164,7 @@
                 linear-gradient(90deg, #eee 1px, transparent 1px);
             background-size: 40px 40px;
             cursor: crosshair;
+            z-index: 1;
         }
 
         /* 得分弹窗 */
@@ -181,7 +179,7 @@
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
             text-align: center;
             display: none;
-            z-index: 2000;
+            z-index: 100;
         }
 
         .score-modal h3 {
@@ -242,7 +240,7 @@
             background-color: rgba(255, 255, 255, 0.8);
             padding: 8px 16px;
             border-radius: 4px;
-            z-index: 100;
+            z-index: 10;
         }
     </style>
 </head>
@@ -312,51 +310,88 @@
         let points = []; // 存储绘制的点
         let canvasWidth, canvasHeight;
 
-        // 初始化画布大小
+        // 页面加载完成后立即初始化画布
+        window.addEventListener('load', () => {
+            initCanvas();
+            // 绑定鼠标事件（确保事件能被捕获）
+            bindCanvasEvents();
+        });
+
+        // 窗口大小变化时重新初始化画布
+        window.addEventListener('resize', () => {
+            initCanvas();
+        });
+
+        // 初始化画布大小（核心修复：确保画布宽高和显示区域一致）
         function initCanvas() {
-            canvasWidth = window.innerWidth;
-            canvasHeight = window.innerHeight;
+            // 获取画布的实际显示尺寸
+            const rect = canvas.getBoundingClientRect();
+            canvasWidth = rect.width;
+            canvasHeight = rect.height;
+            // 设置画布的绘图尺寸（关键：避免绘制模糊+坐标匹配）
             canvas.width = canvasWidth;
             canvas.height = canvasHeight;
+            console.log('画布初始化完成：', canvasWidth, canvasHeight); // 调试日志
         }
 
-        // 开始游戏
-        startBtn.addEventListener('click', () => {
-            rulesScreen.style.display = 'none';
-            gameScreen.style.display = 'block';
-            initCanvas();
-            clearCanvas();
-        });
+        // 绑定画布鼠标事件（核心修复：确保事件正确绑定）
+        function bindCanvasEvents() {
+            // 鼠标按下
+            canvas.addEventListener('mousedown', (e) => {
+                e.preventDefault(); // 阻止默认行为
+                isDrawing = true;
+                points = []; // 清空之前的点
+                // 获取鼠标在画布内的相对坐标（核心：避免页面滚动导致坐标偏移）
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                points.push({x, y});
+                console.log('开始绘制，起始点：', x, y); // 调试日志
+            });
 
-        // 鼠标事件监听
-        canvas.addEventListener('mousedown', (e) => {
-            isDrawing = true;
-            points = []; // 清空之前的点
-            const x = e.clientX;
-            const y = e.clientY;
-            points.push({x, y});
-        });
+            // 鼠标移动
+            canvas.addEventListener('mousemove', (e) => {
+                if (!isDrawing) return;
+                e.preventDefault();
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                points.push({x, y});
+                drawPath();
+            });
 
-        canvas.addEventListener('mousemove', (e) => {
+            // 鼠标松开（画布内）
+            canvas.addEventListener('mouseup', (e) => {
+                e.preventDefault();
+                finishDrawing();
+            });
+
+            // 鼠标离开画布（防止鼠标移出后还在绘制）
+            canvas.addEventListener('mouseleave', (e) => {
+                e.preventDefault();
+                finishDrawing();
+            });
+        }
+
+        // 完成绘制逻辑
+        function finishDrawing() {
             if (!isDrawing) return;
-            const x = e.clientX;
-            const y = e.clientY;
-            points.push({x, y});
-            drawPath();
-        });
-
-        canvas.addEventListener('mouseup', () => {
-            if (!isDrawing || points.length < 10) { // 至少绘制10个点才评估
+            isDrawing = false;
+            console.log('绘制完成，总点数：', points.length); // 调试日志
+            
+            if (points.length < 10) { // 至少绘制10个点才评估
                 clearCanvas();
+                alert('绘制的点太少啦，请重新绘制一个完整的圆形！');
                 return;
             }
-            isDrawing = false;
+            
             const score = calculateCircleScore();
             showScore(score);
-        });
+        }
 
-        // 绘制路径
+        // 绘制路径（核心修复：确保路径正确渲染）
         function drawPath() {
+            if (points.length < 2) return;
             clearCanvas();
             ctx.beginPath();
             ctx.moveTo(points[0].x, points[0].y);
@@ -408,13 +443,11 @@
             const stdDev = Math.sqrt(variance / distances.length);
 
             // 5. 计算圆度得分（0-100）
-            // 标准差越小，得分越高，非线性映射
             const maxStdDev = avgDist * 0.3; // 最大可接受标准差（平均距离的30%）
             let score = 100 - (stdDev / maxStdDev) * 100;
             score = Math.max(0, Math.min(100, score));
 
             // 6. 加入对称性修正
-            // 计算上下左右四个方向的点分布均匀度
             let quadrants = [0, 0, 0, 0]; // 左上、右上、右下、左下
             for (let p of points) {
                 if (p.x < centerX && p.y < centerY) quadrants[0]++;
@@ -456,6 +489,14 @@
             scoreModal.style.display = 'block';
         }
 
+        // 开始游戏
+        startBtn.addEventListener('click', () => {
+            rulesScreen.style.display = 'none';
+            gameScreen.style.display = 'block';
+            initCanvas(); // 再次初始化确保尺寸正确
+            clearCanvas();
+        });
+
         // 再玩一次
         restartBtn.addEventListener('click', () => {
             scoreModal.style.display = 'none';
@@ -466,9 +507,6 @@
         backToListBtn.addEventListener('click', () => {
             window.location.href = 'games.html';
         });
-
-        // 窗口大小变化时重新初始化画布
-        window.addEventListener('resize', initCanvas);
     </script>
 </body>
 </html>
