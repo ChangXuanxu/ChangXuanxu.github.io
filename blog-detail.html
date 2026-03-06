@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>博客详情 - ChangXuanxu 的个人网站</title>
+    <title>博客详情 - 士多啤梨除草机</title>
     <style>
         /* 全局重置与基础样式 */
         * {
@@ -26,7 +26,7 @@
             transition: opacity 0.8s ease;
         }
 
-        /* 导航栏样式 */
+        /* 导航栏样式（logo改为士多啤梨除草机） */
         .navbar {
             background-color: rgba(255, 255, 255, 0.9);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -99,18 +99,6 @@
             line-height: 1.4;
         }
 
-        /* 博客元信息 */
-        .blog-detail-meta {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            color: #888;
-            font-size: 14px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 25px;
-        }
-
         /* 博客内容 */
         .blog-detail-content {
             line-height: 1.8;
@@ -160,8 +148,8 @@
             background-color: #0056b3;
         }
 
-        /* 加载提示 */
-        .loading {
+        /* 加载/错误提示 */
+        .tip {
             text-align: center;
             padding: 50px;
             font-size: 18px;
@@ -202,17 +190,11 @@
             .blog-detail-card {
                 padding: 20px;
             }
-
-            .blog-detail-meta {
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
+    <!-- 导航栏（logo改为士多啤梨除草机） -->
     <nav class="navbar">
         <div class="navbar-container">
             <a href="index.html" class="navbar-logo">士多啤梨除草机</a>
@@ -229,13 +211,8 @@
     <div class="blog-detail-container">
         <div class="blog-detail-card">
             <h1 class="blog-detail-title" id="blogTitle">加载中...</h1>
-            <div class="blog-detail-meta" id="blogMeta">
-                <span id="blogDate">加载中...</span>
-                <span id="blogCategory">加载中...</span>
-                <span id="blogRead">加载中...</span>
-            </div>
             <div class="blog-detail-content" id="blogContent">
-                <div class="loading">正在加载文章内容...</div>
+                <div class="tip">正在加载文章内容...</div>
             </div>
             <a href="blog.html" class="back-to-list">← 返回博客列表</a>
         </div>
@@ -244,51 +221,34 @@
     <button id="backToTop">↑</button>
 
     <script>
-        // 博客元数据（和blog.html保持一致）
-        const blogData = [
-            {
-                filename: "flower.html",
-                title: "花",
-                date: "2025-08-24",
-                category: "小故事",
-                read: 91,
-                excerpt: "学校的春光应是极美的，眼看着千朵万朵花儿渐次盛放。F先生却自那个大雪纷飞的夜晚后变得沉默寡言，高三的一模、考场的飞雪、诗人的赠书……终在书页间见得“花落春仍在”。"
-            }
-        ];
-
         window.onload = function() {
             document.body.style.opacity = 1;
             loadBlogContent();
         };
 
-        // 加载博客内容
+        // 极简加载：直接根据文件名加载，无需元数据
         async function loadBlogContent() {
             // 获取URL中的文件名参数
             const urlParams = new URLSearchParams(window.location.search);
             const filename = decodeURIComponent(urlParams.get('file') || '');
             
-            // 找到对应的博客元数据
-            const blogMeta = blogData.find(blog => blog.filename === filename);
-            if (!blogMeta) {
+            if (!filename) {
                 document.getElementById('blogTitle').textContent = '文章不存在';
-                document.getElementById('blogContent').innerHTML = '<p style="text-align:center; color:red;">抱歉，该文章不存在或已被删除！</p>';
+                document.getElementById('blogContent').innerHTML = '<div class="tip" style="color:red;">未找到文章参数！</div>';
                 return;
             }
 
-            // 更新标题和元信息
-            document.getElementById('blogTitle').textContent = blogMeta.title;
-            document.getElementById('blogDate').textContent = blogMeta.date;
-            document.getElementById('blogCategory').textContent = blogMeta.category;
-            document.getElementById('blogRead').textContent = `阅读：${blogMeta.read}`;
+            // 设置标题（去掉.html后缀）
+            document.getElementById('blogTitle').textContent = filename.replace('.html', '');
 
             // 加载博客文件内容
             try {
                 const response = await fetch(`blogs/${filename}`);
-                if (!response.ok) throw new Error('文件加载失败');
+                if (!response.ok) throw new Error('文件不存在或加载失败');
                 const content = await response.text();
                 document.getElementById('blogContent').innerHTML = content;
             } catch (error) {
-                document.getElementById('blogContent').innerHTML = `<p style="text-align:center; color:red;">文章内容加载失败：${error.message}</p>`;
+                document.getElementById('blogContent').innerHTML = `<div class="tip" style="color:red;">文章加载失败：${error.message}</div>`;
             }
         }
 
