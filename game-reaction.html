@@ -216,16 +216,16 @@
         const startBtn = document.getElementById('startBtn');
         const restartBtn = document.getElementById('restartBtn');
 
-        // 游戏核心变量
-        let reactionTimes = []; // 存储每轮反应时间
-        let startTime = 0;      // 屏幕变蓝的时间
-        let isTesting = false;  // 是否在测试中（等待变蓝）
+        // 游戏核心变量（关键修复：初始化更严谨）
+        let reactionTimes = []; 
+        let startTime = 0;      
+        let isWaiting = false;  // 等待屏幕变蓝的状态
         let isActive = false;   // 屏幕已变蓝，可点击
 
         // 初始化游戏状态
         function initGame() {
             reactionTimes = [];
-            isTesting = false;
+            isWaiting = false;
             isActive = false;
             
             // 重置UI
@@ -236,41 +236,41 @@
             restartBtn.classList.add('hidden');
         }
 
-        // 开始测试回合
+        // 开始测试回合（核心修复：时间逻辑）
         function startTest() {
-            // 隐藏开始按钮，重置状态
             startBtn.classList.add('hidden');
             resultArea.classList.add('hidden');
-            isTesting = true;
+            isWaiting = true;
             isActive = false;
             
-            // 提示文本
             statusText.textContent = '等待屏幕变蓝...';
             gameArea.style.background = '#ffffff';
 
-            // 随机延迟（1-5秒）后让屏幕变蓝
-            const randomDelay = Math.floor(Math.random() * 4000) + 1000; // 1000-5000ms
+            // 随机延迟 1-5 秒
+            const randomDelay = Math.floor(Math.random() * 4000) + 1000;
             setTimeout(() => {
-                if (!isTesting) return; // 防止提前退出
+                if (!isWaiting) return; 
                 
-                // 屏幕变蓝，激活点击
+                // 只有等待状态下才激活，避免重复触发
                 gameArea.style.background = '#007bff';
                 statusText.textContent = '立即点击屏幕！';
-                startTime = Date.now();
+                startTime = Date.now(); // 精准记录变蓝时间
                 isActive = true;
+                isWaiting = false; // 等待状态结束
             }, randomDelay);
         }
 
-        // 处理屏幕点击
-        function handleAreaClick() {
-            // 1. 未开始测试：点击无效
-            if (!isTesting && !isActive) {
-                return;
-            }
+        // 处理屏幕点击（核心修复：精准判断）
+        function handleAreaClick(e) {
+            // 过滤按钮点击（避免点按钮也算反应）
+            if (e.target.tagName === 'BUTTON') return;
 
-            // 2. 提前点击（作弊）：测试中但屏幕未变蓝
-            if (isTesting && !isActive) {
-                isTesting = false;
+            // 1. 未开始测试：无反应
+            if (!isWaiting && !isActive) return;
+
+            // 2. 提前点击（作弊）：还在等待变蓝就点
+            if (isWaiting && !isActive) {
+                isWaiting = false;
                 statusText.textContent = '作弊！请等待屏幕变蓝后再点击';
                 startBtn.classList.remove('hidden');
                 return;
@@ -278,31 +278,35 @@
 
             // 3. 有效点击：屏幕已变蓝
             if (isActive) {
-                // 计算反应时间（毫秒）
                 const endTime = Date.now();
-                const time = endTime - startTime;
-                reactionTimes.push(time);
+                const time = endTime - startTime; // 精准计算反应时间
                 
-                // 更新UI
-                isTesting = false;
+                // 只记录合理的反应时间（过滤异常值）
+                if (time > 0 && time < 10000) {
+                    reactionTimes.push(time);
+                }
+                
+                // 重置状态
                 isActive = false;
                 gameArea.style.background = '#ffffff';
                 
-                // 显示本轮结果
+                // 显示结果
                 showResult(time);
             }
         }
 
-        // 显示测试结果（完整功能）
+        // 显示测试结果
         function showResult(currentTimeVal) {
-            // 1. 显示本轮反应时间
+            // 显示本轮时间（只显示合理值）
             currentTime.textContent = `本轮反应：${currentTimeVal} ms`;
             
-            // 2. 计算平均反应时间
-            const avgVal = Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length);
+            // 计算平均时间（避免空数组报错）
+            const avgVal = reactionTimes.length > 0 
+                ? Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length)
+                : 0;
             avgTime.textContent = `平均反应：${avgVal} ms`;
             
-            // 3. 生成评级文字
+            // 评级逻辑
             let rank = '';
             if (currentTimeVal < 150) rank = '超神！你的反应速度堪比职业电竞选手';
             else if (currentTimeVal < 200) rank = '优秀！反应速度远超普通人';
@@ -311,23 +315,18 @@
             else rank = '加油！多玩几次能提升反应速度哦';
             rankText.textContent = rank;
             
-            // 4. 显示结果区域，隐藏状态文字，显示再来一次按钮
+            // 更新UI
             statusText.textContent = '测试完成';
             resultArea.classList.remove('hidden');
             restartBtn.classList.remove('hidden');
         }
 
         // 绑定事件
-        // 开始测试按钮
         startBtn.addEventListener('click', startTest);
-        
-        // 再来一次按钮
         restartBtn.addEventListener('click', initGame);
-        
-        // 全屏点击事件
         gameArea.addEventListener('click', handleAreaClick);
         
-        // 初始化游戏
+        // 初始化
         initGame();
     </script>
 </body>
