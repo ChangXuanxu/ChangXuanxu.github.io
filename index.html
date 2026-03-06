@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChangXuanxu 的个人小网站</title>
+    <title>ChangXuanxu 的个人网站</title>
     <style>
-        /* 全局样式重置与基础配置 */
+        /* 全局重置与基础样式 */
         * {
             margin: 0;
             padding: 0;
@@ -14,11 +14,8 @@
 
         body {
             font-family: "Microsoft YaHei", sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
             background-color: #f5f5f5;
-            background-image: url("West Lake 1.jpg"); 
+            background-image: url("West Lake 1.jpg");
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center center;
@@ -29,148 +26,84 @@
             transition: opacity 0.8s ease;
         }
 
-        /* 头部区域样式 */
-        .header {
-            text-align: center;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            background-color: rgba(255, 255, 255, 0.8);
-            transition: box-shadow 0.3s ease;
-            margin-bottom: 30px;
+        /* 导航栏样式（核心） */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 9999;
         }
 
-        /* 功能卡片样式（核心：三个功能独立） */
-        .function-card {
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            background-color: rgba(255, 255, 255, 0.8);
-            transition: box-shadow 0.3s ease;
-            margin-bottom: 25px;
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
         }
 
-        .function-card:hover {
-            box-shadow: 0 0 20px rgba(0,0,0,0.15);
-        }
-
-        /* 通用样式 */
-        a {
+        .navbar-logo {
+            font-size: 20px;
+            font-weight: bold;
             color: #007bff;
             text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        a:hover {
-            color: #0056b3;
-            text-decoration: underline;
         }
 
-        img {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-radius: 50%;
-            margin: 10px 0;
-        }
-        img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-        }
-
-        /* 按钮通用样式 */
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            background: #007bff;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 15px;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        /* 各功能按钮特殊样式 */
-        #fortuneBtn {
-            padding: 12px 24px;
-            font-size: 18px;
-            background: #28a745;
-        }
-        #fortuneBtn:hover {
-            background: #218838;
-        }
-
-        #yesnoBtn {
-            padding: 12px 24px;
-            font-size: 18px;
-            background: #6610f2;
-        }
-        #yesnoBtn:hover {
-            background: #520dc2;
-        }
-
-        #randomNumBtn {
-            padding: 12px 24px;
-            font-size: 16px;
-            background: #fd7e14;
-        }
-        #randomNumBtn:hover {
-            background: #e06800;
-        }
-
-        /* 结果显示通用样式 */
-        .result-box {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            display: none;
-        }
-
-        /* 运势结果样式 */
-        #fortuneResult { }
-
-        /* Yes/No结果样式 */
-        #yesnoResult { }
-
-        /* 随机数结果样式 */
-        #randomNumResult {
-            font-size: 18px;
-            font-weight: normal;
-        }
-
-        /* 随机数输入框样式 */
-        .num-input-group {
-            margin-top: 15px;
+        .navbar-menu {
+            list-style: none;
             display: flex;
+            gap: 24px;
+        }
+
+        .navbar-item a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-item a:hover {
+            color: #007bff;
+        }
+
+        .navbar-item a.active {
+            color: #007bff;
+            font-weight: bold;
+            border-bottom: 2px solid #007bff;
+        }
+
+        /* 大字时钟容器 */
+        .clock-container {
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
+            justify-content: center;
+            min-height: calc(100vh - 60px); /* 减去导航栏高度 */
+            padding: 20px;
+            text-align: center;
         }
 
-        .num-input-group input {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            width: 120px;
-            font-size: 16px;
+        /* 大字时间样式 */
+        #time {
+            font-size: 8vw; /* 响应式字体，随屏幕缩放 */
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            font-family: "Consolas", "Monaco", monospace;
         }
 
-        .num-input-group label {
-            font-size: 16px;
+        /* 日期样式 */
+        #date {
+            font-size: 24px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
-        /* 错误提示样式 */
-        .error-tip {
-            color: #dc3545;
-            font-size: 14px;
-            margin-top: 8px;
-            display: none;
-        }
-
-        /* 回到顶部按钮样式 */
+        /* 回到顶部按钮 */
         #backToTop {
             position: fixed;
             bottom: 20px;
@@ -185,57 +118,43 @@
             transition: opacity 0.3s ease, transform 0.3s ease;
             z-index: 999;
         }
+
         #backToTop:hover {
             background-color: #0056b3;
             transform: scale(1.1);
         }
+
+        /* 响应式适配（移动端） */
+        @media (max-width: 768px) {
+            #time {
+                font-size: 12vw;
+            }
+
+            .navbar-menu {
+                gap: 16px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>你好，这是我的个人小网站</h1>
-        <p>通过 GitHub Pages 快速搭建 ✨</p>
-        <!-- 预留头像位置 -->
-        <!-- <img src="images/avatar.jpg" alt="我的头像" width="150" height="150"> -->
-    </div>
-
-    <!-- 功能1：今日运势抽取（独立卡片） -->
-    <div class="function-card">
-        <h2>今日运势抽取</h2>
-        <p>点击下方按钮，抽取你的今日运势吧！</p>
-        <button id="fortuneBtn" class="btn">抽取今日运势 🎲</button>
-        <div id="fortuneResult" class="result-box"></div>
-    </div>
-
-    <!-- 功能2：Yes / No 抽取（独立卡片） -->
-    <div class="function-card">
-        <h2>Yes / No 抽取</h2>
-        <p>纠结选哪个？让随机数帮你做决定！</p>
-        <button id="yesnoBtn" class="btn">Yes / No 抽取 🤔</button>
-        <div id="yesnoResult" class="result-box"></div>
-    </div>
-
-    <!-- 功能3：随机数生成（独立卡片，新增） -->
-    <div class="function-card">
-        <h2>不重复随机数生成</h2>
-        <p>输入范围和个数，生成指定数量的不重复随机数</p>
-        <div class="num-input-group">
-            <label>起始数：</label>
-            <input type="number" id="startNum" placeholder="例如：1" min="0">
-            <label>终止数：</label>
-            <input type="number" id="endNum" placeholder="例如：100" min="0">
-            <label>生成个数：</label>
-            <input type="number" id="numCount" placeholder="例如：5" min="1">
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">CXuanxu</a>
+            <ul class="navbar-menu">
+                <li class="navbar-item"><a href="index.html" class="active">首页</a></li>
+                <li class="navbar-item"><a href="fun-tools.html">趣味组件</a></li>
+                <li class="navbar-item"><a href="#">项目展示</a></li> <!-- 预留 -->
+                <li class="navbar-item"><a href="#">关于我</a></li>     <!-- 预留 -->
+                <li class="navbar-item"><a href="#">联系我</a></li>   <!-- 预留 -->
+            </ul>
         </div>
-        <div class="error-tip" id="numErrorTip">请检查输入：生成个数不能超过数值范围，且起始数需小于终止数</div>
-        <button id="randomNumBtn" class="btn">生成随机数 🎯</button>
-        <div id="randomNumResult" class="result-box"></div>
-    </div>
+    </nav>
 
-    <!-- 联系方式区域 -->
-    <div class="function-card">
-        <h2>联系方式</h2>
-        <p>GitHub：<a href="https://github.com/ChangXuanxu">ChangXuanxu</a></p>
+    <!-- 大字时钟区域 -->
+    <div class="clock-container">
+        <div id="time">00:00:00</div>
+        <div id="date">2026年03月06日 星期五</div>
     </div>
 
     <!-- 回到顶部按钮 -->
@@ -245,142 +164,37 @@
         // 页面加载淡入
         window.onload = function() {
             document.body.style.opacity = 1;
+            updateClock(); // 初始化时钟
         };
 
-        // 1. 今日运势抽取功能
-        const fortuneBtn = document.getElementById('fortuneBtn');
-        const fortuneResult = document.getElementById('fortuneResult');
-        const fortunes = [
-            { name: '大凶', color: '#dc3545' },
-            { name: '凶', color: '#fd7e14' },
-            { name: '中', color: '#ffc107' },
-            { name: '吉', color: '#17a2b8' },
-            { name: '大吉', color: '#28a745' }
-        ];
-
-        fortuneBtn.addEventListener('click', function() {
-            fortuneBtn.disabled = true;
-            fortuneBtn.textContent = '抽取中...';
+        // 实时更新时钟（每秒）
+        function updateClock() {
+            const now = new Date();
+            // 格式化时间：时:分:秒（补零）
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            // 格式化日期：年-月-日 星期
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            const weekday = weekdays[now.getDay()];
             
-            setTimeout(() => {
-                const randomIndex = Math.floor(Math.random() * fortunes.length);
-                const selectedFortune = fortunes[randomIndex];
-                
-                fortuneResult.style.display = 'block';
-                fortuneResult.style.backgroundColor = selectedFortune.color + '20';
-                fortuneResult.style.color = selectedFortune.color;
-                fortuneResult.textContent = `你的今日运势：${selectedFortune.name}`;
-                
-                fortuneBtn.disabled = false;
-                fortuneBtn.textContent = '重新抽取运势 🎲';
-            }, 1000);
-        });
-
-        // 2. Yes/No 抽取功能
-        const yesnoBtn = document.getElementById('yesnoBtn');
-        const yesnoResult = document.getElementById('yesnoResult');
-        const yesnoOptions = [
-            { name: 'Yes', color: '#28a745' },
-            { name: 'No', color: '#dc3545' }
-        ];
-
-        yesnoBtn.addEventListener('click', function() {
-            yesnoBtn.disabled = true;
-            yesnoBtn.textContent = '思考中...';
-            
-            setTimeout(() => {
-                const randomIndex = Math.floor(Math.random() * yesnoOptions.length);
-                const selectedOption = yesnoOptions[randomIndex];
-                
-                yesnoResult.style.display = 'block';
-                yesnoResult.style.backgroundColor = selectedOption.color + '20';
-                yesnoResult.style.color = selectedOption.color;
-                yesnoResult.textContent = `答案是：${selectedOption.name}`;
-                
-                yesnoBtn.disabled = false;
-                yesnoBtn.textContent = '重新抽取 Yes/No 🤔';
-            }, 1000);
-        });
-
-        // 3. 不重复随机数生成功能（核心新增）
-        const randomNumBtn = document.getElementById('randomNumBtn');
-        const randomNumResult = document.getElementById('randomNumResult');
-        const startNumInput = document.getElementById('startNum');
-        const endNumInput = document.getElementById('endNum');
-        const numCountInput = document.getElementById('numCount');
-        const numErrorTip = document.getElementById('numErrorTip');
-
-        // 生成不重复随机数的核心函数
-        function generateUniqueRandomNumbers(start, end, count) {
-            // 创建范围数组
-            const numRange = [];
-            for (let i = start; i <= end; i++) {
-                numRange.push(i);
-            }
-            // 洗牌算法（Fisher-Yates）生成不重复随机数
-            const result = [];
-            for (let i = 0; i < count; i++) {
-                const randomIndex = Math.floor(Math.random() * numRange.length);
-                result.push(numRange.splice(randomIndex, 1)[0]);
-            }
-            return result;
+            // 更新DOM
+            document.getElementById('time').textContent = `${hours}:${minutes}:${seconds}`;
+            document.getElementById('date').textContent = `${year}年${month}月${day}日 ${weekday}`;
         }
+        setInterval(updateClock, 1000);
 
-        randomNumBtn.addEventListener('click', function() {
-            // 隐藏错误提示和旧结果
-            numErrorTip.style.display = 'none';
-            randomNumResult.style.display = 'none';
-            
-            // 获取并验证输入
-            const start = parseInt(startNumInput.value);
-            const end = parseInt(endNumInput.value);
-            const count = parseInt(numCountInput.value);
-            
-            // 输入合法性校验
-            if (isNaN(start) || isNaN(end) || isNaN(count) || start >= end || count > (end - start + 1) || count < 1) {
-                numErrorTip.style.display = 'block';
-                return;
-            }
-
-            // 按钮状态处理
-            randomNumBtn.disabled = true;
-            randomNumBtn.textContent = '生成中...';
-            
-            // 模拟生成动画
-            setTimeout(() => {
-                // 生成不重复随机数
-                const randomNumbers = generateUniqueRandomNumbers(start, end, count);
-                
-                // 显示结果
-                randomNumResult.style.display = 'block';
-                randomNumResult.style.backgroundColor = '#fd7e1420';
-                randomNumResult.style.color = '#fd7e14';
-                randomNumResult.innerHTML = `
-                    生成结果（共${count}个不重复随机数）：<br>
-                    <strong>${randomNumbers.join(' , ')}</strong>
-                `;
-                
-                // 恢复按钮状态
-                randomNumBtn.disabled = false;
-                randomNumBtn.textContent = '重新生成随机数 🎯';
-            }, 1000);
-        });
-
-        // 4. 回到顶部功能
+        // 回到顶部功能
         const backToTopBtn = document.getElementById('backToTop');
         window.onscroll = function() {
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                backToTopBtn.style.display = 'block';
-            } else {
-                backToTopBtn.style.display = 'none';
-            }
+            backToTopBtn.style.display = (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) ? 'block' : 'none';
         };
 
         backToTopBtn.addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     </script>
 </body>
