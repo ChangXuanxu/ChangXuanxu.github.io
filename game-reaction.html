@@ -96,7 +96,13 @@
             justify-content: center;
             transition: background 0.2s ease;
             z-index: 1;
-            cursor: pointer;
+        }
+
+        /* 游戏内容容器（文字+按钮） */
+        .game-content {
+            z-index: 10;
+            pointer-events: auto;
+            text-align: center;
         }
 
         /* 游戏状态/结果文字 */
@@ -104,15 +110,10 @@
             font-size: 28px;
             color: #333;
             margin-bottom: 20px;
-            z-index: 10;
-            pointer-events: none;
-            text-align: center;
         }
 
         .result-area {
-            z-index: 10;
-            pointer-events: none;
-            text-align: center;
+            display: none;
         }
 
         .current-time {
@@ -143,7 +144,6 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin: 10px;
-            z-index: 10;
         }
 
         .start-btn {
@@ -158,15 +158,11 @@
         .restart-btn {
             background-color: #ffc107;
             color: #2c3e50;
+            display: none;
         }
 
         .restart-btn:hover {
             background-color: #e0a800;
-        }
-
-        /* 隐藏元素 */
-        .hidden {
-            display: none !important;
         }
     </style>
 </head>
@@ -188,21 +184,24 @@
     <!-- 返回按钮 -->
     <a href="games.html" class="back-btn">← 返回小游戏合集</a>
 
-    <!-- 全屏游戏区域 -->
+    <!-- 全屏游戏区域（仅响应空白区域点击） -->
     <div class="game-full" id="gameArea">
-        <!-- 状态提示 -->
-        <div class="status-text" id="statusText">点击「开始测试」，等待屏幕变蓝后立即点击</div>
-        
-        <!-- 结果区域 -->
-        <div class="result-area hidden" id="resultArea">
-            <div class="current-time" id="currentTime"></div>
-            <div class="avg-time" id="avgTime"></div>
-            <div class="rank-text" id="rankText"></div>
+        <!-- 游戏内容（文字+按钮，单独容器，避免触发空白点击） -->
+        <div class="game-content">
+            <!-- 状态提示 -->
+            <div class="status-text" id="statusText">点击「开始测试」，等待屏幕变蓝后立即点击</div>
+            
+            <!-- 结果区域 -->
+            <div class="result-area" id="resultArea">
+                <div class="current-time" id="currentTime"></div>
+                <div class="avg-time" id="avgTime"></div>
+                <div class="rank-text" id="rankText"></div>
+            </div>
+            
+            <!-- 按钮 -->
+            <button class="game-btn start-btn" id="startBtn">开始测试</button>
+            <button class="game-btn restart-btn" id="restartBtn">再来一次</button>
         </div>
-        
-        <!-- 按钮 -->
-        <button class="game-btn start-btn" id="startBtn">开始测试</button>
-        <button class="game-btn restart-btn hidden" id="restartBtn">再来一次</button>
     </div>
 
     <script>
@@ -216,11 +215,11 @@
         const startBtn = document.getElementById('startBtn');
         const restartBtn = document.getElementById('restartBtn');
 
-        // 游戏核心变量（关键修复：初始化更严谨）
+        // 游戏核心变量
         let reactionTimes = []; 
         let startTime = 0;      
-        let isWaiting = false;  // 等待屏幕变蓝的状态
-        let isActive = false;   // 屏幕已变蓝，可点击
+        let isWaiting = false;  // 等待屏幕变蓝
+        let isActive = false;   // 屏幕已变蓝可点击
 
         // 初始化游戏状态
         function initGame() {
@@ -231,57 +230,60 @@
             // 重置UI
             gameArea.style.background = '#ffffff';
             statusText.textContent = '点击「开始测试」，等待屏幕变蓝后立即点击';
-            resultArea.classList.add('hidden');
-            startBtn.classList.remove('hidden');
-            restartBtn.classList.add('hidden');
+            resultArea.style.display = 'none';
+            startBtn.style.display = 'inline-block';
+            restartBtn.style.display = 'none';
         }
 
-        // 开始测试回合（核心修复：时间逻辑）
+        // 开始测试回合
         function startTest() {
-            startBtn.classList.add('hidden');
-            resultArea.classList.add('hidden');
+            // 隐藏开始按钮，重置结果
+            startBtn.style.display = 'none';
+            resultArea.style.display = 'none';
+            
+            // 设置状态：开始等待
             isWaiting = true;
             isActive = false;
             
+            // 更新提示
             statusText.textContent = '等待屏幕变蓝...';
             gameArea.style.background = '#ffffff';
 
-            // 随机延迟 1-5 秒
+            // 随机延迟 1-5 秒（1000-5000ms）
             const randomDelay = Math.floor(Math.random() * 4000) + 1000;
             setTimeout(() => {
+                // 只有还在等待状态才执行（避免退出后仍触发）
                 if (!isWaiting) return; 
                 
-                // 只有等待状态下才激活，避免重复触发
+                // 屏幕变蓝，激活点击
                 gameArea.style.background = '#007bff';
                 statusText.textContent = '立即点击屏幕！';
                 startTime = Date.now(); // 精准记录变蓝时间
                 isActive = true;
-                isWaiting = false; // 等待状态结束
+                isWaiting = false;
             }, randomDelay);
         }
 
-        // 处理屏幕点击（核心修复：精准判断）
-        function handleAreaClick(e) {
-            // 过滤按钮点击（避免点按钮也算反应）
-            if (e.target.tagName === 'BUTTON') return;
-
-            // 1. 未开始测试：无反应
+        // 处理屏幕空白区域点击（核心修复：只响应空白处）
+        function handleAreaClick() {
+            // 1. 未开始测试：直接返回
             if (!isWaiting && !isActive) return;
 
-            // 2. 提前点击（作弊）：还在等待变蓝就点
+            // 2. 提前点击（作弊）：等待变蓝时点击空白区
             if (isWaiting && !isActive) {
                 isWaiting = false;
                 statusText.textContent = '作弊！请等待屏幕变蓝后再点击';
-                startBtn.classList.remove('hidden');
+                startBtn.style.display = 'inline-block';
                 return;
             }
 
             // 3. 有效点击：屏幕已变蓝
             if (isActive) {
+                // 计算反应时间（毫秒）
                 const endTime = Date.now();
-                const time = endTime - startTime; // 精准计算反应时间
+                const time = endTime - startTime;
                 
-                // 只记录合理的反应时间（过滤异常值）
+                // 只记录合理的反应时间（0-10秒）
                 if (time > 0 && time < 10000) {
                     reactionTimes.push(time);
                 }
@@ -290,14 +292,14 @@
                 isActive = false;
                 gameArea.style.background = '#ffffff';
                 
-                // 显示结果
+                // 显示测试结果
                 showResult(time);
             }
         }
 
         // 显示测试结果
         function showResult(currentTimeVal) {
-            // 显示本轮时间（只显示合理值）
+            // 显示本轮反应时间
             currentTime.textContent = `本轮反应：${currentTimeVal} ms`;
             
             // 计算平均时间（避免空数组报错）
@@ -306,27 +308,28 @@
                 : 0;
             avgTime.textContent = `平均反应：${avgVal} ms`;
             
-            // 评级逻辑
+            // 反应速度评级
             let rank = '';
-            if (currentTimeVal < 150) rank = '超神！你的反应速度堪比职业电竞选手';
-            else if (currentTimeVal < 200) rank = '优秀！反应速度远超普通人';
-            else if (currentTimeVal < 300) rank = '良好！反应速度处于平均水平之上';
-            else if (currentTimeVal < 400) rank = '及格！反应速度是普通人水平';
-            else rank = '加油！多玩几次能提升反应速度哦';
+            if (currentTimeVal < 150) rank = '超神！反应速度堪比职业电竞选手';
+            else if (currentTimeVal < 200) rank = '优秀！反应远超普通人';
+            else if (currentTimeVal < 300) rank = '良好！高于平均水平';
+            else if (currentTimeVal < 400) rank = '及格！普通人类水平';
+            else rank = '加油！多玩能提升反应';
+            
             rankText.textContent = rank;
             
             // 更新UI
             statusText.textContent = '测试完成';
-            resultArea.classList.remove('hidden');
-            restartBtn.classList.remove('hidden');
+            resultArea.style.display = 'block';
+            restartBtn.style.display = 'inline-block';
         }
 
-        // 绑定事件
-        startBtn.addEventListener('click', startTest);
-        restartBtn.addEventListener('click', initGame);
-        gameArea.addEventListener('click', handleAreaClick);
-        
-        // 初始化
+        // 绑定事件（核心修复：分离按钮和空白区事件）
+        startBtn.addEventListener('click', startTest);       // 按钮点击：开始测试
+        restartBtn.addEventListener('click', initGame);      // 按钮点击：重置游戏
+        gameArea.addEventListener('click', handleAreaClick); // 空白区点击：反应测试
+
+        // 初始化游戏
         initGame();
     </script>
 </body>
