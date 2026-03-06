@@ -377,28 +377,28 @@
 
     <!-- 主内容区 -->
     <div class="main-content">
-        <h1 class="page-title"> 明清升官图</h1>
+        <h1 class="page-title">📜 明清升官图</h1>
 
         <!-- 游戏核心容器 -->
         <div class="game-container">
             <!-- 当前状态 -->
             <div class="status-box">
                 <h2>当前职位</h2>
-                <div class="current-pos" id="currentPos">白丁</div>
-                <div class="pos-level" id="posLevel">出身圈 · 第1级</div>
+                <div class="current-pos" id="currentPosDisplay">白丁</div>
+                <div class="pos-level" id="posLevelDisplay">出身圈 · 第1级</div>
             </div>
 
             <!-- 骰子区域 -->
             <div class="dice-box">
                 <button class="dice-btn" id="diceBtn">掷骰子 🎲</button>
-                <div class="dice-result" id="diceResult">等待掷骰子...</div>
-                <p class="roll-count-info">累计掷骰次数：<span id="rollCount">0</span> / 40</p>
+                <div class="dice-result" id="diceResultDisplay">等待掷骰子...</div>
+                <p class="roll-count-info">累计掷骰次数：<span id="rollCountDisplay">0</span> / 40</p>
             </div>
 
             <!-- 晋升记录 -->
             <div class="record-box">
                 <h3>升官记录</h3>
-                <ul class="record-list" id="recordList">
+                <ul class="record-list" id="recordListDisplay">
                     <li>游戏开始，从白丁起步！</li>
                 </ul>
             </div>
@@ -424,7 +424,7 @@
         <div class="modal-content">
             <h2 class="win-title">🎉 荣归故里！</h2>
             <p>恭喜你升至太师（正一品）并掷出德，完成圆满胜利！</p>
-            <p>本次共掷骰子 <span id="winRollCount">0</span> 次</p>
+            <p>本次共掷骰子 <span id="winRollCountDisplay">0</span> 次</p>
             <button class="restart-btn" id="winRestartBtn">重新开始游戏</button>
         </div>
     </div>
@@ -435,8 +435,8 @@
             <h2 class="end-title">🎯 游戏结束</h2>
             <p>40次掷骰子机会已用完，未能荣归故里</p>
             <p>你的最终官职是：</p>
-            <div class="final-pos" id="finalPos">白丁</div>
-            <p>累计掷骰子：<span id="endRollCount">0</span> 次</p>
+            <div class="final-pos" id="finalPosDisplay">白丁</div>
+            <p>累计掷骰子：<span id="endRollCountDisplay">0</span> 次</p>
             <button class="restart-btn" id="endRestartBtn">重新开始游戏</button>
         </div>
     </div>
@@ -447,218 +447,218 @@
     </div>
 
     <script>
-        // 全局状态
-        const gameState = {
-            currentPos: "白丁",
-            currentLevel: { type: "出身圈", num: 1 },
-            rollCount: 0,
-            maxRollCount: 40, // 最大掷骰子次数限制
-            recordList: ["游戏开始，从白丁起步！"]
+        // 1. 游戏核心状态（完全独立，不与DOM变量冲突）
+        const gameData = {
+            currentPosition: "白丁",
+            currentRank: { type: "出身圈", num: 1 },
+            rollTimes: 0,
+            maxRollTimes: 40,
+            records: ["游戏开始，从白丁起步！"]
         };
 
-        // 职位映射表 - 完整实现出身圈+品级序列的德才功赃规则
-        const posMap = {
+        // 2. 职位映射表（修正规则+确保层级正确）
+        const positionRules = {
             // 出身圈 1-15级
-            "白丁": { de: "监生", cai: "童生", gong: "童生", zang: "白丁", level: { type: "出身圈", num: 1 } },
-            "童生": { de: "秀才", cai: "案首", gong: "案首", zang: "白丁", level: { type: "出身圈", num: 2 } },
-            "案首": { de: "廪生", cai: "监生", gong: "监生", zang: "童生", level: { type: "出身圈", num: 3 } },
-            "监生": { de: "贡生", cai: "秀才", gong: "秀才", zang: "案首", level: { type: "出身圈", num: 4 } },
-            "秀才": { de: "举人", cai: "廪生", gong: "廪生", zang: "监生", level: { type: "出身圈", num: 5 } },
-            "廪生": { de: "解元", cai: "贡生", gong: "贡生", zang: "秀才", level: { type: "出身圈", num: 6 } },
-            "贡生": { de: "进士", cai: "举人", gong: "举人", zang: "廪生", level: { type: "出身圈", num: 7 } },
-            "举人": { de: "会元", cai: "解元", gong: "解元", zang: "贡生", level: { type: "出身圈", num: 8 } },
-            "解元": { de: "传胪", cai: "进士", gong: "进士", zang: "举人", level: { type: "出身圈", num: 9 } },
-            "进士": { de: "探花", cai: "会元", gong: "会元", zang: "解元", level: { type: "出身圈", num: 10 } },
-            "会元": { de: "榜眼", cai: "传胪", gong: "传胪", zang: "进士", level: { type: "出身圈", num: 11 } },
-            "传胪": { de: "状元", cai: "探花", gong: "探花", zang: "会元", level: { type: "出身圈", num: 12 } },
-            "探花": { de: "状元", cai: "榜眼", gong: "探花", zang: "传胪", level: { type: "出身圈", num: 13 } },
-            "榜眼": { de: "状元", cai: "状元", gong: "探花", zang: "探花", level: { type: "出身圈", num: 14 } },
-            "状元": { de: "县丞", cai: "主簿", gong: "典史", zang: "进士", level: { type: "出身圈", num: 15 } },
+            "白丁": { de: "监生", cai: "童生", gong: "童生", zang: "白丁", rank: { type: "出身圈", num: 1 } },
+            "童生": { de: "秀才", cai: "案首", gong: "案首", zang: "白丁", rank: { type: "出身圈", num: 2 } },
+            "案首": { de: "廪生", cai: "监生", gong: "监生", zang: "童生", rank: { type: "出身圈", num: 3 } },
+            "监生": { de: "贡生", cai: "秀才", gong: "秀才", zang: "案首", rank: { type: "出身圈", num: 4 } },
+            "秀才": { de: "举人", cai: "廪生", gong: "廪生", zang: "监生", rank: { type: "出身圈", num: 5 } },
+            "廪生": { de: "解元", cai: "贡生", gong: "贡生", zang: "秀才", rank: { type: "出身圈", num: 6 } },
+            "贡生": { de: "进士", cai: "举人", gong: "举人", zang: "廪生", rank: { type: "出身圈", num: 7 } },
+            "举人": { de: "会元", cai: "解元", gong: "解元", zang: "贡生", rank: { type: "出身圈", num: 8 } },
+            "解元": { de: "传胪", cai: "进士", gong: "进士", zang: "举人", rank: { type: "出身圈", num: 9 } },
+            "进士": { de: "探花", cai: "会元", gong: "会元", zang: "解元", rank: { type: "出身圈", num: 10 } },
+            "会元": { de: "榜眼", cai: "传胪", gong: "传胪", zang: "进士", rank: { type: "出身圈", num: 11 } },
+            "传胪": { de: "状元", cai: "探花", gong: "探花", zang: "会元", rank: { type: "出身圈", num: 12 } },
+            "探花": { de: "状元", cai: "榜眼", gong: "探花", zang: "传胪", rank: { type: "出身圈", num: 13 } },
+            "榜眼": { de: "状元", cai: "状元", gong: "探花", zang: "探花", rank: { type: "出身圈", num: 14 } },
+            "状元": { de: "县丞", cai: "主簿", gong: "典史", zang: "进士", rank: { type: "出身圈", num: 15 } },
             // 九品
-            "典史": { de: "县丞", cai: "主簿", gong: "典史", zang: "典史", level: { type: "九品", num: 9 } }, // 修复：赃不再退回白丁，符合规则
+            "典史": { de: "县丞", cai: "主簿", gong: "典史", zang: "典史", rank: { type: "九品", num: 9 } },
             // 八品
-            "主簿": { de: "知县", cai: "县丞", gong: "典史", zang: "典史", level: { type: "八品", num: 8 } }, // 修复：赃降至典史
+            "主簿": { de: "知县", cai: "县丞", gong: "典史", zang: "典史", rank: { type: "八品", num: 8 } },
             // 七品
-            "县丞": { de: "知州", cai: "知县", gong: "主簿", zang: "主簿", level: { type: "七品", num: 7 } },
-            "知县": { de: "知府", cai: "州判", gong: "县丞", zang: "县丞", level: { type: "七品正堂", num: 7 } },
-            "州判": { de: "同知", cai: "州同", gong: "知县", zang: "知县", level: { type: "从七品", num: 7 } },
-            "监察御史": { de: "左都御史", cai: "副都御史", gong: "监察御史", zang: "监察御史", level: { type: "正七品", num: 7 } },
+            "县丞": { de: "知州", cai: "知县", gong: "主簿", zang: "主簿", rank: { type: "七品", num: 7 } },
+            "知县": { de: "知府", cai: "州判", gong: "县丞", zang: "县丞", rank: { type: "七品正堂", num: 7 } },
+            "州判": { de: "同知", cai: "州同", gong: "知县", zang: "知县", rank: { type: "从七品", num: 7 } },
+            "监察御史": { de: "左都御史", cai: "副都御史", gong: "监察御史", zang: "监察御史", rank: { type: "正七品", num: 7 } },
             // 六品
-            "州同": { de: "知府", cai: "知州", gong: "州判", zang: "州判", level: { type: "从六品", num: 6 } },
-            "通判": { de: "布政使", cai: "同知", gong: "知州", zang: "知州", level: { type: "正六品", num: 6 } },
-            "主事": { de: "郎中", cai: "员外郎", gong: "主事", zang: "主事", level: { type: "正六品", num: 6 } },
-            "编修": { de: "侍讲学士", cai: "修撰", gong: "编修", zang: "编修", level: { type: "从六品", num: 6 } },
-            "修撰": { de: "掌院学士", cai: "侍讲学士", gong: "编修", zang: "主事", level: { type: "从六品", num: 6 } },
+            "州同": { de: "知府", cai: "知州", gong: "州判", zang: "州判", rank: { type: "从六品", num: 6 } },
+            "通判": { de: "布政使", cai: "同知", gong: "知州", zang: "知州", rank: { type: "正六品", num: 6 } },
+            "主事": { de: "郎中", cai: "员外郎", gong: "主事", zang: "主事", rank: { type: "正六品", num: 6 } },
+            "编修": { de: "侍讲学士", cai: "修撰", gong: "编修", zang: "编修", rank: { type: "从六品", num: 6 } },
+            "修撰": { de: "掌院学士", cai: "侍讲学士", gong: "编修", zang: "主事", rank: { type: "从六品", num: 6 } },
             // 五品
-            "知州": { de: "按察使", cai: "通判", gong: "州同", zang: "州同", level: { type: "从五品", num: 5 } },
-            "同知": { de: "按察使", cai: "知府", gong: "通判", zang: "通判", level: { type: "正五品", num: 5 } },
-            "员外郎": { de: "侍郎", cai: "郎中", gong: "主事", zang: "主事", level: { type: "从五品", num: 5 } },
-            "郎中": { de: "尚书", cai: "侍郎", gong: "员外郎", zang: "员外郎", level: { type: "正五品", num: 5 } },
-            "侍讲学士": { de: "掌院学士", cai: "掌院学士", gong: "修撰", zang: "修撰", level: { type: "正五品", num: 5 } },
-            "大理寺丞": { de: "大理寺卿", cai: "大理寺丞", gong: "通政司参议", zang: "通政司参议", level: { type: "正五品", num: 5 } },
-            "通政司参议": { de: "通政使", cai: "通政司参议", gong: "顺天府丞", zang: "顺天府丞", level: { type: "正五品", num: 5 } },
+            "知州": { de: "按察使", cai: "通判", gong: "州同", zang: "州同", rank: { type: "从五品", num: 5 } },
+            "同知": { de: "按察使", cai: "知府", gong: "通判", zang: "通判", rank: { type: "正五品", num: 5 } },
+            "员外郎": { de: "侍郎", cai: "郎中", gong: "主事", zang: "主事", rank: { type: "从五品", num: 5 } },
+            "郎中": { de: "尚书", cai: "侍郎", gong: "员外郎", zang: "员外郎", rank: { type: "正五品", num: 5 } },
+            "侍讲学士": { de: "掌院学士", cai: "掌院学士", gong: "修撰", zang: "修撰", rank: { type: "正五品", num: 5 } },
+            "大理寺丞": { de: "大理寺卿", cai: "大理寺丞", gong: "通政司参议", zang: "通政司参议", rank: { type: "正五品", num: 5 } },
+            "通政司参议": { de: "通政使", cai: "通政司参议", gong: "顺天府丞", zang: "顺天府丞", rank: { type: "正五品", num: 5 } },
             // 四品
-            "知府": { de: "巡抚", cai: "佥事", gong: "同知", zang: "同知", level: { type: "正四品", num: 4 } },
-            "佥事": { de: "布政使", cai: "按察使", gong: "知府", zang: "知府", level: { type: "正四品", num: 4 } },
-            "参政": { de: "巡抚", cai: "布政使", gong: "按察使", zang: "按察使", level: { type: "正四品", num: 4 } },
-            "顺天府丞": { de: "顺天府尹", cai: "顺天府丞", gong: "通政司参议", zang: "通政司参议", level: { type: "正四品", num: 4 } },
+            "知府": { de: "巡抚", cai: "佥事", gong: "同知", zang: "同知", rank: { type: "正四品", num: 4 } },
+            "佥事": { de: "布政使", cai: "按察使", gong: "知府", zang: "知府", rank: { type: "正四品", num: 4 } },
+            "参政": { de: "巡抚", cai: "布政使", gong: "按察使", zang: "按察使", rank: { type: "正四品", num: 4 } },
+            "顺天府丞": { de: "顺天府尹", cai: "顺天府丞", gong: "通政司参议", zang: "通政司参议", rank: { type: "正四品", num: 4 } },
             // 三品
-            "按察使": { de: "总督", cai: "参政", gong: "佥事", zang: "佥事", level: { type: "正三品", num: 3 } },
-            "副都御史": { de: "左都御史", cai: "左都御史", gong: "监察御史", zang: "监察御史", level: { type: "正三品", num: 3 } },
-            "大理寺卿": { de: "尚书", cai: "通政使", gong: "大理寺丞", zang: "大理寺丞", level: { type: "正三品", num: 3 } },
-            "通政使": { de: "左都御史", cai: "顺天府尹", gong: "通政司参议", zang: "顺天府丞", level: { type: "正三品", num: 3 } },
-            "顺天府尹": { de: "内阁学士", cai: "侍郎", gong: "顺天府丞", zang: "通政使", level: { type: "正三品", num: 3 } },
+            "按察使": { de: "总督", cai: "参政", gong: "佥事", zang: "佥事", rank: { type: "正三品", num: 3 } },
+            "副都御史": { de: "左都御史", cai: "左都御史", gong: "监察御史", zang: "监察御史", rank: { type: "正三品", num: 3 } },
+            "大理寺卿": { de: "尚书", cai: "通政使", gong: "大理寺丞", zang: "大理寺丞", rank: { type: "正三品", num: 3 } },
+            "通政使": { de: "左都御史", cai: "顺天府尹", gong: "通政司参议", zang: "顺天府丞", rank: { type: "正三品", num: 3 } },
+            "顺天府尹": { de: "内阁学士", cai: "侍郎", gong: "顺天府丞", zang: "通政使", rank: { type: "正三品", num: 3 } },
             // 二品
-            "布政使": { de: "总督", cai: "巡抚", gong: "按察使", zang: "按察使", level: { type: "从二品", num: 2 } },
-            "巡抚": { de: "总督", cai: "总督", gong: "布政使", zang: "布政使", level: { type: "从二品", num: 2 } },
-            "总督": { de: "内阁学士", cai: "尚书", gong: "总督", zang: "巡抚", level: { type: "正二品加衔", num: 2 } },
-            "侍郎": { de: "尚书", cai: "尚书", gong: "郎中", zang: "郎中", level: { type: "正二品", num: 2 } },
-            "掌院学士": { de: "内阁学士", cai: "侍郎", gong: "侍讲学士", zang: "侍讲学士", level: { type: "从二品", num: 2 } },
-            "内阁学士": { de: "大学士", cai: "协办大学士", gong: "内阁学士", zang: "尚书", level: { type: "从二品", num: 2 } },
+            "布政使": { de: "总督", cai: "巡抚", gong: "按察使", zang: "按察使", rank: { type: "从二品", num: 2 } },
+            "巡抚": { de: "总督", cai: "总督", gong: "布政使", zang: "布政使", rank: { type: "从二品", num: 2 } },
+            "总督": { de: "内阁学士", cai: "尚书", gong: "总督", zang: "巡抚", rank: { type: "正二品加衔", num: 2 } },
+            "侍郎": { de: "尚书", cai: "尚书", gong: "郎中", zang: "郎中", rank: { type: "正二品", num: 2 } },
+            "掌院学士": { de: "内阁学士", cai: "侍郎", gong: "侍讲学士", zang: "侍讲学士", rank: { type: "从二品", num: 2 } },
+            "内阁学士": { de: "大学士", cai: "协办大学士", gong: "内阁学士", zang: "尚书", rank: { type: "从二品", num: 2 } },
             // 一品
-            "尚书": { de: "大学士", cai: "内阁学士", gong: "侍郎", zang: "侍郎", level: { type: "从一品", num: 1 } },
-            "左都御史": { de: "大学士", cai: "内阁学士", gong: "副都御史", zang: "副都御史", level: { type: "从一品", num: 1 } },
-            "协办大学士": { de: "太保", cai: "大学士", gong: "内阁学士", zang: "左都御史", level: { type: "从一品", num: 1 } },
-            "大学士": { de: "太傅", cai: "太保", gong: "协办大学士", zang: "协办大学士", level: { type: "正一品", num: 1 } },
-            "太保": { de: "太师", cai: "太傅", gong: "大学士", zang: "大学士", level: { type: "正一品", num: 1 } },
-            "太傅": { de: "太师", cai: "太师", gong: "太保", zang: "太保", level: { type: "正一品", num: 1 } },
-            "太师": { de: "荣归", cai: "太师", gong: "太师", zang: "太保", level: { type: "正一品（最终）", num: 1 } }
+            "尚书": { de: "大学士", cai: "内阁学士", gong: "侍郎", zang: "侍郎", rank: { type: "从一品", num: 1 } },
+            "左都御史": { de: "大学士", cai: "内阁学士", gong: "副都御史", zang: "副都御史", rank: { type: "从一品", num: 1 } },
+            "协办大学士": { de: "太保", cai: "大学士", gong: "内阁学士", zang: "左都御史", rank: { type: "从一品", num: 1 } },
+            "大学士": { de: "太傅", cai: "太保", gong: "协办大学士", zang: "协办大学士", rank: { type: "正一品", num: 1 } },
+            "太保": { de: "太师", cai: "太傅", gong: "大学士", zang: "大学士", rank: { type: "正一品", num: 1 } },
+            "太傅": { de: "太师", cai: "太师", gong: "太保", zang: "太保", rank: { type: "正一品", num: 1 } },
+            "太师": { de: "荣归", cai: "太师", gong: "太师", zang: "太保", rank: { type: "正一品（最终）", num: 1 } }
         };
 
-        // DOM元素
-        const diceBtn = document.getElementById("diceBtn");
-        const diceResult = document.getElementById("diceResult");
-        const currentPosEl = document.getElementById("currentPos"); // 重命名避免冲突
-        const posLevelEl = document.getElementById("posLevel"); // 重命名避免冲突
-        const rollCountEl = document.getElementById("rollCount"); // 重命名避免冲突
-        const recordListEl = document.getElementById("recordList"); // 重命名避免冲突
-        const winModal = document.getElementById("winModal");
-        const winRollCount = document.getElementById("winRollCount");
-        const endModal = document.getElementById("endModal");
-        const finalPos = document.getElementById("finalPos");
-        const endRollCount = document.getElementById("endRollCount");
-        const winRestartBtn = document.getElementById("winRestartBtn");
-        const endRestartBtn = document.getElementById("endRestartBtn");
+        // 3. DOM元素获取（统一命名+避免冲突）
+        const domElements = {
+            diceButton: document.getElementById("diceBtn"),
+            diceResult: document.getElementById("diceResultDisplay"),
+            currentPos: document.getElementById("currentPosDisplay"),
+            currentRank: document.getElementById("posLevelDisplay"),
+            rollCount: document.getElementById("rollCountDisplay"),
+            recordList: document.getElementById("recordListDisplay"),
+            winModal: document.getElementById("winModal"),
+            winRollCount: document.getElementById("winRollCountDisplay"),
+            endModal: document.getElementById("endModal"),
+            finalPos: document.getElementById("finalPosDisplay"),
+            endRollCount: document.getElementById("endRollCountDisplay"),
+            winRestartBtn: document.getElementById("winRestartBtn"),
+            endRestartBtn: document.getElementById("endRestartBtn")
+        };
 
-        // 初始化页面
-        function initPage() {
-            currentPosEl.textContent = gameState.currentPos;
-            posLevelEl.textContent = `${gameState.currentLevel.type} · 第${gameState.currentLevel.num}级`;
-            rollCountEl.textContent = gameState.rollCount;
-            updateRecord();
-            // 启用骰子按钮
-            diceBtn.disabled = false;
-        }
-
-        // 更新记录列表
-        function updateRecord() {
-            recordListEl.innerHTML = "";
-            gameState.recordList.forEach(item => {
+        // 4. 核心函数：同步状态到DOM（每次状态变化必调用）
+        function syncStateToDOM() {
+            // 更新当前职位和级别
+            domElements.currentPos.textContent = gameData.currentPosition;
+            domElements.currentRank.textContent = `${gameData.currentRank.type} · 第${gameData.currentRank.num}级`;
+            // 更新掷骰子次数
+            domElements.rollCount.textContent = gameData.rollTimes;
+            // 更新记录列表
+            domElements.recordList.innerHTML = "";
+            gameData.records.forEach(record => {
                 const li = document.createElement("li");
-                li.textContent = item;
-                recordListEl.appendChild(li);
+                li.textContent = record;
+                domElements.recordList.appendChild(li);
             });
             // 滚动到最新记录
-            recordListEl.scrollTop = recordListEl.scrollHeight;
+            domElements.recordList.scrollTop = domElements.recordList.scrollHeight;
         }
 
-        // 🔴 核心修复：新增更新职位显示的函数
-        function updatePosDisplay() {
-            currentPosEl.textContent = gameState.currentPos;
-            posLevelEl.textContent = `${gameState.currentLevel.type} · 第${gameState.currentLevel.num}级`;
-        }
-
-        // 掷骰子 - 随机生成德才功赃
-        function rollDice() {
-            // 检查是否已达到最大次数
-            if (gameState.rollCount >= gameState.maxRollCount) {
-                gameEnd();
+        // 5. 掷骰子核心逻辑
+        function handleDiceRoll() {
+            // 检查是否达到最大次数
+            if (gameData.rollTimes >= gameData.maxRollTimes) {
+                showGameEnd();
                 return;
             }
 
-            const types = ["德", "才", "功", "赃"];
-            const randomType = types[Math.floor(Math.random() * 4)];
-            gameState.rollCount++;
-            rollCountEl.textContent = gameState.rollCount;
-
-            // 显示结果样式
-            diceResult.className = "dice-result";
-            diceResult.classList.add(`result-${randomType}`);
-            diceResult.textContent = `掷出：${randomType}`;
-
-            // 获取原职位和新职位
-            const oldPos = gameState.currentPos;
-            const newPos = posMap[oldPos][randomType];
-
-            // 判定胜利
-            if (oldPos === "太师" && randomType === "德") {
-                gameWin();
-                return;
-            }
-
-            // 更新状态
-            gameState.currentPos = newPos;
-            gameState.currentLevel = posMap[newPos].level;
+            // 1. 随机生成德/才/功/赃
+            const diceTypes = ["德", "才", "功", "赃"];
+            const randomType = diceTypes[Math.floor(Math.random() * 4)];
             
-            // 🔴 核心修复：调用更新显示的函数
-            updatePosDisplay();
+            // 2. 更新掷骰子次数
+            gameData.rollTimes++;
+            
+            // 3. 显示骰子结果（带样式）
+            domElements.diceResult.className = "dice-result";
+            domElements.diceResult.classList.add(`result-${randomType}`);
+            domElements.diceResult.textContent = `掷出：${randomType}`;
 
-            // 添加记录
-            const recordText = `【${randomType}】${oldPos} → ${newPos}`;
-            gameState.recordList.push(recordText);
-            updateRecord();
+            // 4. 获取新旧职位
+            const oldPos = gameData.currentPosition;
+            const newPos = positionRules[oldPos][randomType];
 
-            // 检查是否用完次数
-            if (gameState.rollCount >= gameState.maxRollCount) {
-                setTimeout(gameEnd, 1000); // 延迟1秒显示结束弹窗，让用户看到最后一次结果
+            // 5. 判定胜利条件（太师+德）
+            if (oldPos === "太师" && randomType === "德") {
+                showGameWin();
+                return;
+            }
+
+            // 6. 更新游戏状态（核心）
+            gameData.currentPosition = newPos;
+            gameData.currentRank = positionRules[newPos].rank;
+            
+            // 7. 添加操作记录
+            gameData.records.push(`【${randomType}】${oldPos} → ${newPos}`);
+            
+            // 8. 强制同步到DOM（关键！）
+            syncStateToDOM();
+
+            // 9. 检查是否用完次数
+            if (gameData.rollTimes >= gameData.maxRollTimes) {
+                setTimeout(showGameEnd, 1000);
             }
         }
 
-        // 游戏胜利
-        function gameWin() {
-            diceBtn.disabled = true;
-            winRollCount.textContent = gameState.rollCount;
-            winModal.style.display = "flex";
-            // 添加胜利记录
-            gameState.recordList.push("🎉 升至太师并掷出德，荣归故里，游戏胜利！");
-            updateRecord();
+        // 6. 游戏胜利处理
+        function showGameWin() {
+            domElements.diceButton.disabled = true;
+            domElements.winRollCount.textContent = gameData.rollTimes;
+            domElements.winModal.style.display = "flex";
+            // 添加胜利记录并同步
+            gameData.records.push("🎉 升至太师并掷出德，荣归故里，游戏胜利！");
+            syncStateToDOM();
         }
 
-        // 游戏结束（次数用完）
-        function gameEnd() {
-            diceBtn.disabled = true;
-            finalPos.textContent = gameState.currentPos;
-            endRollCount.textContent = gameState.rollCount;
-            endModal.style.display = "flex";
-            // 添加结束记录
-            gameState.recordList.push(`🔚 40次掷骰子机会已用完，最终官职：${gameState.currentPos}`);
-            updateRecord();
+        // 7. 游戏结束处理（次数用完）
+        function showGameEnd() {
+            domElements.diceButton.disabled = true;
+            domElements.finalPos.textContent = gameData.currentPosition;
+            domElements.endRollCount.textContent = gameData.rollTimes;
+            domElements.endModal.style.display = "flex";
+            // 添加结束记录并同步
+            gameData.records.push(`🔚 40次掷骰子机会已用完，最终官职：${gameData.currentPosition}`);
+            syncStateToDOM();
         }
 
-        // 重新开始游戏
+        // 8. 重新开始游戏
         function restartGame() {
-            gameState.currentPos = "白丁";
-            gameState.currentLevel = { type: "出身圈", num: 1 };
-            gameState.rollCount = 0;
-            gameState.recordList = ["游戏开始，从白丁起步！"];
-            diceBtn.disabled = false;
-            diceResult.textContent = "等待掷骰子...";
-            diceResult.className = "dice-result";
-            winModal.style.display = "none";
-            endModal.style.display = "none";
-            // 🔴 核心修复：重启时更新显示
-            updatePosDisplay();
-            rollCountEl.textContent = gameState.rollCount;
-            updateRecord();
+            // 重置游戏状态
+            gameData.currentPosition = "白丁";
+            gameData.currentRank = { type: "出身圈", num: 1 };
+            gameData.rollTimes = 0;
+            gameData.records = ["游戏开始，从白丁起步！"];
+            
+            // 重置UI状态
+            domElements.diceButton.disabled = false;
+            domElements.diceResult.textContent = "等待掷骰子...";
+            domElements.diceResult.className = "dice-result";
+            domElements.winModal.style.display = "none";
+            domElements.endModal.style.display = "none";
+            
+            // 强制同步到DOM
+            syncStateToDOM();
         }
 
-        // 绑定事件
-        diceBtn.addEventListener("click", rollDice);
-        winRestartBtn.addEventListener("click", restartGame);
-        endRestartBtn.addEventListener("click", restartGame);
+        // 9. 初始化游戏
+        function initGame() {
+            // 绑定事件
+            domElements.diceButton.addEventListener("click", handleDiceRoll);
+            domElements.winRestartBtn.addEventListener("click", restartGame);
+            domElements.endRestartBtn.addEventListener("click", restartGame);
+            
+            // 初始同步状态到DOM
+            syncStateToDOM();
+        }
 
-        // 页面加载初始化
-        window.onload = initPage;
+        // 页面加载完成后初始化
+        window.addEventListener("load", initGame);
     </script>
 </body>
 </html>
