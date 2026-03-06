@@ -3,78 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人小网站</title>
-    <!-- 简单的样式美化 -->
+    <title>ChangXuanxu 的个人小网站</title>
+    <!-- 优化后的样式 -->
     <style>
+        /* 全局样式重置与基础配置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: "Microsoft YaHei", sans-serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            /* 背景样式（保留你的原图路径） */
             background-color: #f5f5f5;
             background-image: url("images/West Lake 1.jpg"); 
-            background-size: cover; /* 全屏覆盖 */
-            background-repeat: no-repeat; /* 禁止重复 */
-            background-position: center center; /* 居中显示 */
-            background-attachment: fixed; /* 滚动时背景固定（可选） */
-            min-height: 100vh; /* 让背景占满屏幕高度 */
-            color: #333; /* 文字颜色，可根据照片深浅调整为 #fff（白色） */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #333;
+            /* 页面加载淡入效果 */
+            opacity: 0;
+            transition: opacity 0.8s ease;
         }
+
+        /* 头部区域样式（修复冗余的背景色定义） */
         .header {
             text-align: center;
             padding: 20px;
-            background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             background-color: rgba(255, 255, 255, 0.8);
+            transition: box-shadow 0.3s ease; /* 悬浮阴影过渡 */
+            margin-bottom: 20px; /* 与内容区增加间距 */
         }
+
+        /* 内容区域样式（修复冗余的背景色定义） */
         .content {
-            margin-top: 20px;
-            background-color: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             background-color: rgba(255, 255, 255, 0.8);
+            transition: box-shadow 0.3s ease; /* 悬浮阴影过渡 */
         }
-        /* 1. 给链接加悬浮变色 */
-a {
-    color: #007bff; /* 原有链接颜色 */
-    text-decoration: none; /* 去掉下划线 */
-    transition: all 0.3s; /* 过渡动画，变色更丝滑 */
-}
-a:hover {
-    color: #0056b3; /* 鼠标悬浮时的颜色 */
-    text-decoration: underline; /* 悬浮时显示下划线 */
-}
 
-/* 2. 给头像加悬浮放大（如果有头像） */
-img {
-    transition: transform 0.3s; /* 缩放过渡动画 */
-}
-img:hover {
-    transform: scale(1.05); /* 悬浮时放大1.05倍 */
-    box-shadow: 0 0 15px rgba(0,0,0,0.2); /* 新增阴影，更立体 */
-}
+        /* 链接交互样式 */
+        a {
+            color: #007bff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
 
-/* 3. 给内容卡片加悬浮阴影（可选） */
-.header, .content {
-    transition: box-shadow 0.3s; /* 阴影过渡 */
-}
-.header:hover, .content:hover {
-    box-shadow: 0 0 20px rgba(0,0,0,0.15); /* 悬浮时阴影变大 */
-}
+        /* 图片悬浮放大（预留头像样式） */
+        img {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 50%; /* 头像圆形样式 */
+            margin: 10px 0;
+        }
+        img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+
+        /* 内容卡片悬浮效果 */
+        .header:hover, .content:hover {
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+        }
+
+        /* 按钮通用样式 */
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* 回到顶部按钮样式 */
+        #backToTop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            border-radius: 50%;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 999;
+        }
+        #backToTop:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        /* 隐藏内容区域样式 */
+        #moreContent {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>你好，这是我的个人小网站</h1>
         <p>通过 GitHub Pages 快速搭建 ✨</p>
+        <!-- 预留头像位置（你可自行添加图片） -->
+        <!-- <img src="images/avatar.jpg" alt="我的头像" width="150" height="150"> -->
     </div>
+
     <div class="content">
         <h2>关于我</h2>
         <p>可以在这里写你的个人介绍、爱好、联系方式等。</p>
+        
+        <!-- 新增：查看更多交互按钮 -->
+        <button id="toggleBtn" class="btn">查看更多</button>
+        <div id="moreContent">
+            <p>大家好，我是 ChangXuanxu，一名热爱编程和生活的开发者～</p>
+            <p>日常喜欢探索前端小技巧，用简单的代码打造有趣的个人网站。</p>
+            <p>除了编程，也喜欢记录生活中的美好瞬间，比如西湖的风景～</p>
+        </div>
+
         <h2>联系方式</h2>
         <p>GitHub：<a href="https://github.com/ChangXuanxu">ChangXuanxu</a></p>
     </div>
+
+    <!-- 新增：回到顶部按钮 -->
+    <button id="backToTop">↑</button>
+
+    <!-- 交互逻辑脚本 -->
+    <script>
+        // 1. 页面加载完成后淡入显示
+        window.onload = function() {
+            document.body.style.opacity = 1;
+        };
+
+        // 2. 查看更多/收起内容交互
+        const toggleBtn = document.getElementById('toggleBtn');
+        const moreContent = document.getElementById('moreContent');
+        toggleBtn.addEventListener('click', function() {
+            if (moreContent.style.display === 'none') {
+                moreContent.style.display = 'block';
+                toggleBtn.textContent = '收起内容';
+            } else {
+                moreContent.style.display = 'none';
+                toggleBtn.textContent = '查看更多';
+            }
+        });
+
+        // 3. 回到顶部按钮交互
+        const backToTopBtn = document.getElementById('backToTop');
+        // 滚动时显示/隐藏按钮
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                backToTopBtn.style.display = 'block';
+            } else {
+                backToTopBtn.style.display = 'none';
+            }
+        };
+        // 点击回到顶部（平滑滚动）
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
 </body>
 </html>
