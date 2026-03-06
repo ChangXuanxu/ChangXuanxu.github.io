@@ -475,63 +475,63 @@
             "榜眼": { de: "状元", cai: "状元", gong: "探花", zang: "探花", level: { type: "出身圈", num: 14 } },
             "状元": { de: "县丞", cai: "主簿", gong: "典史", zang: "进士", level: { type: "出身圈", num: 15 } },
             // 九品
-            "典史": { de: "县丞", cai: "主簿", gong: "典史", zang: "白丁", level: { type: "九品", num: 9 } },
+            "典史": { de: "县丞", cai: "主簿", gong: "典史", zang: "典史", level: { type: "九品", num: 9 } }, // 修复：赃不再退回白丁，符合规则
             // 八品
-            "主簿": { de: "知县", cai: "县丞", gong: "典史", zang: "白丁", level: { type: "八品", num: 8 } },
+            "主簿": { de: "知县", cai: "县丞", gong: "典史", zang: "典史", level: { type: "八品", num: 8 } }, // 修复：赃降至典史
             // 七品
-            "县丞": { de: "知州", cai: "知县", gong: "主簿", zang: "典史", level: { type: "七品", num: 7 } },
-            "知县": { de: "知府", cai: "州判", gong: "县丞", zang: "主簿", level: { type: "七品正堂", num: 7 } },
-            "州判": { de: "同知", cai: "州同", gong: "知县", zang: "县丞", level: { type: "从七品", num: 7 } },
-            "监察御史": { de: "左都御史", cai: "副都御史", gong: "监察御史", zang: "状元", level: { type: "正七品", num: 7 } },
+            "县丞": { de: "知州", cai: "知县", gong: "主簿", zang: "主簿", level: { type: "七品", num: 7 } },
+            "知县": { de: "知府", cai: "州判", gong: "县丞", zang: "县丞", level: { type: "七品正堂", num: 7 } },
+            "州判": { de: "同知", cai: "州同", gong: "知县", zang: "知县", level: { type: "从七品", num: 7 } },
+            "监察御史": { de: "左都御史", cai: "副都御史", gong: "监察御史", zang: "监察御史", level: { type: "正七品", num: 7 } },
             // 六品
-            "州同": { de: "知府", cai: "知州", gong: "州判", zang: "知县", level: { type: "从六品", num: 6 } },
-            "通判": { de: "布政使", cai: "同知", gong: "知州", zang: "州同", level: { type: "正六品", num: 6 } },
-            "主事": { de: "郎中", cai: "员外郎", gong: "主事", zang: "状元", level: { type: "正六品", num: 6 } },
-            "编修": { de: "侍讲学士", cai: "修撰", gong: "编修", zang: "状元", level: { type: "从六品", num: 6 } },
+            "州同": { de: "知府", cai: "知州", gong: "州判", zang: "州判", level: { type: "从六品", num: 6 } },
+            "通判": { de: "布政使", cai: "同知", gong: "知州", zang: "知州", level: { type: "正六品", num: 6 } },
+            "主事": { de: "郎中", cai: "员外郎", gong: "主事", zang: "主事", level: { type: "正六品", num: 6 } },
+            "编修": { de: "侍讲学士", cai: "修撰", gong: "编修", zang: "编修", level: { type: "从六品", num: 6 } },
             "修撰": { de: "掌院学士", cai: "侍讲学士", gong: "编修", zang: "主事", level: { type: "从六品", num: 6 } },
             // 五品
-            "知州": { de: "按察使", cai: "通判", gong: "州同", zang: "州判", level: { type: "从五品", num: 5 } },
-            "同知": { de: "按察使", cai: "知府", gong: "通判", zang: "知州", level: { type: "正五品", num: 5 } },
-            "员外郎": { de: "侍郎", cai: "郎中", gong: "主事", zang: "监察御史", level: { type: "从五品", num: 5 } },
-            "郎中": { de: "尚书", cai: "侍郎", gong: "员外郎", zang: "主事", level: { type: "正五品", num: 5 } },
-            "侍讲学士": { de: "掌院学士", cai: "掌院学士", gong: "修撰", zang: "编修", level: { type: "正五品", num: 5 } },
-            "大理寺丞": { de: "大理寺卿", cai: "大理寺丞", gong: "通政司参议", zang: "主事", level: { type: "正五品", num: 5 } },
-            "通政司参议": { de: "通政使", cai: "通政司参议", gong: "顺天府丞", zang: "大理寺丞", level: { type: "正五品", num: 5 } },
+            "知州": { de: "按察使", cai: "通判", gong: "州同", zang: "州同", level: { type: "从五品", num: 5 } },
+            "同知": { de: "按察使", cai: "知府", gong: "通判", zang: "通判", level: { type: "正五品", num: 5 } },
+            "员外郎": { de: "侍郎", cai: "郎中", gong: "主事", zang: "主事", level: { type: "从五品", num: 5 } },
+            "郎中": { de: "尚书", cai: "侍郎", gong: "员外郎", zang: "员外郎", level: { type: "正五品", num: 5 } },
+            "侍讲学士": { de: "掌院学士", cai: "掌院学士", gong: "修撰", zang: "修撰", level: { type: "正五品", num: 5 } },
+            "大理寺丞": { de: "大理寺卿", cai: "大理寺丞", gong: "通政司参议", zang: "通政司参议", level: { type: "正五品", num: 5 } },
+            "通政司参议": { de: "通政使", cai: "通政司参议", gong: "顺天府丞", zang: "顺天府丞", level: { type: "正五品", num: 5 } },
             // 四品
-            "知府": { de: "巡抚", cai: "佥事", gong: "同知", zang: "通判", level: { type: "正四品", num: 4 } },
-            "佥事": { de: "布政使", cai: "按察使", gong: "知府", zang: "同知", level: { type: "正四品", num: 4 } },
-            "参政": { de: "巡抚", cai: "布政使", gong: "按察使", zang: "佥事", level: { type: "正四品", num: 4 } },
+            "知府": { de: "巡抚", cai: "佥事", gong: "同知", zang: "同知", level: { type: "正四品", num: 4 } },
+            "佥事": { de: "布政使", cai: "按察使", gong: "知府", zang: "知府", level: { type: "正四品", num: 4 } },
+            "参政": { de: "巡抚", cai: "布政使", gong: "按察使", zang: "按察使", level: { type: "正四品", num: 4 } },
             "顺天府丞": { de: "顺天府尹", cai: "顺天府丞", gong: "通政司参议", zang: "通政司参议", level: { type: "正四品", num: 4 } },
             // 三品
-            "按察使": { de: "总督", cai: "参政", gong: "佥事", zang: "知府", level: { type: "正三品", num: 3 } },
-            "副都御史": { de: "左都御史", cai: "左都御史", gong: "监察御史", zang: "主事", level: { type: "正三品", num: 3 } },
-            "大理寺卿": { de: "尚书", cai: "通政使", gong: "大理寺丞", zang: "通政司参议", level: { type: "正三品", num: 3 } },
+            "按察使": { de: "总督", cai: "参政", gong: "佥事", zang: "佥事", level: { type: "正三品", num: 3 } },
+            "副都御史": { de: "左都御史", cai: "左都御史", gong: "监察御史", zang: "监察御史", level: { type: "正三品", num: 3 } },
+            "大理寺卿": { de: "尚书", cai: "通政使", gong: "大理寺丞", zang: "大理寺丞", level: { type: "正三品", num: 3 } },
             "通政使": { de: "左都御史", cai: "顺天府尹", gong: "通政司参议", zang: "顺天府丞", level: { type: "正三品", num: 3 } },
             "顺天府尹": { de: "内阁学士", cai: "侍郎", gong: "顺天府丞", zang: "通政使", level: { type: "正三品", num: 3 } },
             // 二品
-            "布政使": { de: "总督", cai: "巡抚", gong: "按察使", zang: "参政", level: { type: "从二品", num: 2 } },
-            "巡抚": { de: "总督", cai: "总督", gong: "布政使", zang: "按察使", level: { type: "从二品", num: 2 } },
+            "布政使": { de: "总督", cai: "巡抚", gong: "按察使", zang: "按察使", level: { type: "从二品", num: 2 } },
+            "巡抚": { de: "总督", cai: "总督", gong: "布政使", zang: "布政使", level: { type: "从二品", num: 2 } },
             "总督": { de: "内阁学士", cai: "尚书", gong: "总督", zang: "巡抚", level: { type: "正二品加衔", num: 2 } },
-            "侍郎": { de: "尚书", cai: "尚书", gong: "郎中", zang: "员外郎", level: { type: "正二品", num: 2 } },
-            "掌院学士": { de: "内阁学士", cai: "侍郎", gong: "侍讲学士", zang: "修撰", level: { type: "从二品", num: 2 } },
+            "侍郎": { de: "尚书", cai: "尚书", gong: "郎中", zang: "郎中", level: { type: "正二品", num: 2 } },
+            "掌院学士": { de: "内阁学士", cai: "侍郎", gong: "侍讲学士", zang: "侍讲学士", level: { type: "从二品", num: 2 } },
             "内阁学士": { de: "大学士", cai: "协办大学士", gong: "内阁学士", zang: "尚书", level: { type: "从二品", num: 2 } },
             // 一品
-            "尚书": { de: "大学士", cai: "内阁学士", gong: "侍郎", zang: "郎中", level: { type: "从一品", num: 1 } },
-            "左都御史": { de: "大学士", cai: "内阁学士", gong: "副都御史", zang: "监察御史", level: { type: "从一品", num: 1 } },
+            "尚书": { de: "大学士", cai: "内阁学士", gong: "侍郎", zang: "侍郎", level: { type: "从一品", num: 1 } },
+            "左都御史": { de: "大学士", cai: "内阁学士", gong: "副都御史", zang: "副都御史", level: { type: "从一品", num: 1 } },
             "协办大学士": { de: "太保", cai: "大学士", gong: "内阁学士", zang: "左都御史", level: { type: "从一品", num: 1 } },
-            "大学士": { de: "太傅", cai: "太保", gong: "协办大学士", zang: "内阁学士", level: { type: "正一品", num: 1 } },
-            "太保": { de: "太师", cai: "太傅", gong: "大学士", zang: "协办大学士", level: { type: "正一品", num: 1 } },
-            "太傅": { de: "太师", cai: "太师", gong: "太保", zang: "大学士", level: { type: "正一品", num: 1 } },
+            "大学士": { de: "太傅", cai: "太保", gong: "协办大学士", zang: "协办大学士", level: { type: "正一品", num: 1 } },
+            "太保": { de: "太师", cai: "太傅", gong: "大学士", zang: "大学士", level: { type: "正一品", num: 1 } },
+            "太傅": { de: "太师", cai: "太师", gong: "太保", zang: "太保", level: { type: "正一品", num: 1 } },
             "太师": { de: "荣归", cai: "太师", gong: "太师", zang: "太保", level: { type: "正一品（最终）", num: 1 } }
         };
 
         // DOM元素
         const diceBtn = document.getElementById("diceBtn");
         const diceResult = document.getElementById("diceResult");
-        const currentPos = document.getElementById("currentPos");
-        const posLevel = document.getElementById("posLevel");
-        const rollCount = document.getElementById("rollCount");
-        const recordList = document.getElementById("recordList");
+        const currentPosEl = document.getElementById("currentPos"); // 重命名避免冲突
+        const posLevelEl = document.getElementById("posLevel"); // 重命名避免冲突
+        const rollCountEl = document.getElementById("rollCount"); // 重命名避免冲突
+        const recordListEl = document.getElementById("recordList"); // 重命名避免冲突
         const winModal = document.getElementById("winModal");
         const winRollCount = document.getElementById("winRollCount");
         const endModal = document.getElementById("endModal");
@@ -542,9 +542,9 @@
 
         // 初始化页面
         function initPage() {
-            currentPos.textContent = gameState.currentPos;
-            posLevel.textContent = `${gameState.currentLevel.type} · 第${gameState.currentLevel.num}级`;
-            rollCount.textContent = gameState.rollCount;
+            currentPosEl.textContent = gameState.currentPos;
+            posLevelEl.textContent = `${gameState.currentLevel.type} · 第${gameState.currentLevel.num}级`;
+            rollCountEl.textContent = gameState.rollCount;
             updateRecord();
             // 启用骰子按钮
             diceBtn.disabled = false;
@@ -552,14 +552,20 @@
 
         // 更新记录列表
         function updateRecord() {
-            recordList.innerHTML = "";
+            recordListEl.innerHTML = "";
             gameState.recordList.forEach(item => {
                 const li = document.createElement("li");
                 li.textContent = item;
-                recordList.appendChild(li);
+                recordListEl.appendChild(li);
             });
             // 滚动到最新记录
-            recordList.scrollTop = recordList.scrollHeight;
+            recordListEl.scrollTop = recordListEl.scrollHeight;
+        }
+
+        // 🔴 核心修复：新增更新职位显示的函数
+        function updatePosDisplay() {
+            currentPosEl.textContent = gameState.currentPos;
+            posLevelEl.textContent = `${gameState.currentLevel.type} · 第${gameState.currentLevel.num}级`;
         }
 
         // 掷骰子 - 随机生成德才功赃
@@ -573,7 +579,7 @@
             const types = ["德", "才", "功", "赃"];
             const randomType = types[Math.floor(Math.random() * 4)];
             gameState.rollCount++;
-            rollCount.textContent = gameState.rollCount;
+            rollCountEl.textContent = gameState.rollCount;
 
             // 显示结果样式
             diceResult.className = "dice-result";
@@ -590,11 +596,12 @@
                 return;
             }
 
-            // 更新状态 - 修复级别不刷新问题
+            // 更新状态
             gameState.currentPos = newPos;
             gameState.currentLevel = posMap[newPos].level;
-            currentPos.textContent = newPos;
-            posLevel.textContent = `${gameState.currentLevel.type} · 第${gameState.currentLevel.num}级`;
+            
+            // 🔴 核心修复：调用更新显示的函数
+            updatePosDisplay();
 
             // 添加记录
             const recordText = `【${randomType}】${oldPos} → ${newPos}`;
@@ -639,7 +646,10 @@
             diceResult.className = "dice-result";
             winModal.style.display = "none";
             endModal.style.display = "none";
-            initPage();
+            // 🔴 核心修复：重启时更新显示
+            updatePosDisplay();
+            rollCountEl.textContent = gameState.rollCount;
+            updateRecord();
         }
 
         // 绑定事件
