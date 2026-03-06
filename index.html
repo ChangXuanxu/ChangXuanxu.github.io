@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChangXuanxu 的个人小网站</title>
-    <!-- 优化后的样式 -->
     <style>
         /* 全局样式重置与基础配置 */
         * {
@@ -18,7 +17,6 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            /* 背景样式（保留你的原图路径） */
             background-color: #f5f5f5;
             background-image: url("West Lake 1.jpg"); 
             background-size: cover;
@@ -27,7 +25,6 @@
             background-attachment: fixed;
             min-height: 100vh;
             color: #333;
-            /* 页面加载淡入效果 */
             opacity: 0;
             transition: opacity 0.8s ease;
         }
@@ -39,20 +36,25 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             background-color: rgba(255, 255, 255, 0.8);
-            transition: box-shadow 0.3s ease; /* 悬浮阴影过渡 */
-            margin-bottom: 20px; /* 与内容区增加间距 */
+            transition: box-shadow 0.3s ease;
+            margin-bottom: 30px;
         }
 
-        /* 内容区域样式 */
-        .content {
-            padding: 20px;
+        /* 功能卡片样式（核心：三个功能独立） */
+        .function-card {
+            padding: 25px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             background-color: rgba(255, 255, 255, 0.8);
-            transition: box-shadow 0.3s ease; /* 悬浮阴影过渡 */
+            transition: box-shadow 0.3s ease;
+            margin-bottom: 25px;
         }
 
-        /* 链接交互样式 */
+        .function-card:hover {
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+        }
+
+        /* 通用样式 */
         a {
             color: #007bff;
             text-decoration: none;
@@ -63,20 +65,14 @@
             text-decoration: underline;
         }
 
-        /* 图片悬浮放大（预留头像样式） */
         img {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-radius: 50%; /* 头像圆形样式 */
+            border-radius: 50%;
             margin: 10px 0;
         }
         img:hover {
             transform: scale(1.05);
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
-        }
-
-        /* 内容卡片悬浮效果 */
-        .header:hover, .content:hover {
-            box-shadow: 0 0 20px rgba(0,0,0,0.15);
         }
 
         /* 按钮通用样式 */
@@ -94,7 +90,7 @@
             background-color: #0056b3;
         }
 
-        /* 运势按钮特殊样式 */
+        /* 各功能按钮特殊样式 */
         #fortuneBtn {
             padding: 12px 24px;
             font-size: 18px;
@@ -104,15 +100,22 @@
             background: #218838;
         }
 
-        /* Yes/No按钮特殊样式 */
         #yesnoBtn {
             padding: 12px 24px;
             font-size: 18px;
             background: #6610f2;
-            margin-left: 10px;
         }
         #yesnoBtn:hover {
             background: #520dc2;
+        }
+
+        #randomNumBtn {
+            padding: 12px 24px;
+            font-size: 16px;
+            background: #fd7e14;
+        }
+        #randomNumBtn:hover {
+            background: #e06800;
         }
 
         /* 结果显示通用样式 */
@@ -126,14 +129,45 @@
             display: none;
         }
 
-        /* 运势结果显示样式 */
-        #fortuneResult {
-            /* 不同运势的颜色会通过JS动态设置 */
+        /* 运势结果样式 */
+        #fortuneResult { }
+
+        /* Yes/No结果样式 */
+        #yesnoResult { }
+
+        /* 随机数结果样式 */
+        #randomNumResult {
+            font-size: 18px;
+            font-weight: normal;
         }
 
-        /* Yes/No结果显示样式 */
-        #yesnoResult {
-            /* 不同结果的颜色会通过JS动态设置 */
+        /* 随机数输入框样式 */
+        .num-input-group {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .num-input-group input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 120px;
+            font-size: 16px;
+        }
+
+        .num-input-group label {
+            font-size: 16px;
+        }
+
+        /* 错误提示样式 */
+        .error-tip {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
         }
 
         /* 回到顶部按钮样式 */
@@ -161,118 +195,179 @@
     <div class="header">
         <h1>你好，这是我的个人小网站</h1>
         <p>通过 GitHub Pages 快速搭建 ✨</p>
-        <!-- 预留头像位置（你可自行添加图片） -->
+        <!-- 预留头像位置 -->
         <!-- <img src="images/avatar.jpg" alt="我的头像" width="150" height="150"> -->
     </div>
 
-    <div class="content">
-        <h2>趣味抽取</h2>
-        <p>选择下方功能，抽取你的专属答案吧！</p>
-        
-        <!-- 运势抽取按钮 -->
+    <!-- 功能1：今日运势抽取（独立卡片） -->
+    <div class="function-card">
+        <h2>今日运势抽取</h2>
+        <p>点击下方按钮，抽取你的今日运势吧！</p>
         <button id="fortuneBtn" class="btn">抽取今日运势 🎲</button>
-        <!-- Yes/No抽取按钮（新增） -->
-        <button id="yesnoBtn" class="btn">Yes / No 抽取 🤔</button>
-        
-        <!-- 运势结果显示区域 -->
         <div id="fortuneResult" class="result-box"></div>
-        <!-- Yes/No结果显示区域（新增） -->
-        <div id="yesnoResult" class="result-box"></div>
+    </div>
 
-        <h2 style="margin-top: 30px;">联系方式</h2>
+    <!-- 功能2：Yes / No 抽取（独立卡片） -->
+    <div class="function-card">
+        <h2>Yes / No 抽取</h2>
+        <p>纠结选哪个？让随机数帮你做决定！</p>
+        <button id="yesnoBtn" class="btn">Yes / No 抽取 🤔</button>
+        <div id="yesnoResult" class="result-box"></div>
+    </div>
+
+    <!-- 功能3：随机数生成（独立卡片，新增） -->
+    <div class="function-card">
+        <h2>不重复随机数生成</h2>
+        <p>输入范围和个数，生成指定数量的不重复随机数</p>
+        <div class="num-input-group">
+            <label>起始数：</label>
+            <input type="number" id="startNum" placeholder="例如：1" min="0">
+            <label>终止数：</label>
+            <input type="number" id="endNum" placeholder="例如：100" min="0">
+            <label>生成个数：</label>
+            <input type="number" id="numCount" placeholder="例如：5" min="1">
+        </div>
+        <div class="error-tip" id="numErrorTip">请检查输入：生成个数不能超过数值范围，且起始数需小于终止数</div>
+        <button id="randomNumBtn" class="btn">生成随机数 🎯</button>
+        <div id="randomNumResult" class="result-box"></div>
+    </div>
+
+    <!-- 联系方式区域 -->
+    <div class="function-card">
+        <h2>联系方式</h2>
         <p>GitHub：<a href="https://github.com/ChangXuanxu">ChangXuanxu</a></p>
     </div>
 
     <!-- 回到顶部按钮 -->
     <button id="backToTop">↑</button>
 
-    <!-- 交互逻辑脚本 -->
     <script>
-        // 1. 页面加载完成后淡入显示
+        // 页面加载淡入
         window.onload = function() {
             document.body.style.opacity = 1;
         };
 
-        // 2. 今日运势抽取功能
+        // 1. 今日运势抽取功能
         const fortuneBtn = document.getElementById('fortuneBtn');
         const fortuneResult = document.getElementById('fortuneResult');
-        
-        // 定义运势列表，每种运势等概率
         const fortunes = [
-            { name: '大凶', color: '#dc3545' },    // 红色
-            { name: '凶', color: '#fd7e14' },      // 橙色
-            { name: '中', color: '#ffc107' },      // 黄色
-            { name: '吉', color: '#17a2b8' },      // 青色
-            { name: '大吉', color: '#28a745' }     // 绿色
+            { name: '大凶', color: '#dc3545' },
+            { name: '凶', color: '#fd7e14' },
+            { name: '中', color: '#ffc107' },
+            { name: '吉', color: '#17a2b8' },
+            { name: '大吉', color: '#28a745' }
         ];
 
-        // 点击抽取运势
         fortuneBtn.addEventListener('click', function() {
-            // 隐藏另一个结果，避免混淆
-            yesnoResult.style.display = 'none';
-            
-            // 禁用按钮防止重复点击
             fortuneBtn.disabled = true;
             fortuneBtn.textContent = '抽取中...';
             
-            // 模拟抽取动画效果（1秒后显示结果）
             setTimeout(() => {
-                // 随机生成0-4的索引，等概率抽取
                 const randomIndex = Math.floor(Math.random() * fortunes.length);
                 const selectedFortune = fortunes[randomIndex];
                 
-                // 设置结果显示样式和内容
                 fortuneResult.style.display = 'block';
-                fortuneResult.style.backgroundColor = selectedFortune.color + '20'; // 浅色调背景
+                fortuneResult.style.backgroundColor = selectedFortune.color + '20';
                 fortuneResult.style.color = selectedFortune.color;
                 fortuneResult.textContent = `你的今日运势：${selectedFortune.name}`;
                 
-                // 恢复按钮状态
                 fortuneBtn.disabled = false;
                 fortuneBtn.textContent = '重新抽取运势 🎲';
             }, 1000);
         });
 
-        // 3. Yes/No抽取功能（新增）
+        // 2. Yes/No 抽取功能
         const yesnoBtn = document.getElementById('yesnoBtn');
         const yesnoResult = document.getElementById('yesnoResult');
-        
-        // 定义Yes/No列表，等概率
         const yesnoOptions = [
-            { name: 'Yes', color: '#28a745' },     // 绿色
-            { name: 'No', color: '#dc3545' }       // 红色
+            { name: 'Yes', color: '#28a745' },
+            { name: 'No', color: '#dc3545' }
         ];
 
-        // 点击抽取Yes/No
         yesnoBtn.addEventListener('click', function() {
-            // 隐藏运势结果，避免混淆
-            fortuneResult.style.display = 'none';
-            
-            // 禁用按钮防止重复点击
             yesnoBtn.disabled = true;
             yesnoBtn.textContent = '思考中...';
             
-            // 模拟抽取动画效果（1秒后显示结果）
             setTimeout(() => {
-                // 随机生成0或1的索引，等概率抽取
                 const randomIndex = Math.floor(Math.random() * yesnoOptions.length);
                 const selectedOption = yesnoOptions[randomIndex];
                 
-                // 设置结果显示样式和内容
                 yesnoResult.style.display = 'block';
-                yesnoResult.style.backgroundColor = selectedOption.color + '20'; // 浅色调背景
+                yesnoResult.style.backgroundColor = selectedOption.color + '20';
                 yesnoResult.style.color = selectedOption.color;
                 yesnoResult.textContent = `答案是：${selectedOption.name}`;
                 
-                // 恢复按钮状态
                 yesnoBtn.disabled = false;
                 yesnoBtn.textContent = '重新抽取 Yes/No 🤔';
             }, 1000);
         });
 
-        // 4. 回到顶部按钮交互
+        // 3. 不重复随机数生成功能（核心新增）
+        const randomNumBtn = document.getElementById('randomNumBtn');
+        const randomNumResult = document.getElementById('randomNumResult');
+        const startNumInput = document.getElementById('startNum');
+        const endNumInput = document.getElementById('endNum');
+        const numCountInput = document.getElementById('numCount');
+        const numErrorTip = document.getElementById('numErrorTip');
+
+        // 生成不重复随机数的核心函数
+        function generateUniqueRandomNumbers(start, end, count) {
+            // 创建范围数组
+            const numRange = [];
+            for (let i = start; i <= end; i++) {
+                numRange.push(i);
+            }
+            // 洗牌算法（Fisher-Yates）生成不重复随机数
+            const result = [];
+            for (let i = 0; i < count; i++) {
+                const randomIndex = Math.floor(Math.random() * numRange.length);
+                result.push(numRange.splice(randomIndex, 1)[0]);
+            }
+            return result;
+        }
+
+        randomNumBtn.addEventListener('click', function() {
+            // 隐藏错误提示和旧结果
+            numErrorTip.style.display = 'none';
+            randomNumResult.style.display = 'none';
+            
+            // 获取并验证输入
+            const start = parseInt(startNumInput.value);
+            const end = parseInt(endNumInput.value);
+            const count = parseInt(numCountInput.value);
+            
+            // 输入合法性校验
+            if (isNaN(start) || isNaN(end) || isNaN(count) || start >= end || count > (end - start + 1) || count < 1) {
+                numErrorTip.style.display = 'block';
+                return;
+            }
+
+            // 按钮状态处理
+            randomNumBtn.disabled = true;
+            randomNumBtn.textContent = '生成中...';
+            
+            // 模拟生成动画
+            setTimeout(() => {
+                // 生成不重复随机数
+                const randomNumbers = generateUniqueRandomNumbers(start, end, count);
+                
+                // 显示结果
+                randomNumResult.style.display = 'block';
+                randomNumResult.style.backgroundColor = '#fd7e1420';
+                randomNumResult.style.color = '#fd7e14';
+                randomNumResult.innerHTML = `
+                    生成结果（共${count}个不重复随机数）：<br>
+                    <strong>${randomNumbers.join(' , ')}</strong>
+                `;
+                
+                // 恢复按钮状态
+                randomNumBtn.disabled = false;
+                randomNumBtn.textContent = '重新生成随机数 🎯';
+            }, 1000);
+        });
+
+        // 4. 回到顶部功能
         const backToTopBtn = document.getElementById('backToTop');
-        // 滚动时显示/隐藏按钮
         window.onscroll = function() {
             if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
                 backToTopBtn.style.display = 'block';
@@ -280,7 +375,7 @@
                 backToTopBtn.style.display = 'none';
             }
         };
-        // 点击回到顶部（平滑滚动）
+
         backToTopBtn.addEventListener('click', function() {
             window.scrollTo({
                 top: 0,
