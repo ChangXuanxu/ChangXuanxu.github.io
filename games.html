@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小游戏合集 - 士多啤梨除草机</title>
+    <style>
+        /* 全局重置与基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .navbar-logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .navbar-menu {
+            list-style: none;
+            display: flex;
+            gap: 24px;
+        }
+
+        .navbar-item a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-item a:hover {
+            color: #007bff;
+        }
+
+        .navbar-item a.active {
+            color: #007bff;
+            font-weight: bold;
+            border-bottom: 2px solid #007bff;
+        }
+
+        /* 游戏合集容器 */
+        .games-container {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* 游戏卡片 */
+        .game-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .game-card p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .play-btn {
+            padding: 10px 25px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .play-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* 页面标题 */
+        .page-title {
+            text-align: center;
+            margin-top: 80px;
+            font-size: 32px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">士多啤梨除草机</a>
+            <ul class="navbar-menu">
+                <li class="navbar-item"><a href="index.html">首页</a></li>
+                <li class="navbar-item"><a href="fun-tools.html">趣味组件</a></li>
+                <li class="navbar-item"><a href="blog.html">个人博客</a></li>
+                <li class="navbar-item"><a href="games.html" class="active">小游戏</a></li>
+                <li class="navbar-item"><a href="#">联系我</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 页面标题 -->
+    <h1 class="page-title">小游戏合集</h1>
+
+    <!-- 游戏合集容器 -->
+    <div class="games-container">
+        <!-- 反应速度测试卡片 -->
+        <div class="game-card">
+            <h3>反应速度测试</h3>
+            <p>考验你的瞬间反应能力！等待目标变蓝后立即点击，系统会记录你的反应时间，看看你是不是“手速达人”～</p>
+            <a href="game-reaction.html" class="play-btn">开始游玩</a>
+        </div>
+
+        <!-- 预留新游戏卡片（后续添加新游戏时复制这个模板） -->
+        <!-- <div class="game-card">
+            <h3>新游戏名称</h3>
+            <p>新游戏的简单介绍...</p>
+            <a href="game-xxx.html" class="play-btn">开始游玩</a>
+        </div> -->
+    </div>
+</body>
+</html>
