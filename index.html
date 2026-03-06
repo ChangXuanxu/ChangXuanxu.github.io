@@ -36,6 +36,33 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             background-color: rgba(255, 255, 255, 0.8);
         }
+        /* 1. 给链接加悬浮变色 */
+a {
+    color: #007bff; /* 原有链接颜色 */
+    text-decoration: none; /* 去掉下划线 */
+    transition: all 0.3s; /* 过渡动画，变色更丝滑 */
+}
+a:hover {
+    color: #0056b3; /* 鼠标悬浮时的颜色 */
+    text-decoration: underline; /* 悬浮时显示下划线 */
+}
+
+/* 2. 给头像加悬浮放大（如果有头像） */
+img {
+    transition: transform 0.3s; /* 缩放过渡动画 */
+}
+img:hover {
+    transform: scale(1.05); /* 悬浮时放大1.05倍 */
+    box-shadow: 0 0 15px rgba(0,0,0,0.2); /* 新增阴影，更立体 */
+}
+
+/* 3. 给内容卡片加悬浮阴影（可选） */
+.header, .content {
+    transition: box-shadow 0.3s; /* 阴影过渡 */
+}
+.header:hover, .content:hover {
+    box-shadow: 0 0 20px rgba(0,0,0,0.15); /* 悬浮时阴影变大 */
+}
     </style>
 </head>
 <body>
