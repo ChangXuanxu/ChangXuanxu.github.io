@@ -32,7 +32,7 @@
             transition: opacity 0.8s ease;
         }
 
-        /* 头部区域样式（修复冗余的背景色定义） */
+        /* 头部区域样式 */
         .header {
             text-align: center;
             padding: 20px;
@@ -43,7 +43,7 @@
             margin-bottom: 20px; /* 与内容区增加间距 */
         }
 
-        /* 内容区域样式（修复冗余的背景色定义） */
+        /* 内容区域样式 */
         .content {
             padding: 20px;
             border-radius: 8px;
@@ -94,6 +94,28 @@
             background-color: #0056b3;
         }
 
+        /* 运势按钮特殊样式 */
+        #fortuneBtn {
+            padding: 12px 24px;
+            font-size: 18px;
+            background: #28a745;
+        }
+        #fortuneBtn:hover {
+            background: #218838;
+        }
+
+        /* 运势结果显示样式 */
+        #fortuneResult {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            display: none;
+            /* 不同运势的颜色会通过JS动态设置 */
+        }
+
         /* 回到顶部按钮样式 */
         #backToTop {
             position: fixed;
@@ -113,14 +135,6 @@
             background-color: #0056b3;
             transform: scale(1.1);
         }
-
-        /* 隐藏内容区域样式 */
-        #moreContent {
-            display: none;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
-        }
     </style>
 </head>
 <body>
@@ -132,22 +146,20 @@
     </div>
 
     <div class="content">
-        <h2>关于我</h2>
-        <p>可以在这里写你的个人介绍、爱好、联系方式等。</p>
+        <h2>今日运势抽取</h2>
+        <p>点击下方按钮，抽取你的今日运势吧！</p>
         
-        <!-- 新增：查看更多交互按钮 -->
-        <button id="toggleBtn" class="btn">查看更多</button>
-        <div id="moreContent">
-            <p>大家好，我是 ChangXuanxu，一名热爱编程和生活的开发者～</p>
-            <p>日常喜欢探索前端小技巧，用简单的代码打造有趣的个人网站。</p>
-            <p>除了编程，也喜欢记录生活中的美好瞬间，比如西湖的风景～</p>
-        </div>
+        <!-- 运势抽取按钮 -->
+        <button id="fortuneBtn" class="btn">抽取今日运势 🎲</button>
+        
+        <!-- 运势结果显示区域 -->
+        <div id="fortuneResult"></div>
 
-        <h2>联系方式</h2>
+        <h2 style="margin-top: 30px;">联系方式</h2>
         <p>GitHub：<a href="https://github.com/ChangXuanxu">ChangXuanxu</a></p>
     </div>
 
-    <!-- 新增：回到顶部按钮 -->
+    <!-- 回到顶部按钮 -->
     <button id="backToTop">↑</button>
 
     <!-- 交互逻辑脚本 -->
@@ -157,17 +169,41 @@
             document.body.style.opacity = 1;
         };
 
-        // 2. 查看更多/收起内容交互
-        const toggleBtn = document.getElementById('toggleBtn');
-        const moreContent = document.getElementById('moreContent');
-        toggleBtn.addEventListener('click', function() {
-            if (moreContent.style.display === 'none') {
-                moreContent.style.display = 'block';
-                toggleBtn.textContent = '收起内容';
-            } else {
-                moreContent.style.display = 'none';
-                toggleBtn.textContent = '查看更多';
-            }
+        // 2. 今日运势抽取功能
+        const fortuneBtn = document.getElementById('fortuneBtn');
+        const fortuneResult = document.getElementById('fortuneResult');
+        
+        // 定义运势列表，每种运势等概率
+        const fortunes = [
+            { name: '大凶', color: '#dc3545' },    // 红色
+            { name: '凶', color: '#fd7e14' },      // 橙色
+            { name: '中', color: '#ffc107' },      // 黄色
+            { name: '吉', color: '#17a2b8' },      // 青色
+            { name: '大吉', color: '#28a745' }     // 绿色
+        ];
+
+        // 点击抽取运势
+        fortuneBtn.addEventListener('click', function() {
+            // 禁用按钮防止重复点击
+            fortuneBtn.disabled = true;
+            fortuneBtn.textContent = '抽取中...';
+            
+            // 模拟抽取动画效果（1秒后显示结果）
+            setTimeout(() => {
+                // 随机生成0-4的索引，等概率抽取
+                const randomIndex = Math.floor(Math.random() * fortunes.length);
+                const selectedFortune = fortunes[randomIndex];
+                
+                // 设置结果显示样式和内容
+                fortuneResult.style.display = 'block';
+                fortuneResult.style.backgroundColor = selectedFortune.color + '20'; // 浅色调背景
+                fortuneResult.style.color = selectedFortune.color;
+                fortuneResult.textContent = `你的今日运势：${selectedFortune.name}`;
+                
+                // 恢复按钮状态
+                fortuneBtn.disabled = false;
+                fortuneBtn.textContent = '重新抽取运势 🎲';
+            }, 1000);
         });
 
         // 3. 回到顶部按钮交互
