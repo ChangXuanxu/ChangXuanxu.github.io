@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>反应速度测试 - 士多啤梨除草机</title>
+    <style>
+        /* 全局样式（和网站统一） */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            overflow: hidden;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .navbar-logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .navbar-menu {
+            list-style: none;
+            display: flex;
+            gap: 24px;
+        }
+
+        .navbar-item a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-item a:hover {
+            color: #007bff;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 1001;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background-color: #545b62;
+        }
+
+        /* 游戏容器 */
+        .game-container {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            padding: 20px;
+        }
+
+        /* 游戏区域 */
+        .game-area {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .game-title {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        /* 提示文本 */
+        .hint-text {
+            font-size: 24px;
+            color: #666;
+            margin: 30px 0;
+        }
+
+        /* 点击目标 */
+        .click-target {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 40px auto;
+        }
+
+        .click-target.active {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(0, 123, 255, 0.5);
+        }
+
+        /* 结果/得分区 */
+        .result-area {
+            margin: 30px 0;
+        }
+
+        .reaction-time {
+            font-size: 36px;
+            font-weight: bold;
+            color: #dc3545;
+            margin: 10px 0;
+        }
+
+        .avg-time {
+            font-size: 24px;
+            color: #007bff;
+            margin: 15px 0;
+        }
+
+        .rank-text {
+            font-size: 18px;
+            color: #28a745;
+            margin: 10px 0;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            padding: 12px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 10px;
+        }
+
+        .start-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .start-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .restart-btn {
+            background-color: #ffc107;
+            color: #2c3e50;
+        }
+
+        .restart-btn:hover {
+            background-color: #e0a800;
+        }
+
+        /* 隐藏元素 */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">士多啤梨除草机</a>
+            <ul class="navbar-menu">
+                <li class="navbar-item"><a href="index.html">首页</a></li>
+                <li class="navbar-item"><a href="fun-tools.html">趣味组件</a></li>
+                <li class="navbar-item"><a href="blog.html">个人博客</a></li>
+                <li class="navbar-item"><a href="games.html">小游戏</a></li>
+                <li class="navbar-item"><a href="#">联系我</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 返回按钮 -->
+    <a href="games.html" class="back-btn">← 返回小游戏合集</a>
+
+    <!-- 游戏容器 -->
+    <div class="game-container">
+        <div class="game-area">
+            <h1 class="game-title">反应速度测试</h1>
+            
+            <!-- 提示文本 -->
+            <div class="hint-text" id="hintText">点击「开始测试」，等待目标变蓝后立即点击</div>
+            
+            <!-- 点击目标 -->
+            <div class="click-target" id="clickTarget">准备开始</div>
+            
+            <!-- 结果区域 -->
+            <div class="result-area" id="resultArea">
+                <div class="reaction-time" id="reactionTime"></div>
+                <div class="avg-time" id="avgTime"></div>
+                <div class="rank-text" id="rankText"></div>
+            </div>
+            
+            <!-- 按钮 -->
+            <button class="btn start-btn" id="startBtn">开始测试</button>
+            <button class="btn restart-btn hidden" id="restartBtn">再来一次</button>
+        </div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const startBtn = document.getElementById('startBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const clickTarget = document.getElementById('clickTarget');
+        const hintText = document.getElementById('hintText');
+        const reactionTime = document.getElementById('reactionTime');
+        const avgTime = document.getElementById('avgTime');
+        const rankText = document.getElementById('rankText');
+        const resultArea = document.getElementById('resultArea');
+
+        // 游戏变量
+        let startTime = 0;
+        let endTime = 0;
+        let reactionTimes = [];
+        let testRunning = false;
+
+        // 随机延迟（1-5秒）后激活目标
+        function activateTarget() {
+            // 随机延迟 1000-5000 毫秒
+            const randomDelay = Math.floor(Math.random() * 4000) + 1000;
+            
+            hintText.textContent = '等待目标变蓝...';
+            clickTarget.textContent = '等待...';
+            
+            setTimeout(() => {
+                if (!testRunning) return;
+                
+                // 激活目标
+                clickTarget.classList.add('active');
+                clickTarget.textContent = '点击我！';
+                startTime = Date.now(); // 记录激活时间
+                hintText.textContent = '目标已激活，立即点击！';
+            }, randomDelay);
+        }
+
+        // 开始测试
+        function startTest() {
+            // 重置状态
+            testRunning = true;
+            reactionTimes = [];
+            resultArea.style.display = 'none';
+            startBtn.classList.add('hidden');
+            restartBtn.classList.add('hidden');
+            clickTarget.classList.remove('active');
+            
+            // 开始第一轮
+            activateTarget();
+        }
+
+        // 处理目标点击
+        function handleTargetClick() {
+            if (!testRunning) return;
+            
+            if (clickTarget.classList.contains('active')) {
+                // 目标激活后点击：计算反应时间
+                endTime = Date.now();
+                const time = endTime - startTime; // 反应时间（毫秒）
+                reactionTimes.push(time);
+                
+                // 更新显示
+                clickTarget.classList.remove('active');
+                hintText.textContent = `本次反应时间：${time} 毫秒`;
+                reactionTime.textContent = `本次：${time} ms`;
+                
+                // 计算平均时间
+                const avg = Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length);
+                avgTime.textContent = `平均：${avg} ms`;
+                
+                // 评级
+                let rank = '';
+                if (time < 150) rank = '超神！你的反应速度堪比职业电竞选手';
+                else if (time < 200) rank = '优秀！反应速度远超普通人';
+                else if (time < 300) rank = '良好！反应速度处于平均水平之上';
+                else if (time < 400) rank = '及格！反应速度是普通人水平';
+                else rank = '加油！多玩几次能提升反应速度哦';
+                rankText.textContent = rank;
+                
+                // 显示结果
+                resultArea.style.display = 'block';
+                
+                // 结束测试，显示再来一次按钮
+                testRunning = false;
+                clickTarget.textContent = '测试完成';
+                startBtn.classList.add('hidden');
+                restartBtn.classList.remove('hidden');
+            } else {
+                // 提前点击（作弊）
+                hintText.textContent = '作弊！请等待目标变蓝后再点击';
+                testRunning = false;
+                clickTarget.textContent = '作弊无效';
+                startBtn.classList.remove('hidden');
+            }
+        }
+
+        // 重置游戏
+        function restartGame() {
+            hintText.textContent = '点击「开始测试」，等待目标变蓝后立即点击';
+            reactionTime.textContent = '';
+            avgTime.textContent = '';
+            rankText.textContent = '';
+            resultArea.style.display = 'none';
+            clickTarget.textContent = '准备开始';
+            restartBtn.classList.add('hidden');
+            startBtn.classList.remove('hidden');
+            testRunning = false;
+        }
+
+        // 绑定事件
+        startBtn.addEventListener('click', startTest);
+        restartBtn.addEventListener('click', restartGame);
+        clickTarget.addEventListener('click', handleTargetClick);
+    </script>
+</body>
+</html>
