@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>小游戏合集 - 士多啤梨除草机</title>
     <style>
-        /* 全局重置与基础样式 */
         * {
             margin: 0;
             padding: 0;
@@ -16,156 +15,224 @@
         body {
             background-color: #f8f9fa;
             color: #333;
+            line-height: 1.6;
         }
 
-        /* 导航栏样式 */
+        /* 导航栏 */
         .navbar {
-            background-color: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            padding: 0 20px;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000;
+            height: 60px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
         }
 
-        .navbar-container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .navbar-content {
+            width: 1200px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 60px;
+            padding: 0 20px;
         }
 
-        .navbar-logo {
+        .logo {
             font-size: 20px;
             font-weight: bold;
             color: #007bff;
             text-decoration: none;
         }
 
-        .navbar-menu {
-            list-style: none;
-            display: flex;
-            gap: 24px;
-        }
-
-        .navbar-item a {
-            text-decoration: none;
+        .nav-menu a {
+            margin: 0 12px;
             color: #333;
-            font-size: 16px;
-            transition: color 0.3s ease;
-        }
-
-        .navbar-item a:hover {
-            color: #007bff;
-        }
-
-        .navbar-item a.active {
-            color: #007bff;
-            font-weight: bold;
-            border-bottom: 2px solid #007bff;
-        }
-
-        /* 游戏合集容器 */
-        .games-container {
-            max-width: 1200px;
-            margin: 100px auto 50px;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        /* 游戏卡片 */
-        .game-card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            padding: 30px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        }
-
-        .game-card h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-
-        .game-card p {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .play-btn {
-            padding: 10px 25px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
             text-decoration: none;
-            display: inline-block;
+            font-size: 16px;
+            transition: color 0.2s;
         }
 
-        .play-btn:hover {
-            background-color: #0056b3;
+        .nav-menu a:hover {
+            color: #007bff;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            max-width: 1200px;
+            margin: 80px auto 40px;
+            padding: 20px;
         }
 
         /* 页面标题 */
         .page-title {
-            text-align: center;
-            margin-top: 80px;
-            font-size: 32px;
+            font-size: 36px;
             color: #2c3e50;
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        /* 游戏卡片容器 */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* 游戏卡片样式 */
+        .game-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding: 30px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .game-card h3 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .game-card h3 i {
+            font-size: 28px;
+            color: #007bff;
+        }
+
+        .game-card p {
+            color: #666;
+            margin-bottom: 20px;
+            flex: 1;
+            line-height: 1.8;
+        }
+
+        /* 游玩按钮 */
+        .play-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            transition: background 0.2s;
+            margin-top: auto;
+        }
+
+        .play-btn:hover {
+            background: #0056b3;
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            border-top: 1px solid #eee;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .navbar-content {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 20px;
+            }
+
+            .nav-menu {
+                margin-top: 10px;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .main-content {
+                margin-top: 120px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .game-card {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- 导航栏 -->
     <nav class="navbar">
-        <div class="navbar-container">
-            <a href="index.html" class="navbar-logo">士多啤梨除草机</a>
-            <ul class="navbar-menu">
-                <li class="navbar-item"><a href="index.html">首页</a></li>
-                <li class="navbar-item"><a href="fun-tools.html">趣味组件</a></li>
-                <li class="navbar-item"><a href="blog.html">个人博客</a></li>
-                <li class="navbar-item"><a href="games.html" class="active">小游戏</a></li>
-                <li class="navbar-item"><a href="#">联系我</a></li>
-            </ul>
+        <div class="navbar-content">
+            <a href="index.html" class="logo">士多啤梨除草机</a>
+            <div class="nav-menu">
+                <a href="index.html">首页</a>
+                <a href="fun-tools.html">趣味组件</a>
+                <a href="blog.html">个人博客</a>
+                <a href="games.html" style="color: #007bff; font-weight: bold;">小游戏</a>
+                <a href="#">联系我</a>
+            </div>
         </div>
     </nav>
 
-    <!-- 页面标题 -->
-    <h1 class="page-title">小游戏合集</h1>
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <h1 class="page-title">🎮 小游戏合集</h1>
 
-    <!-- 游戏合集容器 -->
-    <div class="games-container">
-        <!-- 反应速度测试卡片 -->
-        <div class="game-card">
-            <h3>反应速度测试</h3>
-            <p>考验你的瞬间反应能力！等待目标变蓝后立即点击，系统会记录你的反应时间，看看你是不是“手速达人”～</p>
-            <a href="game-reaction.html" class="play-btn">开始游玩</a>
+        <!-- 游戏卡片网格 -->
+        <div class="games-grid">
+            <!-- 反应速度测试 -->
+            <div class="game-card">
+                <h3>⚡ 反应速度测试</h3>
+                <p>全屏变色反应测试！等待屏幕突然变蓝，立即点击屏幕，测试你的反应速度有多快～记录每轮反应时间和平均成绩，看看你是不是超神手速！</p>
+                <a href="game-reaction.html" class="play-btn">开始游玩</a>
+            </div>
+
+            <!-- 闽南博饼（修正文件名） -->
+            <div class="game-card">
+                <h3>🎲 闽南博饼小游戏</h3>
+                <p>经典闽南中秋博饼游戏！摇6个骰子，试试手气～从一秀到状元插金花，完整还原传统博饼规则，看看你能博到什么大奖！</p>
+                <a href="bobing.html" class="play-btn">开始游玩</a>
+            </div>
+
+            <!-- 预留位置（可添加更多游戏） -->
+            <div class="game-card">
+                <h3>🔜 更多小游戏</h3>
+                <p>持续更新中... 即将上线：2048、记忆翻牌、数字华容道等更多有趣的小游戏，敬请期待！</p>
+                <a href="games.html" class="play-btn">敬请期待</a>
+            </div>
         </div>
+    </div>
 
-        <!-- 预留新游戏卡片（后续添加新游戏时复制这个模板） -->
-        <!-- <div class="game-card">
-            <h3>新游戏名称</h3>
-            <p>新游戏的简单介绍...</p>
-            <a href="game-xxx.html" class="play-btn">开始游玩</a>
-        </div> -->
+    <!-- 页脚 -->
+    <div class="footer">
+        <p>© 2026 士多啤梨除草机 | 极简小游戏合集，轻松休闲，快乐玩耍～</p>
     </div>
 </body>
 </html>
