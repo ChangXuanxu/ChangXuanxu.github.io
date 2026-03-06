@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人博客 - ChangXuanxu 的个人网站</title>
+    <style>
+        /* 全局重置与基础样式（和其他页面保持一致） */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background-color: #f5f5f5;
+            background-image: url("West Lake 1.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #333;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        /* 导航栏样式（完全复用） */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .navbar-logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .navbar-menu {
+            list-style: none;
+            display: flex;
+            gap: 24px;
+        }
+
+        .navbar-item a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-item a:hover {
+            color: #007bff;
+        }
+
+        .navbar-item a.active {
+            color: #007bff;
+            font-weight: bold;
+            border-bottom: 2px solid #007bff;
+        }
+
+        /* 博客主容器 */
+        .blog-container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* 博客头部 */
+        .blog-header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .blog-header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .blog-header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        /* 博客筛选栏 */
+        .blog-filter {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .blog-filter span {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .blog-filter .filter-tag {
+            padding: 6px 12px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .blog-filter .filter-tag:hover {
+            background-color: #0056b3;
+        }
+
+        .blog-filter .filter-tag.active {
+            background-color: #28a745;
+        }
+
+        /* 博客文章列表 */
+        .blog-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* 博客卡片样式 */
+        .blog-card {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+        }
+
+        .blog-card:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .blog-card .blog-meta {
+            display: flex;
+            gap: 15px;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .blog-card .blog-category {
+            background-color: #e8f4fd;
+            color: #007bff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .blog-card h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .blog-card h2 a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+
+        .blog-card h2 a:hover {
+            color: #007bff;
+        }
+
+        .blog-card .blog-excerpt {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* 只显示2行摘要 */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .blog-card .blog-read {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .blog-card .blog-read:hover {
+            background-color: #0056b3;
+        }
+
+        /* 回到顶部按钮（复用） */
+        #backToTop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            border-radius: 50%;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 999;
+        }
+
+        #backToTop:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .navbar-menu {
+                gap: 16px;
+            }
+
+            .blog-header h1 {
+                font-size: 28px;
+            }
+
+            .blog-filter {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .blog-card h2 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏（激活个人博客） -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">CXuanxu</a>
+            <ul class="navbar-menu">
+                <li class="navbar-item"><a href="index.html">首页</a></li>
+                <li class="navbar-item"><a href="fun-tools.html">趣味组件</a></li>
+                <li class="navbar-item"><a href="blog.html" class="active">个人博客</a></li>
+                <li class="navbar-item"><a href="#">关于我</a></li>
+                <li class="navbar-item"><a href="#">联系我</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 博客主内容 -->
+    <div class="blog-container">
+        <!-- 博客头部 -->
+        <div class="blog-header">
+            <h1>我的个人博客</h1>
+            <p>记录学习点滴，分享技术与生活 📝</p>
+        </div>
+
+        <!-- 筛选栏 -->
+        <div class="blog-filter">
+            <span>筛选分类：</span>
+            <div class="filter-tag active">全部</div>
+            <div class="filter-tag">前端开发</div>
+            <div class="filter-tag">学习笔记</div>
+            <div class="filter-tag">生活杂记</div>
+        </div>
+
+        <!-- 博客列表 -->
+        <div class="blog-list">
+            <!-- 博客文章1 -->
+            <div class="blog-card" data-category="前端开发">
+                <div class="blog-meta">
+                    <span>2026-03-06</span>
+                    <span>阅读：128</span>
+                    <span class="blog-category">前端开发</span>
+                </div>
+                <h2><a href="blog-detail.html?title=GitHub Pages搭建个人网站">GitHub Pages 搭建个人网站超详细教程</a></h2>
+                <div class="blog-excerpt">
+                    本文详细介绍了如何使用 GitHub Pages 快速搭建个人静态网站，包括仓库创建、HTML 编写、样式优化、功能扩展等步骤，新手也能轻松上手！
+                </div>
+                <a href="blog-detail.html?title=GitHub Pages搭建个人网站" class="blog-read">阅读全文</a>
+            </div>
+
+            <!-- 博客文章2 -->
+            <div class="blog-card" data-category="学习笔记">
+                <div class="blog-meta">
+                    <span>2026-03-05</span>
+                    <span>阅读：96</span>
+                    <span class="blog-category">学习笔记</span>
+                </div>
+                <h2><a href="blog-detail.html?title=JavaScript随机数生成技巧">JavaScript 随机数生成技巧（不重复+等概率）</a></h2>
+                <div class="blog-excerpt">
+                    总结了 JavaScript 生成随机数的几种常见方法，重点讲解了如何生成指定范围的不重复随机数，以及 Fisher-Yates 洗牌算法的原理和实现。
+                </div>
+                <a href="blog-detail.html?title=JavaScript随机数生成技巧" class="blog-read">阅读全文</a>
+            </div>
+
+            <!-- 博客文章3 -->
+            <div class="blog-card" data-category="生活杂记">
+                <div class="blog-meta">
+                    <span>2026-03-04</span>
+                    <span>阅读：78</span>
+                    <span class="blog-category">生活杂记</span>
+                </div>
+                <h2><a href="blog-detail.html?title=西湖游记">西湖游记：春日里的湖光山色</a></h2>
+                <div class="blog-excerpt">
+                    周末去西湖散步，记录下春日里的西湖美景，有苏堤的柳、断桥的云，还有湖边的微风，分享一些随手拍的照片和小感悟。
+                </div>
+                <a href="blog-detail.html?title=西湖游记" class="blog-read">阅读全文</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 回到顶部按钮 -->
+    <button id="backToTop">↑</button>
+
+    <script>
+        // 页面加载淡入
+        window.onload = function() {
+            document.body.style.opacity = 1;
+        };
+
+        // 分类筛选功能
+        const filterTags = document.querySelectorAll('.blog-filter .filter-tag');
+        const blogCards = document.querySelectorAll('.blog-card');
+
+        filterTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+                // 切换筛选标签激活态
+                filterTags.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filterText = this.textContent;
+                // 筛选博客卡片
+                blogCards.forEach(card => {
+                    if (filterText === '全部' || card.dataset.category === filterText) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 回到顶部功能
+        const backToTopBtn = document.getElementById('backToTop');
+        window.onscroll = function() {
+            backToTopBtn.style.display = (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) ? 'block' : 'none';
+        };
+
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
