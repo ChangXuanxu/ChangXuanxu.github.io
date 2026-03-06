@@ -467,10 +467,9 @@ body {
         <div class="operate-area">
             <div class="operate-title">游戏操作</div>
             
-            <!-- 骰子区 -->
+            <!-- 骰子区 - 移除多余骰子，只保留一个 -->
             <div class="dice-area">
                 <div class="dice" id="dice1">⚀</div>
-                <div class="dice2">⚀</div>
             </div>
 
             <!-- 近五次结果区（替代原德才功赃按钮） -->
@@ -657,7 +656,7 @@ function mergeAllGrids() {
 // ===================== DOM 操作函数 =====================
 // 获取当前格子数据
 function getCurrentGrid() {
-    return gameState.allGrids.find(grid => grid.id === gameState.currentId);
+    return gameState.allGrids.find(grid => grid.id === gameState.currentId) || gameState.allGrids[0];
 }
 
 // 更新游戏状态显示
@@ -666,8 +665,8 @@ function updateStatusDisplay() {
     document.getElementById("current-circle").textContent = 
         gameState.currentCircle === "outer" ? "外圈" : 
         gameState.currentCircle === "middle" ? "中圈" : "内圈";
-    document.getElementById("current-position").textContent = currentGrid?.name || "白丁";
-    document.getElementById("current-grade").textContent = currentGrid?.grade || "无品级";
+    document.getElementById("current-position").textContent = currentGrid.name || "白丁";
+    document.getElementById("current-grade").textContent = currentGrid.grade || "无品级";
     document.getElementById("step-count").textContent = gameState.stepCount;
     
     // 新增：更新骰子次数显示
@@ -756,21 +755,26 @@ function updateRecentResults(resultText, type = "normal") {
 
 // 更新游戏结果详情
 function updateResultDetail(text) {
-    document.getElementById("game-result").textContent = text;
+    const resultEl = document.getElementById("game-result");
+    if (resultEl) {
+        resultEl.textContent = text;
+    }
 }
 
 // 骰子动画
 function diceAnimation(callback) {
     const dice1 = document.getElementById("dice1");
-    const dice2 = document.getElementById("dice2");
+    if (!dice1) {
+        callback();
+        return;
+    }
+    
     const diceIcons = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
     
     let count = 0;
     const animInterval = setInterval(() => {
         const r1 = Math.floor(Math.random() * 6);
-        const r2 = Math.floor(Math.random() * 6);
         dice1.textContent = diceIcons[r1];
-        dice2.textContent = diceIcons[r2];
         count++;
         
         if (count >= 10) {
@@ -786,7 +790,8 @@ function gameSettlement(isWin = false) {
     gameState.gameOver = true;
     
     // 禁用所有操作按钮
-    document.getElementById("btn-roll").disabled = true;
+    const rollBtn = document.getElementById("btn-roll");
+    if (rollBtn) rollBtn.disabled = true;
     
     let resultText = "";
     let resultType = isWin ? "success" : "fail";
@@ -833,7 +838,7 @@ function getTargetIdByPoint(pointType) {
     
     // 2. 贪墨直接贬为白丁
     if (pointType === "tanmo") {
-        const resultText = `触发贪墨！从【${prevGrid.name}】贬为【白丁】，重新开始！剩余次数：${gameState.diceRemain-1}/40`;
+        const resultText = `触发贪墨！从【${prevGrid.name}】贬为【白丁】，重新开始！剩余次数：${gameState.diceRemain}/40`;
         updateResultDetail(resultText);
         updateRecentResults(resultText, "fail");
         gameState.currentCircle = "outer";
@@ -879,18 +884,17 @@ function getTargetIdByPoint(pointType) {
     if (targetId < 1) targetId = 1;
     if (targetId > 77) targetId = 77;
     
-    // 圈层切换
-    let circleText = "";
-    if (targetId > 38 && targetId <= 69 && gameState.currentCircle !== "middle") {
+    // 圈层切换 - 修正判断逻辑
+    if (targetId >= 1 && targetId <= 38) {
+        gameState.currentCircle = "outer";
+    } else if (targetId >= 39 && targetId <= 69) {
         gameState.currentCircle = "middle";
-        circleText = "（进入中圈）";
-    } else if (targetId > 69 && gameState.currentCircle !== "inner") {
+    } else if (targetId >= 70 && targetId <= 77) {
         gameState.currentCircle = "inner";
-        circleText = "（进入内圈）";
     }
     
     // 处理特殊格子
-    const targetGrid = gameState.allGrids.find(g => g.id === targetId);
+    const targetGrid = gameState.allGrids.find(g => g.id === targetId) || currentGrid;
     let specialText = "";
     let resultType = "normal";
     
@@ -904,10 +908,20 @@ function getTargetIdByPoint(pointType) {
             const pointText = {de: "德", cai: "才", gong: "功", zang: "赃"}[randomPoint];
             specialText = `（触发京察：随机掷出${pointText}，${randomPoint === "de" || randomPoint === "cai" ? "升1级" : "降1级"}）`;
             targetId = randomPoint === "de" || randomPoint === "cai" ? targetId + 1 : targetId - 1;
+            // 修正圈层判断
+            if (targetId >= 1 && targetId <= 38) gameState.currentCircle = "outer";
+            else if (targetId >= 39 && targetId <= 69) gameState.currentCircle = "middle";
+            else if (targetId >= 70 && targetId <= 77) gameState.currentCircle = "inner";
+            
             resultType = randomPoint === "de" || randomPoint === "cai" ? "success" : "fail";
         } else if (targetGrid.name === "外放") {
             specialText = "（触发外放：降3级）";
             targetId = Math.max(1, targetId - 3);
+            // 修正圈层判断
+            if (targetId >= 1 && targetId <= 38) gameState.currentCircle = "outer";
+            else if (targetId >= 39 && targetId <= 69) gameState.currentCircle = "middle";
+            else if (targetId >= 70 && targetId <= 77) gameState.currentCircle = "inner";
+            
             resultType = "fail";
         } else if (targetGrid.name === "贪墨") {
             specialText = "（触发贪墨：贬为白丁）";
@@ -918,11 +932,12 @@ function getTargetIdByPoint(pointType) {
     }
     
     // 确定最终目标格子
-    const finalTargetGrid = gameState.allGrids.find(g => g.id === targetId);
+    const finalTargetGrid = gameState.allGrids.find(g => g.id === targetId) || currentGrid;
     
     // 生成结果文本
     let resultText = "";
     const pointName = {de: "德", cai: "才", gong: "功", zang: "赃"}[pointType] || "未知";
+    const circleText = gameState.currentCircle !== prevGrid.circle ? `（进入${gameState.currentCircle === "outer" ? "外圈" : gameState.currentCircle === "middle" ? "中圈" : "内圈"}）` : "";
     
     if (step > 0 || (pointType === "gong" && step === 0)) {
         resultText = `掷出${pointName}${bonusText}：从【${prevGrid.name}】升至【${finalTargetGrid.name}】${circleText}${specialText}！剩余次数：${gameState.diceRemain-1}/40`;
@@ -960,7 +975,8 @@ function rollDice() {
     }
     
     // 禁用按钮
-    document.getElementById("btn-roll").disabled = true;
+    const rollBtn = document.getElementById("btn-roll");
+    if (rollBtn) rollBtn.disabled = true;
     
     // 骰子动画
     diceAnimation(() => {
@@ -987,25 +1003,19 @@ function rollDice() {
             gameSettlement(false); // 次数用尽结算
         }
         
-        // 1%概率触发贪墨（修改：从3%降至1%）
+        // 1%概率触发贪墨
         if (Math.random() < 0.01 && !gameState.gameWon && gameState.diceRemain > 0) {
             setTimeout(() => {
-                gameState.diceRemain--; // 贪墨也消耗次数
                 const tanmoTarget = getTargetIdByPoint("tanmo");
                 gameState.currentId = tanmoTarget;
                 updateStatusDisplay();
                 renderBoard();
-                
-                // 再次检查次数
-                if (gameState.diceRemain <= 0 && !gameState.gameWon) {
-                    gameSettlement(false);
-                }
             }, 1500);
         }
         
         // 启用按钮（如果游戏未结束）
-        if (!gameState.gameWon && !gameState.gameOver && gameState.diceRemain > 0) {
-            document.getElementById("btn-roll").disabled = false;
+        if (rollBtn && !gameState.gameWon && !gameState.gameOver && gameState.diceRemain > 0) {
+            rollBtn.disabled = false;
         }
     });
 }
@@ -1023,7 +1033,8 @@ function resetGame() {
     gameState.recentResults = []; // 清空历史结果
     
     // 启用按钮
-    document.getElementById("btn-roll").disabled = false;
+    const rollBtn = document.getElementById("btn-roll");
+    if (rollBtn) rollBtn.disabled = false;
     
     // 更新显示
     updateStatusDisplay();
@@ -1035,10 +1046,12 @@ function resetGame() {
 // ===================== 事件绑定 =====================
 function bindEvents() {
     // 掷骰子按钮
-    document.getElementById("btn-roll").addEventListener("click", rollDice);
+    const rollBtn = document.getElementById("btn-roll");
+    if (rollBtn) rollBtn.addEventListener("click", rollDice);
     
     // 重新开始
-    document.getElementById("btn-reset").addEventListener("click", resetGame);
+    const resetBtn = document.getElementById("btn-reset");
+    if (resetBtn) resetBtn.addEventListener("click", resetGame);
 }
 
 // ===================== 初始化游戏 =====================
