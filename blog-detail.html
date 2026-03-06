@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客详情 - ChangXuanxu 的个人网站</title>
+    <style>
+        /* 全局重置与基础样式（复用） */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background-color: #f5f5f5;
+            background-image: url("West Lake 1.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #333;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        /* 导航栏样式（复用） */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .navbar-logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .navbar-menu {
+            list-style: none;
+            display: flex;
+            gap: 24px;
+        }
+
+        .navbar-item a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-item a:hover {
+            color: #007bff;
+        }
+
+        .navbar-item a.active {
+            color: #007bff;
+            font-weight: bold;
+            border-bottom: 2px solid #007bff;
+        }
+
+        /* 博客详情容器 */
+        .blog-detail-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* 博客详情卡片 */
+        .blog-detail-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        /* 博客标题 */
+        .blog-detail-title {
+            font-size: 28px;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* 博客元信息 */
+        .blog-detail-meta {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            color: #888;
+            font-size: 14px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 25px;
+        }
+
+        /* 博客内容 */
+        .blog-detail-content {
+            line-height: 1.8;
+            color: #444;
+            font-size: 16px;
+        }
+
+        .blog-detail-content p {
+            margin-bottom: 20px;
+        }
+
+        .blog-detail-content h3 {
+            font-size: 20px;
+            color: #2c3e50;
+            margin: 30px 0 15px;
+        }
+
+        .blog-detail-content code {
+            background-color: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #dc3545;
+            font-family: "Consolas", monospace;
+        }
+
+        .blog-detail-content pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        /* 返回列表按钮 */
+        .back-to-list {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-to-list:hover {
+            background-color: #0056b3;
+        }
+
+        /* 回到顶部按钮（复用） */
+        #backToTop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            border-radius: 50%;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 999;
+        }
+
+        #backToTop:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .navbar-menu {
+                gap: 16px;
+            }
+
+            .blog-detail-title {
+                font-size: 24px;
+            }
+
+            .blog-detail-card {
+                padding: 20px;
+            }
+
+            .blog-detail-meta {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">CXuanxu</a>
+            <ul class="navbar-menu">
+                <li class="navbar-item"><a href="index.html">首页</a></li>
+                <li class="navbar-item"><a href="fun-tools.html">趣味组件</a></li>
+                <li class="navbar-item"><a href="blog.html" class="active">个人博客</a></li>
+                <li class="navbar-item"><a href="#">关于我</a></li>
+                <li class="navbar-item"><a href="#">联系我</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 博客详情内容 -->
+    <div class="blog-detail-container">
+        <div class="blog-detail-card">
+            <!-- 博客标题（从URL参数获取） -->
+            <h1 class="blog-detail-title" id="blogTitle">GitHub Pages搭建个人网站</h1>
+            
+            <!-- 元信息 -->
+            <div class="blog-detail-meta">
+                <span id="blogDate">2026-03-06</span>
+                <span id="blogCategory">前端开发</span>
+                <span id="blogRead">阅读：128</span>
+            </div>
+
+            <!-- 博客内容 -->
+            <div class="blog-detail-content" id="blogContent">
+                <p>大家好，今天给大家分享如何用 GitHub Pages 快速搭建自己的个人静态网站，全程免费且无需服务器，新手也能轻松搞定！</p>
+                
+                <h3>一、准备工作</h3>
+                <p>1. 拥有一个 GitHub 账号（没有的话去 <a href="https://github.com" target="_blank">github.com</a> 注册）</p>
+                <p>2. 基本的 HTML/CSS/JavaScript 基础（本文用最简单的代码示例）</p>
+                
+                <h3>二、创建仓库</h3>
+                <p>1. 登录 GitHub 后，点击右上角的「+」号，选择「New repository」</p>
+                <p>2. 仓库名必须是：<code>你的用户名.github.io</code>（例如：ChangXuanxu.github.io）</p>
+                <p>3. 勾选「Add a README file」，然后点击「Create repository」</p>
+                
+                <h3>三、编写网页代码</h3>
+                <p>1. 进入新建的仓库，点击「Add file」→「Create new file」</p>
+                <p>2. 文件名填写 <code>index.html</code>，然后粘贴你的 HTML 代码</p>
+                <p>3. 拉到页面底部，填写提交信息，点击「Commit new file」</p>
+                
+                <h3>四、访问你的网站</h3>
+                <p>等待1-2分钟后，访问 <code>你的用户名.github.io</code> 就能看到你的个人网站了！</p>
+                
+                <p>后续可以继续添加 CSS 美化样式、JavaScript 实现交互功能，比如我们之前做的运势抽取、随机数生成等功能，都可以整合进去。</p>
+                
+                <p>如果需要修改内容，直接在 GitHub 仓库里编辑文件即可，提交后会自动生效，非常方便。</p>
+            </div>
+
+            <!-- 返回列表按钮 -->
+            <a href="blog.html" class="back-to-list">← 返回博客列表</a>
+        </div>
+    </div>
+
+    <!-- 回到顶部按钮 -->
+    <button id="backToTop">↑</button>
+
+    <script>
+        // 页面加载淡入
+        window.onload = function() {
+            document.body.style.opacity = 1;
+            // 从URL参数获取文章标题，适配不同文章
+            setBlogContentFromUrl();
+        };
+
+        // 根据URL参数设置博客内容（模拟多文章详情）
+        function setBlogContentFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const title = urlParams.get('title') || 'GitHub Pages搭建个人网站';
+            
+            const blogTitle = document.getElementById('blogTitle');
+            const blogDate = document.getElementById('blogDate');
+            const blogCategory = document.getElementById('blogCategory');
+            const blogRead = document.getElementById('blogRead');
+            const blogContent = document.getElementById('blogContent');
+
+            // 根据标题切换不同文章内容
+            switch (title) {
+                case 'JavaScript随机数生成技巧':
+                    blogTitle.textContent = 'JavaScript 随机数生成技巧（不重复+等概率）';
+                    blogDate.textContent = '2026-03-05';
+                    blogCategory.textContent = '学习笔记';
+                    blogRead.textContent = '阅读：96';
+                    blogContent.innerHTML = `
+                        <p>在前端开发中，随机数生成是很常见的需求，比如抽奖、随机选答案、生成验证码等，今天总结几种常用的随机数生成方法。</p>
+                        <h3>一、基础随机数生成</h3>
+                        <p>JavaScript 原生的 <code>Math.random()</code> 会生成 0 到 1 之间的随机浮点数（不包含1）：</p>
+                        <pre>const random = Math.random(); // 0.123456789...</pre>
+                        <p>如果要生成指定范围的整数（比如1-10）：</p>
+                        <pre>const min = 1;
+const max = 10;
+const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;</pre>
+                        <h3>二、生成不重复的随机数</h3>
+                        <p>如果需要生成多个不重复的随机数，推荐使用 Fisher-Yates 洗牌算法：</p>
+                        <pre>function generateUniqueRandomNumbers(start, end, count) {
+    const numRange = [];
+    for (let i = start; i <= end; i++) numRange.push(i);
+    
+    const result = [];
+    for (let i = 0; i < count; i++) {
+        const randomIndex = Math.floor(Math.random() * numRange.length);
+        result.push(numRange.splice(randomIndex, 1)[0]);
+    }
+    return result;
+}</pre>
+                        <p>这个方法的优势是保证每个数只出现一次，且随机分布均匀，适合抽奖、随机选号等场景。</p>
+                        <h3>三、等概率随机选择</h3>
+                        <p>如果要从数组中等概率随机选一个元素：</p>
+                        <pre>const arr = ['大凶', '凶', '中', '吉', '大吉'];
+const randomItem = arr[Math.floor(Math.random() * arr.length)];</pre>
+                        <p>这种方法可以保证每个元素被选中的概率完全相同，我们之前做的运势抽取功能就是用的这个原理。</p>
+                    `;
+                    break;
+                case '西湖游记':
+                    blogTitle.textContent = '西湖游记：春日里的湖光山色';
+                    blogDate.textContent = '2026-03-04';
+                    blogCategory.textContent = '生活杂记';
+                    blogRead.textContent = '阅读：78';
+                    blogContent.innerHTML = `
+                        <p>周末难得的好天气，决定去西湖走一走，避开了热门的景点，选了一条小众的路线，收获了不一样的风景。</p>
+                        <h3>一、苏堤的柳</h3>
+                        <p>三月的苏堤，柳树已经抽出了新芽，嫩绿色的柳条垂在湖面上，风一吹就轻轻摆动，像姑娘的长发。走在苏堤上，能闻到淡淡的青草香，耳边是鸟鸣和湖水拍岸的声音，特别治愈。</p>
+                        <h3>二、杨公堤的静</h3>
+                        <p>相比苏堤的热闹，杨公堤要安静很多，路边的樱花也开了，粉粉的一片，偶尔有骑行的路人经过，不会觉得拥挤，适合慢慢走，慢慢看。</p>
+                        <h3>三、湖边的咖啡</h3>
+                        <p>走累了，在湖边找了一家小咖啡馆，点了一杯拿铁，坐在窗边看着湖面的波光，什么都不想，就单纯地放空自己，感觉一周的疲惫都消失了。</p>
+                        <p>生活有时候需要慢下来，去感受身边的美好，不用追求打卡多少景点，只要能放松心情，就是最好的旅行。</p>
+                    `;
+                    break;
+                default:
+                    // 默认显示GitHub Pages教程
+                    break;
+            }
+        }
+
+        // 回到顶部功能
+        const backToTopBtn = document.getElementById('backToTop');
+        window.onscroll = function() {
+            backToTopBtn.style.display = (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) ? 'block' : 'none';
+        };
+
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
