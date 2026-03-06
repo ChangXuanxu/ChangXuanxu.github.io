@@ -85,7 +85,7 @@
             margin-bottom: 40px;
         }
 
-        /* 游戏卡片样式 */
+        /* 游戏卡片样式 - 统一所有卡片样式 */
         .game-card {
             background: white;
             border-radius: 12px;
@@ -94,7 +94,7 @@
             transition: transform 0.2s, box-shadow 0.2s;
             display: flex;
             flex-direction: column;
-            height: 100%;
+            height: 100%; /* 确保卡片高度一致 */
         }
 
         .game-card:hover {
@@ -111,7 +111,8 @@
             gap: 10px;
         }
 
-        .game-card h3 i {
+        /* 统一图标样式 */
+        .game-card h3 span {
             font-size: 28px;
             color: #007bff;
         }
@@ -119,11 +120,11 @@
         .game-card p {
             color: #666;
             margin-bottom: 20px;
-            flex: 1;
+            flex: 1; /* 让描述文本占满剩余空间，按钮始终在底部 */
             line-height: 1.8;
         }
 
-        /* 游玩按钮 */
+        /* 游玩按钮 - 统一样式 */
         .play-btn {
             display: inline-block;
             padding: 12px 24px;
@@ -135,11 +136,22 @@
             font-weight: 500;
             text-align: center;
             transition: background 0.2s;
-            margin-top: auto;
+            margin-top: auto; /* 按钮固定在卡片底部 */
+            width: 100%; /* 按钮宽度铺满卡片 */
         }
 
         .play-btn:hover {
             background: #0056b3;
+        }
+
+        /* 禁用状态的按钮 */
+        .play-btn.disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .play-btn.disabled:hover {
+            background: #6c757d;
         }
 
         /* 页脚 */
@@ -152,11 +164,15 @@
             margin: 0 auto;
         }
 
-        /* 移动端适配 */
+        /* 移动端适配优化 */
         @media (max-width: 768px) {
+            .navbar {
+                height: auto;
+                padding: 10px 0;
+            }
+            
             .navbar-content {
                 flex-direction: column;
-                height: auto;
                 padding: 10px 20px;
             }
 
@@ -174,14 +190,32 @@
 
             .page-title {
                 font-size: 28px;
+                margin-bottom: 30px;
+                padding-bottom: 15px;
             }
 
             .games-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
 
             .game-card {
                 padding: 20px;
+            }
+
+            .game-card h3 {
+                font-size: 20px;
+            }
+
+            .game-card h3 span {
+                font-size: 24px;
+            }
+        }
+
+        /* 平板适配 */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .games-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -205,35 +239,34 @@
     <div class="main-content">
         <h1 class="page-title">🎮 小游戏合集</h1>
 
-        <!-- 游戏卡片网格 -->
+        <!-- 游戏卡片网格 - 统一所有卡片结构 -->
         <div class="games-grid">
             <!-- 反应速度测试 -->
             <div class="game-card">
-                <h3>⚡ 反应速度测试</h3>
+                <h3><span>⚡</span> 反应速度测试</h3>
                 <p>全屏变色反应测试！等待屏幕突然变蓝，立即点击屏幕，测试你的反应速度有多快～记录每轮反应时间和平均成绩，看看你是不是超神手速！</p>
                 <a href="game-reaction.html" class="play-btn">开始游玩</a>
             </div>
 
-            <!-- 闽南博饼（修正文件名） -->
+            <!-- 闽南博饼 -->
             <div class="game-card">
-                <h3>🎲 闽南博饼小游戏</h3>
+                <h3><span>🎲</span> 闽南博饼小游戏</h3>
                 <p>经典闽南中秋博饼游戏！摇6个骰子，试试手气～从一秀到状元插金花，完整还原传统博饼规则，看看你能博到什么大奖！</p>
                 <a href="bobing.html" class="play-btn">开始游玩</a>
             </div>
-            <!-- 明清升官图游戏卡片（统一风格） -->
+
+            <!-- 明清升官图 - 统一结构 -->
             <div class="game-card">
-                <div class="game-card-img">📜</div>
-                <div class="game-card-content">
-                    <h3 class="game-card-title">明清升官图</h3>
-                    <p class="game-card-desc">经典民俗游戏，从白丁一路升至太师！</p>
-                    <a href="shengguantu.html" class="play-btn">开始游戏</a>
-                </div>
+                <h3><span>📜</span> 明清升官图</h3>
+                <p>经典民俗游戏升级版！从白丁起步，通过掷骰子体验三圈升官之路，一路升至太师（正一品），每局限40次掷骰子，贪墨概率仅1%！</p>
+                <a href="shengguantu.html" class="play-btn">开始游玩</a>
             </div>
-            <!-- 预留位置（可添加更多游戏） -->
+
+            <!-- 预留位置 - 优化样式 -->
             <div class="game-card">
-                <h3>🔜 更多小游戏</h3>
-                <p>持续更新中... 即将上线：2048、记忆翻牌、数字华容道等更多有趣的小游戏，敬请期待！</p>
-                <a href="games.html" class="play-btn">敬请期待</a>
+                <h3><span>🔜</span> 更多小游戏</h3>
+                <p>持续更新中... 即将上线：2048、记忆翻牌、数字华容道等更多有趣的小游戏，轻松休闲，快乐玩耍～</p>
+                <a href="games.html" class="play-btn disabled">敬请期待</a>
             </div>
         </div>
     </div>
