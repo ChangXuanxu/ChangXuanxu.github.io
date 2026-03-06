@@ -228,7 +228,7 @@
             <div class="blog-detail-meta">
                 <span id="blogDate">2026-03-06</span>
                 <span id="blogCategory">前端开发</span>
-                <span id="blogRead">阅读：128</span>
+                <span id="blogRead">阅读：0</span>
             </div>
 
             <!-- 博客内容 -->
@@ -290,7 +290,7 @@
                     blogTitle.textContent = 'JavaScript 随机数生成技巧（不重复+等概率）';
                     blogDate.textContent = '2026-03-05';
                     blogCategory.textContent = '学习笔记';
-                    blogRead.textContent = '阅读：96';
+                    blogRead.textContent = '阅读：114514';
                     blogContent.innerHTML = `
                         <p>在前端开发中，随机数生成是很常见的需求，比如抽奖、随机选答案、生成验证码等，今天总结几种常用的随机数生成方法。</p>
                         <h3>一、基础随机数生成</h3>
@@ -337,6 +337,21 @@ const randomItem = arr[Math.floor(Math.random() * arr.length)];</pre>
                         <p>生活有时候需要慢下来，去感受身边的美好，不用追求打卡多少景点，只要能放松心情，就是最好的旅行。</p>
                     `;
                     break;
+                case '花':
+                    blogTitle.textContent = '';
+                    blogDate.textContent = '2026-03-06';
+                    blogCategory.textContent = '生活杂记';
+                    blogRead.textContent = '阅读：91';
+                    blogContent.innerHTML = `
+                        <p>周末难得的好天气，决定去西湖走一走，避开了热门的景点，选了一条小众的路线，收获了不一样的风景。</p>
+                        <h3>一、苏堤的柳</h3>
+                        <p>三月的苏堤，柳树已经抽出了新芽，嫩绿色的柳条垂在湖面上，风一吹就轻轻摆动，像姑娘的长发。走在苏堤上，能闻到淡淡的青草香，耳边是鸟鸣和湖水拍岸的声音，特别治愈。</p>
+                        <h3>二、杨公堤的静</h3>
+                        <p>相比苏堤的热闹，杨公堤要安静很多，路边的樱花也开了，粉粉的一片，偶尔有骑行的路人经过，不会觉得拥挤，适合慢慢走，慢慢看。</p>
+                        <h3>三、湖边的咖啡</h3>
+                        <p>走累了，在湖边找了一家小咖啡馆，点了一杯拿铁，坐在窗边看着湖面的波光，什么都不想，就单纯地放空自己，感觉一周的疲惫都消失了。</p>
+                        <p>生活有时候需要慢下来，去感受身边的美好，不用追求打卡多少景点，只要能放松心情，就是最好的旅行。</p>
+                    `;
                 default:
                     // 默认显示GitHub Pages教程
                     break;
