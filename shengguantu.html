@@ -255,29 +255,57 @@ body {
     background: white;
 }
 
-/* 掷点选择区 */
-.point-select {
-    display: flex;
-    justify-content: space-between;
+/* 近五次结果区（替代原按钮区） */
+.recent-results {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 15px;
     margin-bottom: 20px;
 }
 
-.point-btn {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    color: white;
+.recent-title {
+    font-size: 14px;
     font-weight: bold;
-    cursor: pointer;
-    flex: 1;
-    margin: 0 5px;
+    margin-bottom: 10px;
+    color: #2c3e50;
 }
 
-.point-de { background: #28a745; } /* 德 */
-.point-cai { background: #007bff; } /* 才 */
-.point-gong { background: #ffc107; } /* 功 */
-.point-zang { background: #dc3545; } /* 赃 */
-.point-tanmo { background: #6610f2; } /* 贪墨（随机触发） */
+.result-list {
+    list-style: none;
+}
+
+.result-item {
+    padding: 6px 0;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-num {
+    color: #666;
+    font-weight: bold;
+}
+
+.result-content {
+    color: #333;
+}
+
+.result-content.success {
+    color: #28a745;
+}
+
+.result-content.fail {
+    color: #dc3545;
+}
+
+.result-content.special {
+    color: #ffc107;
+}
 
 /* 操作按钮 */
 .operate-btn {
@@ -318,7 +346,7 @@ body {
     font-size: 14px;
 }
 
-.result-content {
+.result-detail {
     font-size: 14px;
     color: #666;
     line-height: 1.6;
@@ -442,15 +470,34 @@ body {
             <!-- 骰子区 -->
             <div class="dice-area">
                 <div class="dice" id="dice1">⚀</div>
-                <div class="dice" id="dice2">⚀</div>
+                <div class="dice2">⚀</div>
             </div>
 
-            <!-- 掷点选择 -->
-            <div class="point-select">
-                <button class="point-btn point-de" id="btn-de">德</button>
-                <button class="point-btn point-cai" id="btn-cai">才</button>
-                <button class="point-btn point-gong" id="btn-gong">功</button>
-                <button class="point-btn point-zang" id="btn-zang">赃</button>
+            <!-- 近五次结果区（替代原德才功赃按钮） -->
+            <div class="recent-results" id="recent-results">
+                <div class="recent-title">近五次游戏结果</div>
+                <ul class="result-list" id="result-list">
+                    <li class="result-item">
+                        <span class="result-num">1</span>
+                        <span class="result-content">尚未开始</span>
+                    </li>
+                    <li class="result-item">
+                        <span class="result-num">2</span>
+                        <span class="result-content">尚未开始</span>
+                    </li>
+                    <li class="result-item">
+                        <span class="result-num">3</span>
+                        <span class="result-content">尚未开始</span>
+                    </li>
+                    <li class="result-item">
+                        <span class="result-num">4</span>
+                        <span class="result-content">尚未开始</span>
+                    </li>
+                    <li class="result-item">
+                        <span class="result-num">5</span>
+                        <span class="result-content">尚未开始</span>
+                    </li>
+                </ul>
             </div>
 
             <!-- 操作按钮 -->
@@ -459,8 +506,8 @@ body {
 
             <!-- 结果区 -->
             <div class="result-area">
-                <div class="result-title">游戏结果</div>
-                <div class="result-content" id="game-result">
+                <div class="result-title">本次操作详情</div>
+                <div class="result-detail" id="game-result">
                     点击「掷骰子」开始游戏，首次掷骰子自动升至童生 | 每局限40次掷骰子
                 </div>
             </div>
@@ -475,7 +522,7 @@ body {
             <li>升降规则：德=连升2级，才=升1级，功=升半级（正→从同品），赃=降2级，贪墨=贬为白丁</li>
             <li>特殊格有专属效果，无标注则按常规升降执行</li>
             <li>最终升至「太师」（正一品）即为游戏胜利</li>
-            <li>每局游戏限制40次掷骰子，次数用尽自动结算 | 贪墨触发概率：3%</li>
+            <li>每局游戏限制40次掷骰子，次数用尽自动结算 | 贪墨触发概率：1%</li>
         </ul>
     </div>
 </div>
@@ -594,7 +641,8 @@ const gameState = {
     addTitleBonus: false,  // 加衔奖励（下次升降优先升1级）
     gameWon: false,        // 是否游戏胜利
     gameOver: false,       // 新增：游戏是否结束（次数用尽）
-    allGrids: []           // 合并所有格子的数组
+    allGrids: [],          // 合并所有格子的数组
+    recentResults: []      // 新增：近五次游戏结果记录
 };
 
 // 合并所有格子
@@ -671,8 +719,43 @@ function renderBoard(circle = gameState.currentCircle) {
     });
 }
 
-// 更新游戏结果
-function updateResult(text) {
+// 新增：更新近五次结果显示
+function updateRecentResults(resultText, type = "normal") {
+    // 添加最新结果到数组头部
+    gameState.recentResults.unshift({
+        text: resultText,
+        type: type // success/fail/special/normal
+    });
+    
+    // 只保留最近5条
+    if (gameState.recentResults.length > 5) {
+        gameState.recentResults.pop();
+    }
+    
+    // 更新DOM显示
+    const resultList = document.getElementById("result-list");
+    resultList.innerHTML = "";
+    
+    // 填充5条结果（不足则显示"尚未开始"）
+    for (let i = 0; i < 5; i++) {
+        const resultItem = document.createElement("li");
+        resultItem.className = "result-item";
+        
+        const resultData = gameState.recentResults[i];
+        const content = resultData ? resultData.text : "尚未开始";
+        const contentClass = resultData ? `result-content ${resultData.type}` : "result-content";
+        
+        resultItem.innerHTML = `
+            <span class="result-num">${i+1}</span>
+            <span class="${contentClass}">${content}</span>
+        `;
+        
+        resultList.appendChild(resultItem);
+    }
+}
+
+// 更新游戏结果详情
+function updateResultDetail(text) {
     document.getElementById("game-result").textContent = text;
 }
 
@@ -704,21 +787,21 @@ function gameSettlement(isWin = false) {
     
     // 禁用所有操作按钮
     document.getElementById("btn-roll").disabled = true;
-    document.getElementById("btn-de").disabled = true;
-    document.getElementById("btn-cai").disabled = true;
-    document.getElementById("btn-gong").disabled = true;
-    document.getElementById("btn-zang").disabled = true;
     
     let resultText = "";
+    let resultType = isWin ? "success" : "fail";
+    
     if (isWin) {
         // 胜利结算
         resultText = `🎉 游戏胜利！你在${gameState.stepCount}次掷骰子后升至【${currentGrid.name}】（${currentGrid.grade}），位极人臣！`;
+        updateRecentResults(resultText, "success");
     } else {
         // 次数用尽结算
         resultText = `⏰ 游戏结束！40次掷骰子次数已用尽，你的最终官职是【${currentGrid.name}】（${currentGrid.grade}），位于${gameState.currentCircle === "outer" ? "外圈" : gameState.currentCircle === "middle" ? "中圈" : "内圈"}。点击重新开始可再次挑战！`;
+        updateRecentResults(resultText, "fail");
     }
     
-    updateResult(resultText);
+    updateResultDetail(resultText);
     
     // 弹窗提示
     setTimeout(() => {
@@ -735,17 +818,24 @@ function getTargetIdByPoint(pointType) {
     const currentGrid = getCurrentGrid();
     if (!currentGrid) return 1;
     
+    // 记录操作前的官职
+    const prevGrid = { ...currentGrid };
+    
     // 处理特殊规则
     // 1. 首次掷骰子（白丁）
     if (gameState.firstRoll && currentGrid.id === 1) {
         gameState.firstRoll = false;
-        updateResult("首次掷骰子，自动从白丁升至童生！剩余次数：39/40");
+        const resultText = `首次掷骰子，从【${prevGrid.name}】升至【童生】！剩余次数：${gameState.diceRemain-1}/40`;
+        updateResultDetail(resultText);
+        updateRecentResults(resultText, "success");
         return 2;
     }
     
     // 2. 贪墨直接贬为白丁
     if (pointType === "tanmo") {
-        updateResult("触发贪墨！直接贬为白丁，重新开始！");
+        const resultText = `触发贪墨！从【${prevGrid.name}】贬为【白丁】，重新开始！剩余次数：${gameState.diceRemain-1}/40`;
+        updateResultDetail(resultText);
+        updateRecentResults(resultText, "fail");
         gameState.currentCircle = "outer";
         gameState.addTitleBonus = false;
         return 1;
@@ -758,8 +848,9 @@ function getTargetIdByPoint(pointType) {
     
     // 4. 处理加衔奖励
     let step = 0;
+    let bonusText = "";
     if (gameState.addTitleBonus) {
-        updateResult("触发加衔奖励！本次升降优先升1级");
+        bonusText = "（加衔奖励：优先升1级）";
         gameState.addTitleBonus = false;
     }
     
@@ -789,39 +880,70 @@ function getTargetIdByPoint(pointType) {
     if (targetId > 77) targetId = 77;
     
     // 圈层切换
-    if (targetId > 38 && targetId <= 69) {
+    let circleText = "";
+    if (targetId > 38 && targetId <= 69 && gameState.currentCircle !== "middle") {
         gameState.currentCircle = "middle";
-        updateResult(`进入中圈！当前官职：${gameState.allGrids.find(g => g.id === targetId)?.name} | 剩余次数：${gameState.diceRemain}/40`);
-    } else if (targetId > 69) {
+        circleText = "（进入中圈）";
+    } else if (targetId > 69 && gameState.currentCircle !== "inner") {
         gameState.currentCircle = "inner";
-        updateResult(`进入内圈！当前官职：${gameState.allGrids.find(g => g.id === targetId)?.name} | 剩余次数：${gameState.diceRemain}/40`);
+        circleText = "（进入内圈）";
     }
     
     // 处理特殊格子
     const targetGrid = gameState.allGrids.find(g => g.id === targetId);
+    let specialText = "";
+    let resultType = "normal";
+    
     if (targetGrid?.type === "special") {
         if (targetGrid.name === "加衔") {
             gameState.addTitleBonus = true;
-            updateResult(`触发【加衔】！下次升降优先升1级 | 剩余次数：${gameState.diceRemain}/40`);
+            specialText = "（触发加衔：下次升降优先升1级）";
+            resultType = "special";
         } else if (targetGrid.name === "京察") {
             const randomPoint = ["de", "cai", "gong", "zang"][Math.floor(Math.random() * 4)];
             const pointText = {de: "德", cai: "才", gong: "功", zang: "赃"}[randomPoint];
-            updateResult(`触发【京察】！随机掷出${pointText}，${randomPoint === "de" || randomPoint === "cai" ? "升1级" : "降1级"} | 剩余次数：${gameState.diceRemain}/40`);
+            specialText = `（触发京察：随机掷出${pointText}，${randomPoint === "de" || randomPoint === "cai" ? "升1级" : "降1级"}）`;
             targetId = randomPoint === "de" || randomPoint === "cai" ? targetId + 1 : targetId - 1;
+            resultType = randomPoint === "de" || randomPoint === "cai" ? "success" : "fail";
         } else if (targetGrid.name === "外放") {
-            updateResult(`触发【外放】！中央官贬为对应品级地方官，降3级 | 剩余次数：${gameState.diceRemain}/40`);
+            specialText = "（触发外放：降3级）";
             targetId = Math.max(1, targetId - 3);
+            resultType = "fail";
         } else if (targetGrid.name === "贪墨") {
-            updateResult(`触发【贪墨】！直接贬为白丁 | 剩余次数：${gameState.diceRemain}/40`);
+            specialText = "（触发贪墨：贬为白丁）";
             targetId = 1;
             gameState.currentCircle = "outer";
+            resultType = "fail";
         }
     }
+    
+    // 确定最终目标格子
+    const finalTargetGrid = gameState.allGrids.find(g => g.id === targetId);
+    
+    // 生成结果文本
+    let resultText = "";
+    const pointName = {de: "德", cai: "才", gong: "功", zang: "赃"}[pointType] || "未知";
+    
+    if (step > 0 || (pointType === "gong" && step === 0)) {
+        resultText = `掷出${pointName}${bonusText}：从【${prevGrid.name}】升至【${finalTargetGrid.name}】${circleText}${specialText}！剩余次数：${gameState.diceRemain-1}/40`;
+        resultType = resultType === "normal" ? "success" : resultType;
+    } else if (step < 0) {
+        resultText = `掷出${pointName}${bonusText}：从【${prevGrid.name}】降至【${finalTargetGrid.name}】${circleText}${specialText}！剩余次数：${gameState.diceRemain-1}/40`;
+        resultType = "fail";
+    } else {
+        resultText = `掷出${pointName}${bonusText}：官职保持【${finalTargetGrid.name}】不变${circleText}${specialText}！剩余次数：${gameState.diceRemain-1}/40`;
+    }
+    
+    // 更新结果显示
+    updateResultDetail(resultText);
+    updateRecentResults(resultText, resultType);
     
     // 检查游戏胜利
     if (targetId === 77) {
         gameState.gameWon = true;
-        updateResult(`🎉 恭喜！升至太师（正一品），游戏胜利！共走了${gameState.stepCount + 1}步，剩余次数：${gameState.diceRemain}/40`);
+        const winText = `🎉 恭喜！升至太师（正一品），游戏胜利！共走了${gameState.stepCount + 1}步，剩余次数：${gameState.diceRemain-1}/40`;
+        updateResultDetail(winText);
+        updateRecentResults(winText, "success");
         gameSettlement(true); // 胜利结算
     }
     
@@ -829,10 +951,11 @@ function getTargetIdByPoint(pointType) {
 }
 
 // 掷骰子操作
-function rollDice(pointType) {
+function rollDice() {
     // 检查游戏是否已结束
     if (gameState.gameWon || gameState.gameOver || gameState.diceRemain <= 0) {
-        updateResult(gameState.diceRemain <= 0 ? "40次掷骰子次数已用尽！点击重新开始" : "游戏已胜利！点击重新开始可再次游玩");
+        const tipText = gameState.diceRemain <= 0 ? "40次掷骰子次数已用尽！点击重新开始" : "游戏已胜利！点击重新开始可再次游玩";
+        updateResultDetail(tipText);
         return;
     }
     
@@ -844,8 +967,12 @@ function rollDice(pointType) {
         // 减少剩余次数
         gameState.diceRemain--;
         
+        // 随机选择德才功赃（模拟真实掷骰子）
+        const randomPoints = ["de", "cai", "gong", "zang"];
+        const randomPoint = randomPoints[Math.floor(Math.random() * 4)];
+        
         // 获取目标ID
-        const targetId = getTargetIdByPoint(pointType);
+        const targetId = getTargetIdByPoint(randomPoint);
         
         // 更新游戏状态
         gameState.currentId = targetId;
@@ -860,8 +987,8 @@ function rollDice(pointType) {
             gameSettlement(false); // 次数用尽结算
         }
         
-        // 3%概率触发贪墨（新增：降低至3%）
-        if (Math.random() < 0.03 && !gameState.gameWon && gameState.diceRemain > 0) {
+        // 1%概率触发贪墨（修改：从3%降至1%）
+        if (Math.random() < 0.01 && !gameState.gameWon && gameState.diceRemain > 0) {
             setTimeout(() => {
                 gameState.diceRemain--; // 贪墨也消耗次数
                 const tanmoTarget = getTargetIdByPoint("tanmo");
@@ -893,34 +1020,22 @@ function resetGame() {
     gameState.addTitleBonus = false;
     gameState.gameWon = false;
     gameState.gameOver = false;
+    gameState.recentResults = []; // 清空历史结果
     
-    // 启用所有按钮
+    // 启用按钮
     document.getElementById("btn-roll").disabled = false;
-    document.getElementById("btn-de").disabled = false;
-    document.getElementById("btn-cai").disabled = false;
-    document.getElementById("btn-gong").disabled = false;
-    document.getElementById("btn-zang").disabled = false;
     
+    // 更新显示
     updateStatusDisplay();
-    updateResult("点击「掷骰子」开始游戏，首次掷骰子自动升至童生 | 每局限40次掷骰子");
+    updateResultDetail("点击「掷骰子」开始游戏，首次掷骰子自动升至童生 | 每局限40次掷骰子");
+    updateRecentResults("游戏重置，等待开始");
     renderBoard();
 }
 
 // ===================== 事件绑定 =====================
 function bindEvents() {
     // 掷骰子按钮
-    document.getElementById("btn-roll").addEventListener("click", () => {
-        // 随机选择德才功赃（模拟真实掷骰子）
-        const randomPoints = ["de", "cai", "gong", "zang"];
-        const randomPoint = randomPoints[Math.floor(Math.random() * 4)];
-        rollDice(randomPoint);
-    });
-    
-    // 手动选择掷点
-    document.getElementById("btn-de").addEventListener("click", () => rollDice("de"));
-    document.getElementById("btn-cai").addEventListener("click", () => rollDice("cai"));
-    document.getElementById("btn-gong").addEventListener("click", () => rollDice("gong"));
-    document.getElementById("btn-zang").addEventListener("click", () => rollDice("zang"));
+    document.getElementById("btn-roll").addEventListener("click", rollDice);
     
     // 重新开始
     document.getElementById("btn-reset").addEventListener("click", resetGame);
@@ -932,6 +1047,8 @@ function initGame() {
     updateStatusDisplay();
     renderBoard();
     bindEvents();
+    // 初始化近五次结果显示
+    updateRecentResults("尚未开始");
 }
 
 // 启动游戏
