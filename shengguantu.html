@@ -619,7 +619,7 @@ const positionRules = {
     "监察御史": { de: "副都御史", cai: "编修", gong: "监察御史", zang: "主簿", rank: { type: "正七品", num: 7 } },
     // 六品（保持原有逻辑）
     "州同": { de: "知府", cai: "知州", gong: "州判", zang: "州判", rank: { type: "从六品", num: 6 } },
-    "通判": { de: "布政使", cai: "同知", gong: "知州", zang: "知州", rank: { type: "正六品", num: 6 } },
+    "通判": { de: ["大理寺丞","郎中"], cai: "同知", gong: "知州", zang: "知州", rank: { type: "正六品", num: 6 } },
     "主事": { de: "郎中", cai: "员外郎", gong: "主事", zang: "主事", rank: { type: "正六品", num: 6 } },
     "编修": { de: "侍讲学士", cai: "修撰", gong: "编修", zang: "编修", rank: { type: "从六品", num: 6 } },
     "修撰": { de: "同知", cai: "侍讲学士", gong: "编修", zang: "主事", rank: { type: "从六品", num: 6 } },
@@ -655,7 +655,7 @@ const positionRules = {
     "协办大学士": { de: "太保", cai: "大学士", gong: "协办大学士", zang: "左都御史", rank: { type: "从一品", num: 1 } },
     "大学士": { de: "太傅", cai: "太保", gong: "协办大学士", zang: "协办大学士", rank: { type: "正一品", num: 1 } },
     "太保": { de: "太师", cai: "太傅", gong: "太保", zang: "太保", rank: { type: "正一品", num: 1 } },
-    "太傅": { de: "太师", cai: "太师", gong: "太保", zang: "太保", rank: { type: "正一品", num: 1 } },
+    "太傅": { de: "太师", cai: "太师", gong: "太傅", zang: "太保", rank: { type: "正一品", num: 1 } },
     "太师": { de: "荣归", cai: "太师", gong: "太师", zang: "太保", rank: { type: "正一品（最终）", num: 1 } },
     // 新增：处理荣归故里的边界情况
     "荣归": { de: "荣归", cai: "荣归", gong: "荣归", zang: "荣归", rank: { type: "荣归故里", num: 0 } }
