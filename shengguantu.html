@@ -575,11 +575,11 @@ const positionRules = {
     "佥事": { de: ["通政使", "按察使"], cai: "按察使", gong: "知府", zang: "知府", rank: { type: "正四品", num: 4 } },
     "参政": { de: ["副都御史","大理寺卿"], cai: "顺天府丞", gong: "参政", zang: "郎中", rank: { type: "正四品", num: 4 } },
     "顺天府丞": { de: "顺天府尹", cai: "顺天府丞", gong: "通政司参议", zang: "通政司参议", rank: { type: "正四品", num: 4 } },
-    // 三品（保持原有逻辑）
+    // 三品（保持原有逻辑，修复通政使笔误）
     "按察使": { de: ["布政使","巡抚"], cai: "通政使", gong: "按察使", zang: "佥事", rank: { type: "正三品", num: 3 } },
     "副都御史": { de: "左都御史", cai: "侍郎", gong: "副都御史", zang: "监察御史", rank: { type: "正三品", num: 3 } },
     "大理寺卿": { de: ["布政使","侍郎","巡抚"], cai: "通政使", gong: "大理寺卿", zang: "大理寺丞", rank: { type: "正三品", num: 3 } },
-    "通政使": { de: ["布政使","巡抚"], cai: "顺天府尹", gong: "通政史", zang: "顺天府丞", rank: { type: "正三品", num: 3 } },
+    "通政使": { de: ["布政使","巡抚"], cai: "顺天府尹", gong: "通政使", zang: "顺天府丞", rank: { type: "正三品", num: 3 } }, // 修复：通政史 → 通政使
     "顺天府尹": { de: ["内阁学士","巡抚"], cai: "侍郎", gong: "顺天府丞", zang: "通政使", rank: { type: "正三品", num: 3 } },
     // 二品（保持原有逻辑）
     "布政使": { de: ["总督","左都御史"], cai: "巡抚", gong: "布政使", zang: "按察使", rank: { type: "从二品", num: 2 } },
@@ -595,7 +595,9 @@ const positionRules = {
     "大学士": { de: "太傅", cai: "太保", gong: "协办大学士", zang: "协办大学士", rank: { type: "正一品", num: 1 } },
     "太保": { de: "太师", cai: "太傅", gong: "太保", zang: "太保", rank: { type: "正一品", num: 1 } },
     "太傅": { de: "太师", cai: "太师", gong: "太保", zang: "太保", rank: { type: "正一品", num: 1 } },
-    "太师": { de: "荣归", cai: "太师", gong: "太师", zang: "太保", rank: { type: "正一品（最终）", num: 1 } }
+    "太师": { de: "荣归", cai: "太师", gong: "太师", zang: "太保", rank: { type: "正一品（最终）", num: 1 } },
+    // 新增：处理荣归故里的边界情况
+    "荣归": { de: "荣归", cai: "荣归", gong: "荣归", zang: "荣归", rank: { type: "荣归故里", num: 0 } }
 };
 
 // ===================== 辅助数据：职位分类和棋盘展示 =====================
@@ -605,7 +607,8 @@ const positionCategories = {
     "六品至五品": ["州同", "通判", "主事", "编修", "修撰", "知州", "同知", "员外郎", "郎中", "侍讲学士", "大理寺丞", "通政司参议"],
     "四品至三品": ["知府", "佥事", "参政", "顺天府丞", "按察使", "副都御史", "大理寺卿", "通政使", "顺天府尹"],
     "二品": ["布政使", "巡抚", "总督", "侍郎", "掌院学士", "内阁学士"],
-    "一品": ["尚书", "左都御史", "协办大学士", "大学士", "太保", "太傅", "太师"]
+    "一品": ["尚书", "左都御史", "协办大学士", "大学士", "太保", "太傅", "太师"],
+    "荣归故里": ["荣归"]
 };
 
 // 新增：职位到分类的映射表（解决跨圈层切换问题）
@@ -631,7 +634,7 @@ const gameState = {
 // 更新游戏状态显示
 function updateStatusDisplay() {
     // 获取当前职位的等级信息
-    const rankInfo = positionRules[gameState.currentPosition].rank;
+    const rankInfo = positionRules[gameState.currentPosition]?.rank || { type: "未知", num: 0 };
     
     // 更新显示
     document.getElementById("current-circle").textContent = rankInfo.type;
@@ -659,7 +662,7 @@ function updateStatusDisplay() {
 function updateBoardTitle() {
     const boardTitle = document.getElementById("board-title");
     // 关键修改：通过职位直接获取所属分类，而不是通过rank.type
-    const currentCategory = positionToCategory[gameState.currentPosition];
+    const currentCategory = positionToCategory[gameState.currentPosition] || "出身圈";
     
     // 根据分类设置标题
     switch(currentCategory) {
@@ -681,6 +684,9 @@ function updateBoardTitle() {
         case "一品":
             boardTitle.textContent = "极品官员（一品）：宰辅与荣誉衔";
             break;
+        case "荣归故里":
+            boardTitle.textContent = "🎉 荣归故里：仕途圆满";
+            break;
         default:
             boardTitle.textContent = "出身圈（1-15级）：科举进阶";
     }
@@ -690,7 +696,7 @@ function updateBoardTitle() {
 function renderBoard() {
     const boardContainer = document.getElementById("board-container");
     // 关键修改：通过职位直接获取所属分类，而不是通过rank.type
-    const currentCategory = positionToCategory[gameState.currentPosition];
+    const currentCategory = positionToCategory[gameState.currentPosition] || "出身圈";
     
     // 确定要显示的职位列表
     let displayPositions = positionCategories[currentCategory] || positionCategories["出身圈"];
@@ -707,7 +713,8 @@ function renderBoard() {
         // 确定圈层样式
         if (currentCategory === "出身圈") gridItem.classList.add("outer");
         else if (["九品至七品", "六品至五品"].includes(currentCategory)) gridItem.classList.add("middle");
-        else gridItem.classList.add("inner");
+        else if (["四品至三品", "二品", "一品"].includes(currentCategory)) gridItem.classList.add("inner");
+        else if (currentCategory === "荣归故里") gridItem.classList.add("special");
         
         // 适配数组规则的显示（将数组转为逗号分隔的字符串）
         const formatRuleValue = (value) => {
@@ -795,7 +802,7 @@ function gameSettlement(isWin = false) {
     // 禁用所有操作按钮
     document.getElementById("btn-roll").disabled = true;
     
-    const rankInfo = positionRules[gameState.currentPosition].rank;
+    const rankInfo = positionRules[gameState.currentPosition]?.rank || { type: "未知", num: 0 };
     let resultText = "";
     let resultType = isWin ? "success" : "fail";
     
@@ -832,8 +839,11 @@ function getRandomPosition(target) {
     return target;
 }
 
-// 根据掷点更新职位（核心修改：支持随机分支）
+// 根据掷点更新职位（核心修改：支持随机分支 + 修复边界问题）
 function updatePositionByPoint(pointType) {
+    // 如果已经胜利，直接返回
+    if (gameState.gameWon) return;
+    
     // 记录操作前的职位
     const prevPosition = gameState.currentPosition;
     
@@ -846,7 +856,7 @@ function updatePositionByPoint(pointType) {
         return;
     }
     
-    // 获取当前职位的规则
+    // 获取当前职位的规则（增加容错）
     const currentRule = positionRules[prevPosition];
     if (!currentRule) {
         gameState.currentPosition = "白丁";
@@ -858,6 +868,7 @@ function updatePositionByPoint(pointType) {
     
     // 关键修改：太师后掷德触发荣归胜利
     if (prevPosition === "太师" && pointType === "de") {
+        gameState.currentPosition = "荣归";
         const resultText = `🎉 从太师掷出「德」，触发【荣归故里】！游戏胜利！剩余次数：${gameState.diceRemain - 1}/60`;
         updateResultDetail(resultText);
         updateRecentResults(resultText, "success");
@@ -869,6 +880,15 @@ function updatePositionByPoint(pointType) {
     // 核心修改：获取目标职位（支持随机分支）
     const targetPosition = currentRule[pointType];
     const newPosition = getRandomPosition(targetPosition);
+    
+    // 安全检查：确保新职位存在
+    if (!positionRules[newPosition]) {
+        gameState.currentPosition = prevPosition;
+        const resultText = `⚠️ 职位规则异常，保持当前职位【${prevPosition}】不变！剩余次数：${gameState.diceRemain - 1}/60`;
+        updateResultDetail(resultText);
+        updateRecentResults(resultText, "special");
+        return;
+    }
     
     // 更新职位
     gameState.currentPosition = newPosition;
@@ -910,7 +930,7 @@ function updatePositionByPoint(pointType) {
     updateRecentResults(resultText, resultType);
 }
 
-// 掷骰子操作
+// 掷骰子操作（增加容错处理）
 function rollDice() {
     // 检查：剩余次数 <=0 就不能再掷
     if (gameState.diceRemain <= 0 || gameState.gameWon || gameState.gameOver) {
@@ -920,35 +940,44 @@ function rollDice() {
     }
 
     // 禁用按钮
-    document.getElementById("btn-roll").disabled = true;
+    const rollBtn = document.getElementById("btn-roll");
+    rollBtn.disabled = true;
     
     // 骰子动画
     diceAnimation(() => {
-        // 先掷，再减次数
-        const randomPoints = ["de", "cai", "gong", "zang"];
-        const randomPoint = randomPoints[Math.floor(Math.random() * 4)];
-        
-        // 执行移动
-        updatePositionByPoint(randomPoint);
-        
-        // 步数+1
-        gameState.stepCount++;
-        
-        // 次数-1
-        gameState.diceRemain--;
-        
-        // 更新界面
-        updateStatusDisplay();
-        renderBoard();
-        
-        // 用完次数就结束
-        if (gameState.diceRemain <= 0 && !gameState.gameWon) {
-            gameSettlement(false);
-        }
-        
-        // 恢复按钮
-        if (!gameState.gameWon && !gameState.gameOver && gameState.diceRemain > 0) {
-            document.getElementById("btn-roll").disabled = false;
+        try {
+            // 先掷，再减次数
+            const randomPoints = ["de", "cai", "gong", "zang"];
+            const randomPoint = randomPoints[Math.floor(Math.random() * 4)];
+            
+            // 执行移动
+            updatePositionByPoint(randomPoint);
+            
+            // 步数+1
+            gameState.stepCount++;
+            
+            // 次数-1
+            gameState.diceRemain--;
+            
+            // 更新界面
+            updateStatusDisplay();
+            renderBoard();
+            
+            // 用完次数就结束
+            if (gameState.diceRemain <= 0 && !gameState.gameWon) {
+                gameSettlement(false);
+            }
+            
+        } catch (e) {
+            // 异常处理：防止代码崩溃
+            console.error("掷骰子出错：", e);
+            updateResultDetail(`⚠️ 操作出错：${e.message}，请重试！`);
+            updateRecentResults(`操作异常：${e.message}`, "special");
+        } finally {
+            // 恢复按钮（除非游戏结束）
+            if (!gameState.gameWon && !gameState.gameOver && gameState.diceRemain > 0) {
+                rollBtn.disabled = false;
+            }
         }
     });
 }
@@ -983,6 +1012,21 @@ function bindEvents() {
 
 // ===================== 初始化游戏 =====================
 function initGame() {
+    // 初始化前先检查关键DOM元素是否存在
+    const requiredElements = [
+        "current-circle", "current-position", "current-grade", 
+        "step-count", "dice-count", "board-title", "board-container",
+        "result-list", "game-result", "btn-roll", "btn-reset"
+    ];
+    
+    for (const id of requiredElements) {
+        if (!document.getElementById(id)) {
+            console.error(`缺少关键DOM元素：${id}`);
+            alert(`游戏初始化失败：缺少元素${id}`);
+            return;
+        }
+    }
+    
     updateStatusDisplay();
     renderBoard();
     bindEvents();
@@ -990,8 +1034,12 @@ function initGame() {
     updateRecentResults("尚未开始");
 }
 
-// 启动游戏
-initGame();
+// 启动游戏（确保DOM加载完成）
+if (document.readyState === "complete") {
+    initGame();
+} else {
+    window.addEventListener("load", initGame);
+}
 </script>
 </body>
 </html>
