@@ -101,6 +101,51 @@
             font-size: 24px;
             color: #fff;
             text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 25px; /* 给天气组件留出空间 */
+        }
+
+        /* 天气组件样式（极简风格） */
+        .weather-card {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 12px;
+            padding: 15px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            min-width: 280px;
+            justify-content: center;
+        }
+
+        .weather-icon {
+            font-size: 40px;
+        }
+
+        .weather-info {
+            text-align: left;
+        }
+
+        .weather-city {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .weather-temp {
+            font-size: 22px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .weather-desc {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .weather-loading {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            font-size: 16px;
         }
 
         /* 回到顶部按钮 */
@@ -133,6 +178,20 @@
             .navbar-menu {
                 gap: 16px;
             }
+
+            .weather-card {
+                padding: 12px 20px;
+                gap: 15px;
+                min-width: 240px;
+            }
+
+            .weather-icon {
+                font-size: 32px;
+            }
+
+            .weather-temp {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
@@ -155,6 +214,8 @@
     <div class="clock-container">
         <div id="time">00:00:00</div>
         <div id="date">2026年03月06日 星期五</div>
+        <!-- 天气组件 -->
+        <div id="weather-container" class="weather-loading">正在获取天气信息...</div>
     </div>
 
     <!-- 回到顶部按钮 -->
@@ -165,6 +226,7 @@
         window.onload = function() {
             document.body.style.opacity = 1;
             updateClock(); // 初始化时钟
+            initWeather(); // 初始化天气组件
         };
 
         // 实时更新时钟（每秒）
@@ -186,6 +248,81 @@
             document.getElementById('date').textContent = `${year}年${month}月${day}日 ${weekday}`;
         }
         setInterval(updateClock, 1000);
+
+        // 天气组件核心逻辑（调用Cloudflare代理，无API Key泄露）
+        function initWeather() {
+            // 🔴 替换为你的Cloudflare Worker域名！
+            // 示例：https://weather-proxy-123.yourname.workers.dev
+            const PROXY_URL = 'https://rapid-cell-e3dc.13002218798.workers.dev/'; 
+            const weatherContainer = document.getElementById('weather-container');
+
+            // 天气图标映射
+            const weatherIconMap = {
+                '01d': '☀️', '01n': '🌙',
+                '02d': '⛅', '02n': '⛅',
+                '03d': '☁️', '03n': '☁️',
+                '04d': '☁️', '04n': '☁️',
+                '09d': '🌧️', '09n': '🌧️',
+                '10d': '🌦️', '10n': '🌦️',
+                '11d': '⛈️', '11n': '⛈️',
+                '13d': '❄️', '13n': '❄️',
+                '50d': '🌫️', '50n': '🌫️'
+            };
+
+            // 温度转换：开尔文转摄氏度
+            function kelvinToCelsius(kelvin) {
+                return (kelvin - 273.15).toFixed(1);
+            }
+
+            // 获取定位并加载天气
+            if (!navigator.geolocation) {
+                weatherContainer.innerHTML = '<div class="weather-loading">浏览器不支持定位</div>';
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                // 定位成功
+                function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+
+                    // 调用Cloudflare代理接口（无API Key暴露）
+                    fetch(`${PROXY_URL}?lat=${lat}&lon=${lon}`)
+                        .then(res => {
+                            if (!res.ok) throw new Error('获取失败');
+                            return res.json();
+                        })
+                        .then(data => {
+                            // 处理OpenWeatherMap返回数据
+                            const weather = data.weather[0];
+                            const main = data.main;
+                            const icon = weatherIconMap[weather.icon] || '🌡️';
+                            const temp = kelvinToCelsius(main.temp);
+                            const city = data.name;
+                            const desc = weather.description.replace(/^\w/, c => c.toUpperCase());
+
+                            // 渲染天气卡片
+                            weatherContainer.className = 'weather-card';
+                            weatherContainer.innerHTML = `
+                                <div class="weather-icon">${icon}</div>
+                                <div class="weather-info">
+                                    <div class="weather-city">${city}</div>
+                                    <div class="weather-temp">${temp}°C</div>
+                                    <div class="weather-desc">${desc}</div>
+                                </div>
+                            `;
+                        })
+                        .catch(err => {
+                            weatherContainer.innerHTML = '<div class="weather-loading">天气获取失败</div>';
+                            console.error('天气代理接口错误：', err);
+                        });
+                },
+                // 定位失败
+                function() {
+                    weatherContainer.innerHTML = '<div class="weather-loading">无法获取位置</div>';
+                }
+            );
+        }
 
         // 回到顶部功能
         const backToTopBtn = document.getElementById('backToTop');
