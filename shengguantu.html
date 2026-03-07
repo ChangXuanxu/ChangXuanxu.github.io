@@ -860,12 +860,12 @@ function updatePositionByPoint(pointType) {
 
         if (newRank > oldRank) {
             // 数字变大 = 降级
-            resultText = `掷出${pointName}：从【${prevPosition}】降为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/40`;
-            resultType = "fail";
-        } else if (newRank < oldRank) {
-            // 数字变小 = 升职
             resultText = `掷出${pointName}：从【${prevPosition}】升为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/40`;
             resultType = "success";
+        } else if (newRank < oldRank) {
+            // 数字变小 = 升职
+            resultText = `掷出${pointName}：从【${prevPosition}】降为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/40`;
+            resultType = "fail";
         } else {
             resultText = `掷出${pointName}：从【${prevPosition}】变为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/40`;
             resultType = "normal";
