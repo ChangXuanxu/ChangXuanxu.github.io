@@ -428,7 +428,7 @@ body {
     <!-- 标题区域 -->
     <div class="title-area">
         <h1 class="game-title">📜 明清升官图（完整版）</h1>
-        <p class="game-subtitle">三圈棋盘 · 德才功赃 · 从白丁到太师 | 每局限40次掷骰子</p>
+        <p class="game-subtitle">三圈棋盘 · 德才功赃 · 从白丁到太师 | 每局限60次掷骰子</p>
     </div>
 
     <!-- 游戏状态区 -->
@@ -451,7 +451,7 @@ body {
         </div>
         <!-- 新增：骰子次数限制 -->
         <div class="status-item dice-count" id="dice-count">
-            剩余掷骰子次数：40/40
+            剩余掷骰子次数：60/60
         </div>
     </div>
 
@@ -508,7 +508,7 @@ body {
             <div class="result-area">
                 <div class="result-title">本次操作详情</div>
                 <div class="result-detail" id="game-result">
-                    点击「掷骰子」开始游戏，首次掷骰子从白丁起步 | 每局限40次掷骰子
+                    点击「掷骰子」开始游戏，首次掷骰子从白丁起步 | 每局限60次掷骰子
                 </div>
             </div>
         </div>
@@ -520,7 +520,7 @@ body {
         <ul class="rule-list">
             <li>官职升降严格遵循：德(de)、才(cai)、功(gong)、赃(zang)四种掷点对应的职位映射规则</li>
             <li>从白丁起步，依次通过科举进阶，升至「太师」（正一品）后，再掷出「德」触发「荣归故里」即为游戏胜利</li>
-            <li>每局游戏限制40次掷骰子，次数用尽自动结算 | 贪墨触发概率：1%</li>
+            <li>每局游戏限制60次掷骰子，次数用尽自动结算 | 贪墨触发概率：1%</li>
             <li>掷骰子随机获得德/才/功/赃四种结果之一，对应不同的官职升降路径</li>
             <li>太师为最高官职，需再掷「德」触发荣归才算胜利，掷其他点仍会升降</li>
             <li>低阶职位（出身圈/九品至七品）掷骰子后会随机选择分支路线，增加游戏随机性</li>
@@ -580,12 +580,12 @@ const positionRules = {
     "副都御史": { de: "左都御史", cai: "侍郎", gong: "副都御史", zang: "监察御史", rank: { type: "正三品", num: 3 } },
     "大理寺卿": { de: ["布政使","侍郎","巡抚"], cai: "通政使", gong: "大理寺卿", zang: "大理寺丞", rank: { type: "正三品", num: 3 } },
     "通政使": { de: ["布政使","巡抚"], cai: "顺天府尹", gong: "通政史", zang: "顺天府丞", rank: { type: "正三品", num: 3 } },
-    "顺天府尹": { de: ["内阁学士"，"巡抚"], cai: "侍郎", gong: "顺天府丞", zang: "通政使", rank: { type: "正三品", num: 3 } },
+    "顺天府尹": { de: ["内阁学士","巡抚"], cai: "侍郎", gong: "顺天府丞", zang: "通政使", rank: { type: "正三品", num: 3 } },
     // 二品（保持原有逻辑）
     "布政使": { de: ["总督","左都御史"], cai: "巡抚", gong: "布政使", zang: "按察使", rank: { type: "从二品", num: 2 } },
     "巡抚": { de: "总督", cai: "侍郎", gong: "巡抚", zang: "布政使", rank: { type: "从二品", num: 2 } },
     "总督": { de: "尚书", cai: "掌院学士", gong: "总督", zang: "巡抚", rank: { type: "正二品加衔", num: 2 } },
-    "侍郎": { de: ["尚书","左都御史"], cai: "掌院学士", gong: "侍郎", zang: ["按察使"，"通政使"], rank: { type: "正二品", num: 2 } },
+    "侍郎": { de: ["尚书","左都御史"], cai: "掌院学士", gong: "侍郎", zang: ["按察使","通政使"], rank: { type: "正二品", num: 2 } },
     "掌院学士": { de: "内阁学士", cai: "总督", gong: "掌院学士", zang: "布政使", rank: { type: "从二品", num: 2 } },
     "内阁学士": { de: "协办大学士", cai: "内阁学士", gong: "内阁学士", zang: "掌院学士", rank: { type: "从二品", num: 2 } },
     // 一品（保持原有逻辑）
@@ -620,8 +620,8 @@ Object.keys(positionCategories).forEach(category => {
 const gameState = {
     currentPosition: "白丁",  // 当前职位
     stepCount: 0,             // 步数统计
-    diceRemain: 40,           // 剩余掷骰子次数（初始40次）
-    diceTotal: 40,            // 总次数限制
+    diceRemain: 60,           // 剩余掷骰子次数（修改为60次）
+    diceTotal: 60,            // 总次数限制（修改为60次）
     gameWon: false,           // 是否游戏胜利
     gameOver: false,          // 游戏是否结束（次数用尽）
     recentResults: []         // 近五次游戏结果记录
@@ -645,8 +645,8 @@ function updateStatusDisplay() {
     
     // 样式提示
     diceCountEl.className = "status-item dice-count";
-    if (gameState.diceRemain <= 10 && gameState.diceRemain > 0) {
-        diceCountEl.classList.add("warning"); // 剩余10次以内警告
+    if (gameState.diceRemain <= 15 && gameState.diceRemain > 0) { // 60次的话，剩余15次警告更合理
+        diceCountEl.classList.add("warning"); // 剩余15次以内警告
     } else if (gameState.diceRemain <= 0) {
         diceCountEl.classList.add("over"); // 次数用尽
     }
@@ -805,7 +805,7 @@ function gameSettlement(isWin = false) {
         updateRecentResults(resultText, "success");
     } else {
         // 次数用尽结算
-        resultText = `⏰ 游戏结束！40次掷骰子次数已用尽，你的最终官职是【${gameState.currentPosition}】（${rankInfo.type} ${rankInfo.num}级）。点击重新开始可再次挑战！`;
+        resultText = `⏰ 游戏结束！60次掷骰子次数已用尽，你的最终官职是【${gameState.currentPosition}】（${rankInfo.type} ${rankInfo.num}级）。点击重新开始可再次挑战！`;
         updateRecentResults(resultText, "fail");
     }
     
@@ -815,7 +815,7 @@ function gameSettlement(isWin = false) {
     setTimeout(() => {
         alert(isWin ? 
             `🎊 恭喜荣归故里！\n你用${gameState.stepCount}次掷骰子从白丁升至太师，并成功荣归故里！` :
-            `⏱️ 游戏结束\n40次掷骰子次数已用尽\n最终官职：${gameState.currentPosition}（${rankInfo.type} ${rankInfo.num}级）\n点击重新开始可再次挑战`
+            `⏱️ 游戏结束\n60次掷骰子次数已用尽\n最终官职：${gameState.currentPosition}（${rankInfo.type} ${rankInfo.num}级）\n点击重新开始可再次挑战`
         );
     }, 500);
 }
@@ -840,7 +840,7 @@ function updatePositionByPoint(pointType) {
     // 1%概率触发贪墨（直接贬为白丁）
     if (Math.random() < 0.01 && !gameState.gameWon && gameState.diceRemain > 0) {
         gameState.currentPosition = "白丁";
-        const resultText = `⚠️ 触发贪墨！从【${prevPosition}】贬为【白丁】，重新开始！剩余次数：${gameState.diceRemain - 1}/40`;
+        const resultText = `⚠️ 触发贪墨！从【${prevPosition}】贬为【白丁】，重新开始！剩余次数：${gameState.diceRemain - 1}/60`;
         updateResultDetail(resultText);
         updateRecentResults(resultText, "fail");
         return;
@@ -850,7 +850,7 @@ function updatePositionByPoint(pointType) {
     const currentRule = positionRules[prevPosition];
     if (!currentRule) {
         gameState.currentPosition = "白丁";
-        const resultText = `未知职位，重置为【白丁】！剩余次数：${gameState.diceRemain - 1}/40`;
+        const resultText = `未知职位，重置为【白丁】！剩余次数：${gameState.diceRemain - 1}/60`;
         updateResultDetail(resultText);
         updateRecentResults(resultText, "special");
         return;
@@ -858,7 +858,7 @@ function updatePositionByPoint(pointType) {
     
     // 关键修改：太师后掷德触发荣归胜利
     if (prevPosition === "太师" && pointType === "de") {
-        const resultText = `🎉 从太师掷出「德」，触发【荣归故里】！游戏胜利！剩余次数：${gameState.diceRemain - 1}/40`;
+        const resultText = `🎉 从太师掷出「德」，触发【荣归故里】！游戏胜利！剩余次数：${gameState.diceRemain - 1}/60`;
         updateResultDetail(resultText);
         updateRecentResults(resultText, "success");
         gameState.gameWon = true;
@@ -880,7 +880,7 @@ function updatePositionByPoint(pointType) {
     
     if (newPosition === prevPosition) {
         // 职位未变
-        resultText = `掷出${pointName}：官职保持【${prevPosition}】不变！剩余次数：${gameState.diceRemain - 1}/40`;
+        resultText = `掷出${pointName}：官职保持【${prevPosition}】不变！剩余次数：${gameState.diceRemain - 1}/60`;
         resultType = "normal";
     } else {
         const oldRank = positionRules[prevPosition].rank.num;
@@ -888,14 +888,14 @@ function updatePositionByPoint(pointType) {
 
         if (newRank > oldRank) {
             // 数字变大 = 降级
-            resultText = `掷出${pointName}：从【${prevPosition}】降为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/40`;
+            resultText = `掷出${pointName}：从【${prevPosition}】降为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/60`;
             resultType = "fail";
         } else if (newRank < oldRank) {
             // 数字变小 = 升职
-            resultText = `掷出${pointName}：从【${prevPosition}】升为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/40`;
+            resultText = `掷出${pointName}：从【${prevPosition}】升为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/60`;
             resultType = "success";
         } else {
-            resultText = `掷出${pointName}：从【${prevPosition}】变为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/40`;
+            resultText = `掷出${pointName}：从【${prevPosition}】变为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/60`;
             resultType = "normal";
         }
         
@@ -957,7 +957,7 @@ function rollDice() {
 function resetGame() {
     gameState.currentPosition = "白丁";
     gameState.stepCount = 0;
-    gameState.diceRemain = 40; // 重置次数
+    gameState.diceRemain = 60; // 重置次数为60次
     gameState.gameWon = false;
     gameState.gameOver = false;
     gameState.recentResults = []; // 清空历史结果
@@ -967,7 +967,7 @@ function resetGame() {
     
     // 更新显示
     updateStatusDisplay();
-    updateResultDetail("点击「掷骰子」开始游戏，首次掷骰子从白丁起步 | 每局限40次掷骰子");
+    updateResultDetail("点击「掷骰子」开始游戏，首次掷骰子从白丁起步 | 每局限60次掷骰子");
     updateRecentResults("游戏重置，等待开始");
     renderBoard();
 }
