@@ -581,7 +581,7 @@ body {
         <ul class="rule-list">
             <li>官职升降严格遵循：德(de)、才(cai)、功(gong)、赃(zang)四种掷点对应的职位映射规则</li>
             <li>从白丁起步，依次通过科举进阶，升至「太师」（正一品）后，再掷出「德」触发「荣归故里」即为游戏胜利</li>
-            <li>不同难度对应不同掷骰子次数：困难(40次)、中等(50次)、简单(60次)，次数用尽自动结算 | 贪墨触发概率：1%</li>
+            <li>不同难度对应不同掷骰子次数：困难(40次)、中等(50次)、简单(60次)，次数用尽自动结算 | 贪墨触发概率：3%</li>
             <li>掷骰子随机获得德/才/功/赃四种结果之一，对应不同的官职升降路径</li>
             <li>太师为最高官职，需再掷「德」触发荣归才算胜利，掷其他点仍会升降</li>
             <li>低阶职位（出身圈/九品至七品）掷骰子后会随机选择分支路线，增加游戏随机性</li>
@@ -914,7 +914,7 @@ function updatePositionByPoint(pointType) {
     const prevPosition = gameState.currentPosition;
     
     // 1%概率触发贪墨（直接贬为白丁）
-    if (Math.random() < 0.01 && !gameState.gameWon && gameState.diceRemain > 0) {
+    if (Math.random() < 0.03 && !gameState.gameWon && gameState.diceRemain > 0) {
         gameState.currentPosition = "白丁";
         const resultText = `⚠️ 触发贪墨！从【${prevPosition}】贬为【白丁】，重新开始！剩余次数：${gameState.diceRemain - 1}/${gameState.diceTotal}`;
         updateResultDetail(resultText);
