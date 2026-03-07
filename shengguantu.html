@@ -519,10 +519,10 @@ body {
         <div class="rule-title">📋 游戏规则</div>
         <ul class="rule-list">
             <li>官职升降严格遵循：德(de)、才(cai)、功(gong)、赃(zang)四种掷点对应的职位映射规则</li>
-            <li>从白丁起步，依次通过科举进阶，最终升至「太师」（正一品）即为游戏胜利</li>
+            <li>从白丁起步，依次通过科举进阶，升至「太师」（正一品）后，再掷出「德」触发「荣归故里」即为游戏胜利</li>
             <li>每局游戏限制40次掷骰子，次数用尽自动结算 | 贪墨触发概率：1%</li>
             <li>掷骰子随机获得德/才/功/赃四种结果之一，对应不同的官职升降路径</li>
-            <li>太师为最终官职，达到后游戏胜利，无需继续掷骰子</li>
+            <li>太师为最高官职，需再掷「德」触发荣归才算胜利，掷其他点仍会升降</li>
         </ul>
     </div>
 </div>
@@ -784,8 +784,8 @@ function gameSettlement(isWin = false) {
     let resultType = isWin ? "success" : "fail";
     
     if (isWin) {
-        // 胜利结算
-        resultText = `🎉 游戏胜利！你在${gameState.stepCount}次掷骰子后升至【${gameState.currentPosition}】（${rankInfo.type} ${rankInfo.num}级），位极人臣！`;
+        // 胜利结算（荣归故里）
+        resultText = `🎉 游戏胜利！你在${gameState.stepCount}次掷骰子后，从太师触发「荣归故里」，圆满完成仕途！`;
         updateRecentResults(resultText, "success");
     } else {
         // 次数用尽结算
@@ -798,7 +798,7 @@ function gameSettlement(isWin = false) {
     // 弹窗提示
     setTimeout(() => {
         alert(isWin ? 
-            `🎊 恭喜获胜！\n你用${gameState.stepCount}次掷骰子从白丁升至${gameState.currentPosition}（${rankInfo.type} ${rankInfo.num}级）！` :
+            `🎊 恭喜荣归故里！\n你用${gameState.stepCount}次掷骰子从白丁升至太师，并成功荣归故里！` :
             `⏱️ 游戏结束\n40次掷骰子次数已用尽\n最终官职：${gameState.currentPosition}（${rankInfo.type} ${rankInfo.num}级）\n点击重新开始可再次挑战`
         );
     }, 500);
@@ -813,19 +813,9 @@ function updatePositionByPoint(pointType) {
     // 1%概率触发贪墨（直接贬为白丁）
     if (Math.random() < 0.01 && !gameState.gameWon && gameState.diceRemain > 0) {
         gameState.currentPosition = "白丁";
-        const resultText = `⚠️ 触发贪墨！从【${prevPosition}】贬为【白丁】，重新开始！剩余次数：${gameState.diceRemain-1}/40`;
+        const resultText = `⚠️ 触发贪墨！从【${prevPosition}】贬为【白丁】，重新开始！剩余次数：${gameState.diceRemain - 1}/40`;
         updateResultDetail(resultText);
         updateRecentResults(resultText, "fail");
-        return;
-    }
-    
-    // 检查是否已达最终职位（太师）
-    if (prevPosition === "太师") {
-        const resultText = `你已升至太师（正一品最终），游戏胜利！无需继续掷骰子`;
-        updateResultDetail(resultText);
-        updateRecentResults(resultText, "success");
-        gameState.gameWon = true;
-        gameSettlement(true);
         return;
     }
     
@@ -833,9 +823,19 @@ function updatePositionByPoint(pointType) {
     const currentRule = positionRules[prevPosition];
     if (!currentRule) {
         gameState.currentPosition = "白丁";
-        const resultText = `未知职位，重置为【白丁】！剩余次数：${gameState.diceRemain-1}/40`;
+        const resultText = `未知职位，重置为【白丁】！剩余次数：${gameState.diceRemain - 1}/40`;
         updateResultDetail(resultText);
         updateRecentResults(resultText, "special");
+        return;
+    }
+    
+    // 关键修改：太师后掷德触发荣归胜利
+    if (prevPosition === "太师" && pointType === "de") {
+        const resultText = `🎉 从太师掷出「德」，触发【荣归故里】！游戏胜利！剩余次数：${gameState.diceRemain - 1}/40`;
+        updateResultDetail(resultText);
+        updateRecentResults(resultText, "success");
+        gameState.gameWon = true;
+        gameSettlement(true);
         return;
     }
     
@@ -852,69 +852,68 @@ function updatePositionByPoint(pointType) {
     
     if (newPosition === prevPosition) {
         // 职位未变
-        resultText = `掷出${pointName}：官职保持【${prevPosition}】不变！剩余次数：${gameState.diceRemain-1}/40`;
+        resultText = `掷出${pointName}：官职保持【${prevPosition}】不变！剩余次数：${gameState.diceRemain - 1}/40`;
         resultType = "normal";
-    } else if (positionRules[newPosition].rank.num < positionRules[prevPosition].rank.num || 
-              (positionRules[newPosition].rank.num === positionRules[prevPosition].rank.num && 
-               !positionRules[prevPosition].rank.type.includes("出身圈") && 
-               positionRules[newPosition].rank.type > positionRules[prevPosition].rank.type)) {
-        // 职位提升（数字越小等级越高，出身圈特殊处理）
-        resultText = `掷出${pointName}：从【${prevPosition}】升至【${newPosition}】！剩余次数：${gameState.diceRemain-1}/40`;
-        resultType = "success";
     } else {
-        // 职位下降
-        resultText = `掷出${pointName}：从【${prevPosition}】降至【${newPosition}】！剩余次数：${gameState.diceRemain-1}/40`;
-        resultType = "fail";
+        const oldRank = positionRules[prevPosition].rank.num;
+        const newRank = positionRules[newPosition].rank.num;
+
+        if (newRank > oldRank) {
+            // 数字变大 = 降级
+            resultText = `掷出${pointName}：从【${prevPosition}】降为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/40`;
+            resultType = "fail";
+        } else if (newRank < oldRank) {
+            // 数字变小 = 升职
+            resultText = `掷出${pointName}：从【${prevPosition}】升为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/40`;
+            resultType = "success";
+        } else {
+            resultText = `掷出${pointName}：从【${prevPosition}】变为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/40`;
+            resultType = "normal";
+        }
     }
     
     // 更新结果显示
     updateResultDetail(resultText);
     updateRecentResults(resultText, resultType);
-    
-    // 检查游戏胜利（达到太师）
-    if (newPosition === "太师") {
-        gameState.gameWon = true;
-        gameSettlement(true);
-    }
 }
 
 // 掷骰子操作
 function rollDice() {
-    // 检查游戏是否已结束
-    if (gameState.gameWon || gameState.gameOver || gameState.diceRemain <= 0) {
-        const tipText = gameState.diceRemain <= 0 ? "40次掷骰子次数已用尽！点击重新开始" : "游戏已胜利！点击重新开始可再次游玩";
+    // 检查：剩余次数 <=0 就不能再掷
+    if (gameState.diceRemain <= 0 || gameState.gameWon || gameState.gameOver) {
+        const tipText = gameState.diceRemain <= 0 ? "次数已用完，点击重新开始" : "游戏已结束";
         updateResultDetail(tipText);
         return;
     }
-    
+
     // 禁用按钮
     document.getElementById("btn-roll").disabled = true;
     
     // 骰子动画
     diceAnimation(() => {
-        // 减少剩余次数
-        gameState.diceRemain--;
-        
-        // 随机选择德才功赃（模拟真实掷骰子）
+        // 先掷，再减次数
         const randomPoints = ["de", "cai", "gong", "zang"];
         const randomPoint = randomPoints[Math.floor(Math.random() * 4)];
         
-        // 更新职位
+        // 执行移动
         updatePositionByPoint(randomPoint);
         
-        // 更新步数
+        // 步数+1
         gameState.stepCount++;
         
-        // 更新显示
+        // 次数-1
+        gameState.diceRemain--;
+        
+        // 更新界面
         updateStatusDisplay();
         renderBoard();
         
-        // 检查次数是否用尽
+        // 用完次数就结束
         if (gameState.diceRemain <= 0 && !gameState.gameWon) {
-            gameSettlement(false); // 次数用尽结算
+            gameSettlement(false);
         }
         
-        // 启用按钮（如果游戏未结束）
+        // 恢复按钮
         if (!gameState.gameWon && !gameState.gameOver && gameState.diceRemain > 0) {
             document.getElementById("btn-roll").disabled = false;
         }
