@@ -86,21 +86,19 @@
             text-align: center;
         }
 
-        /* 大字时间样式 */
+        /* 大字时间样式（优化字体和视觉效果） */
         #time {
             font-size: 8vw; /* 响应式字体，随屏幕缩放 */
-            font-weight: bold;
+            font-weight: 700;
+            /* 更换为更美观的无衬线字体组合 */
+            font-family: "Inter", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
             color: #fff;
-            text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
-            font-family: "Consolas", "Monaco", monospace;
-        }
-
-        /* 日期样式 */
-        #date {
-            font-size: 24px;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            /* 增强文字阴影，提升层次感和可读性 */
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2), 
+                         0 4px 20px rgba(0, 0, 0, 0.3),
+                         0 0 30px rgba(0, 123, 255, 0.4);
+            /* 轻微的文字间距，提升美观度 */
+            letter-spacing: 0.05em;
         }
 
         /* 回到顶部按钮 */
@@ -128,6 +126,7 @@
         @media (max-width: 768px) {
             #time {
                 font-size: 12vw;
+                letter-spacing: 0.03em; /* 移动端微调字间距 */
             }
 
             .navbar-menu {
@@ -135,6 +134,8 @@
             }
         }
     </style>
+    <!-- 可选：引入外部美观字体（Inter），提升字体效果 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap">
 </head>
 <body>
     <!-- 导航栏 -->
@@ -151,10 +152,9 @@
         </div>
     </nav>
 
-    <!-- 大字时钟区域 -->
+    <!-- 大字时钟区域（移除日期显示） -->
     <div class="clock-container">
         <div id="time">00:00:00</div>
-        <div id="date">2026年03月06日 星期五</div>
     </div>
 
     <!-- 回到顶部按钮 -->
@@ -174,16 +174,9 @@
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
-            // 格式化日期：年-月-日 星期
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-            const weekday = weekdays[now.getDay()];
             
-            // 更新DOM
+            // 仅更新时间（移除日期相关逻辑）
             document.getElementById('time').textContent = `${hours}:${minutes}:${seconds}`;
-            document.getElementById('date').textContent = `${year}年${month}月${day}日 ${weekday}`;
         }
         setInterval(updateClock, 1000);
 
