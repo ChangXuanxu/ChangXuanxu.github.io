@@ -98,6 +98,53 @@ body {
     font-size: 18px;
 }
 
+/* 难度选择区 */
+.difficulty-area {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.difficulty-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.difficulty-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.diff-btn {
+    padding: 10px 25px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.diff-btn:hover {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.diff-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
 /* 游戏状态区 */
 .status-area {
     background: white;
@@ -428,7 +475,17 @@ body {
     <!-- 标题区域 -->
     <div class="title-area">
         <h1 class="game-title">📜 明清升官图（完整版）</h1>
-        <p class="game-subtitle">三圈棋盘 · 德才功赃 · 从白丁到太师 | 每局限60次掷骰子</p>
+        <p class="game-subtitle">三圈棋盘 · 德才功赃 · 从白丁到太师 | 选择难度设定掷骰子次数</p>
+    </div>
+
+    <!-- 新增：难度选择区 -->
+    <div class="difficulty-area">
+        <div class="difficulty-title">🎮 选择游戏难度（对应掷骰子次数）</div>
+        <div class="difficulty-buttons">
+            <button class="diff-btn" data-count="40" data-level="困难">困难 (40次)</button>
+            <button class="diff-btn" data-count="50" data-level="中等">中等 (50次)</button>
+            <button class="diff-btn active" data-count="60" data-level="简单">简单 (60次)</button>
+        </div>
     </div>
 
     <!-- 游戏状态区 -->
@@ -448,6 +505,10 @@ body {
         <div class="status-item">
             <span class="status-label">步数统计：</span>
             <span class="status-value" id="step-count">0</span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">当前难度：</span>
+            <span class="status-value" id="current-difficulty">简单</span>
         </div>
         <!-- 新增：骰子次数限制 -->
         <div class="status-item dice-count" id="dice-count">
@@ -508,7 +569,7 @@ body {
             <div class="result-area">
                 <div class="result-title">本次操作详情</div>
                 <div class="result-detail" id="game-result">
-                    点击「掷骰子」开始游戏，首次掷骰子从白丁起步 | 每局限60次掷骰子
+                    先选择游戏难度，再点击「掷骰子」开始游戏，首次掷骰子从白丁起步
                 </div>
             </div>
         </div>
@@ -520,7 +581,7 @@ body {
         <ul class="rule-list">
             <li>官职升降严格遵循：德(de)、才(cai)、功(gong)、赃(zang)四种掷点对应的职位映射规则</li>
             <li>从白丁起步，依次通过科举进阶，升至「太师」（正一品）后，再掷出「德」触发「荣归故里」即为游戏胜利</li>
-            <li>每局游戏限制60次掷骰子，次数用尽自动结算 | 贪墨触发概率：1%</li>
+            <li>不同难度对应不同掷骰子次数：困难(40次)、中等(50次)、简单(60次)，次数用尽自动结算 | 贪墨触发概率：1%</li>
             <li>掷骰子随机获得德/才/功/赃四种结果之一，对应不同的官职升降路径</li>
             <li>太师为最高官职，需再掷「德」触发荣归才算胜利，掷其他点仍会升降</li>
             <li>低阶职位（出身圈/九品至七品）掷骰子后会随机选择分支路线，增加游戏随机性</li>
@@ -565,7 +626,7 @@ const positionRules = {
     // 五品（保持原有逻辑）
     "知州": { de: "知府", cai: "郎中", gong: "知州", zang: "州同", rank: { type: "从五品", num: 5 } },
     "同知": { de: "大理寺丞", cai: "知府", gong: "同知", zang: "通判", rank: { type: "正五品", num: 5 } },
-    "员外郎": { de: "参政", cai: "郎中", gong: "员外郎", zang: "主事", rank: { type: "从五品", num: 5 } },
+    "员外郎": { de: "侍郎", cai: "郎中", gong: "员外郎", zang: "主事", rank: { type: "从五品", num: 5 } },
     "郎中": { de: "知府", cai: "佥事", gong: "参政", zang: "员外郎", rank: { type: "正五品", num: 5 } },
     "侍讲学士": { de: "参政", cai: "通政司参议", gong: "修撰", zang: "编修", rank: { type: "正五品", num: 5 } },
     "大理寺丞": { de: "佥事", cai: "大理寺丞", gong: "通政司参议", zang: "主事", rank: { type: "正五品", num: 5 } },
@@ -623,11 +684,12 @@ Object.keys(positionCategories).forEach(category => {
 const gameState = {
     currentPosition: "白丁",  // 当前职位
     stepCount: 0,             // 步数统计
-    diceRemain: 60,           // 剩余掷骰子次数（修改为60次）
-    diceTotal: 60,            // 总次数限制（修改为60次）
+    diceRemain: 60,           // 剩余掷骰子次数（默认简单难度60次）
+    diceTotal: 60,            // 总次数限制（默认简单难度60次）
     gameWon: false,           // 是否游戏胜利
     gameOver: false,          // 游戏是否结束（次数用尽）
-    recentResults: []         // 近五次游戏结果记录
+    recentResults: [],        // 近五次游戏结果记录
+    currentDifficulty: "简单" // 当前难度：困难/中等/简单
 };
 
 // ===================== DOM 操作函数 =====================
@@ -641,6 +703,8 @@ function updateStatusDisplay() {
     document.getElementById("current-position").textContent = gameState.currentPosition;
     document.getElementById("current-grade").textContent = `${rankInfo.type} ${rankInfo.num}级`;
     document.getElementById("step-count").textContent = gameState.stepCount;
+    // 新增：更新难度显示
+    document.getElementById("current-difficulty").textContent = gameState.currentDifficulty;
     
     // 更新骰子次数显示
     const diceCountEl = document.getElementById("dice-count");
@@ -648,8 +712,10 @@ function updateStatusDisplay() {
     
     // 样式提示
     diceCountEl.className = "status-item dice-count";
-    if (gameState.diceRemain <= 15 && gameState.diceRemain > 0) { // 60次的话，剩余15次警告更合理
-        diceCountEl.classList.add("warning"); // 剩余15次以内警告
+    // 根据总次数动态计算警告阈值（总次数的25%）
+    const warningThreshold = Math.floor(gameState.diceTotal * 0.25);
+    if (gameState.diceRemain <= warningThreshold && gameState.diceRemain > 0) {
+        diceCountEl.classList.add("warning"); // 剩余次数低于25%警告
     } else if (gameState.diceRemain <= 0) {
         diceCountEl.classList.add("over"); // 次数用尽
     }
@@ -795,7 +861,7 @@ function diceAnimation(callback) {
     }, 100);
 }
 
-// 游戏结算
+// 游戏结算（新增难度显示）
 function gameSettlement(isWin = false) {
     gameState.gameOver = true;
     
@@ -807,22 +873,22 @@ function gameSettlement(isWin = false) {
     let resultType = isWin ? "success" : "fail";
     
     if (isWin) {
-        // 胜利结算（荣归故里）
-        resultText = `🎉 游戏胜利！你在${gameState.stepCount}次掷骰子后，从太师触发「荣归故里」，圆满完成仕途！`;
+        // 胜利结算（荣归故里）- 显示难度
+        resultText = `🎉 游戏胜利！你在【${gameState.currentDifficulty}】难度下，用${gameState.stepCount}次掷骰子后，从太师触发「荣归故里」，圆满完成仕途！`;
         updateRecentResults(resultText, "success");
     } else {
-        // 次数用尽结算
-        resultText = `⏰ 游戏结束！60次掷骰子次数已用尽，你的最终官职是【${gameState.currentPosition}】（${rankInfo.type} ${rankInfo.num}级）。点击重新开始可再次挑战！`;
+        // 次数用尽结算 - 显示难度
+        resultText = `⏰ 游戏结束！【${gameState.currentDifficulty}】难度(${gameState.diceTotal}次)次数已用尽，你的最终官职是【${gameState.currentPosition}】（${rankInfo.type} ${rankInfo.num}级）。点击重新开始可再次挑战！`;
         updateRecentResults(resultText, "fail");
     }
     
     updateResultDetail(resultText);
     
-    // 弹窗提示
+    // 弹窗提示 - 显示难度
     setTimeout(() => {
         alert(isWin ? 
-            `🎊 恭喜荣归故里！\n你用${gameState.stepCount}次掷骰子从白丁升至太师，并成功荣归故里！` :
-            `⏱️ 游戏结束\n60次掷骰子次数已用尽\n最终官职：${gameState.currentPosition}（${rankInfo.type} ${rankInfo.num}级）\n点击重新开始可再次挑战`
+            `🎊 恭喜荣归故里！\n难度：${gameState.currentDifficulty}\n总次数：${gameState.diceTotal}次\n你用${gameState.stepCount}次掷骰子从白丁升至太师，并成功荣归故里！` :
+            `⏱️ 游戏结束\n难度：${gameState.currentDifficulty}\n总次数：${gameState.diceTotal}次\n最终官职：${gameState.currentPosition}（${rankInfo.type} ${rankInfo.num}级）\n点击重新开始可再次挑战`
         );
     }, 500);
 }
@@ -850,7 +916,7 @@ function updatePositionByPoint(pointType) {
     // 1%概率触发贪墨（直接贬为白丁）
     if (Math.random() < 0.01 && !gameState.gameWon && gameState.diceRemain > 0) {
         gameState.currentPosition = "白丁";
-        const resultText = `⚠️ 触发贪墨！从【${prevPosition}】贬为【白丁】，重新开始！剩余次数：${gameState.diceRemain - 1}/60`;
+        const resultText = `⚠️ 触发贪墨！从【${prevPosition}】贬为【白丁】，重新开始！剩余次数：${gameState.diceRemain - 1}/${gameState.diceTotal}`;
         updateResultDetail(resultText);
         updateRecentResults(resultText, "fail");
         return;
@@ -860,7 +926,7 @@ function updatePositionByPoint(pointType) {
     const currentRule = positionRules[prevPosition];
     if (!currentRule) {
         gameState.currentPosition = "白丁";
-        const resultText = `未知职位，重置为【白丁】！剩余次数：${gameState.diceRemain - 1}/60`;
+        const resultText = `未知职位，重置为【白丁】！剩余次数：${gameState.diceRemain - 1}/${gameState.diceTotal}`;
         updateResultDetail(resultText);
         updateRecentResults(resultText, "special");
         return;
@@ -869,7 +935,7 @@ function updatePositionByPoint(pointType) {
     // 关键修改：太师后掷德触发荣归胜利
     if (prevPosition === "太师" && pointType === "de") {
         gameState.currentPosition = "荣归";
-        const resultText = `🎉 从太师掷出「德」，触发【荣归故里】！游戏胜利！剩余次数：${gameState.diceRemain - 1}/60`;
+        const resultText = `🎉 从太师掷出「德」，触发【荣归故里】！游戏胜利！剩余次数：${gameState.diceRemain - 1}/${gameState.diceTotal}`;
         updateResultDetail(resultText);
         updateRecentResults(resultText, "success");
         gameState.gameWon = true;
@@ -884,7 +950,7 @@ function updatePositionByPoint(pointType) {
     // 安全检查：确保新职位存在
     if (!positionRules[newPosition]) {
         gameState.currentPosition = prevPosition;
-        const resultText = `⚠️ 职位规则异常，保持当前职位【${prevPosition}】不变！剩余次数：${gameState.diceRemain - 1}/60`;
+        const resultText = `⚠️ 职位规则异常，保持当前职位【${prevPosition}】不变！剩余次数：${gameState.diceRemain - 1}/${gameState.diceTotal}`;
         updateResultDetail(resultText);
         updateRecentResults(resultText, "special");
         return;
@@ -900,7 +966,7 @@ function updatePositionByPoint(pointType) {
     
     if (newPosition === prevPosition) {
         // 职位未变
-        resultText = `掷出${pointName}：官职保持【${prevPosition}】不变！剩余次数：${gameState.diceRemain - 1}/60`;
+        resultText = `掷出${pointName}：官职保持【${prevPosition}】不变！剩余次数：${gameState.diceRemain - 1}/${gameState.diceTotal}`;
         resultType = "normal";
     } else {
         const oldRank = positionRules[prevPosition].rank.num;
@@ -908,14 +974,14 @@ function updatePositionByPoint(pointType) {
 
         if (newRank > oldRank) {
             // 数字变大 = 降级
-            resultText = `掷出${pointName}：从【${prevPosition}】降为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/60`;
+            resultText = `掷出${pointName}：从【${prevPosition}】降为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/${gameState.diceTotal}`;
             resultType = "fail";
         } else if (newRank < oldRank) {
             // 数字变小 = 升职
-            resultText = `掷出${pointName}：从【${prevPosition}】升为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/60`;
+            resultText = `掷出${pointName}：从【${prevPosition}】升为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/${gameState.diceTotal}`;
             resultType = "success";
         } else {
-            resultText = `掷出${pointName}：从【${prevPosition}】变为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/60`;
+            resultText = `掷出${pointName}：从【${prevPosition}】变为【${newPosition}】！剩余次数：${gameState.diceRemain - 1}/${gameState.diceTotal}`;
             resultType = "normal";
         }
         
@@ -982,23 +1048,58 @@ function rollDice() {
     });
 }
 
-// 重新开始游戏
+// 重新开始游戏（适配难度选择）
 function resetGame() {
+    // 保留当前选择的难度和总次数
+    const currentTotal = gameState.diceTotal;
+    const currentDiff = gameState.currentDifficulty;
+    
     gameState.currentPosition = "白丁";
     gameState.stepCount = 0;
-    gameState.diceRemain = 60; // 重置次数为60次
+    gameState.diceRemain = currentTotal; // 重置为所选难度的总次数
+    gameState.diceTotal = currentTotal;
     gameState.gameWon = false;
     gameState.gameOver = false;
     gameState.recentResults = []; // 清空历史结果
+    gameState.currentDifficulty = currentDiff; // 保留难度
     
     // 启用按钮
     document.getElementById("btn-roll").disabled = false;
     
     // 更新显示
     updateStatusDisplay();
-    updateResultDetail("点击「掷骰子」开始游戏，首次掷骰子从白丁起步 | 每局限60次掷骰子");
+    updateResultDetail(`已选择【${currentDiff}】难度(${currentTotal}次)，点击「掷骰子」开始游戏，首次掷骰子从白丁起步`);
     updateRecentResults("游戏重置，等待开始");
     renderBoard();
+}
+
+// 新增：选择难度
+function selectDifficulty(btn) {
+    // 移除所有按钮的active样式
+    const allBtns = document.querySelectorAll(".diff-btn");
+    allBtns.forEach(b => b.classList.remove("active"));
+    
+    // 给当前按钮添加active样式
+    btn.classList.add("active");
+    
+    // 获取难度参数
+    const diceCount = parseInt(btn.dataset.count);
+    const difficulty = btn.dataset.level;
+    
+    // 更新游戏状态
+    gameState.diceTotal = diceCount;
+    gameState.diceRemain = diceCount;
+    gameState.currentDifficulty = difficulty;
+    
+    // 如果游戏未开始/已结束，重置游戏状态
+    if (gameState.stepCount === 0 || gameState.gameOver) {
+        resetGame();
+    } else {
+        // 如果游戏中切换难度，提示需要重新开始
+        updateResultDetail(`已切换为【${difficulty}】难度(${diceCount}次)，请点击「重新开始」应用新难度`);
+        updateRecentResults(`切换难度：${difficulty}(${diceCount}次)`, "special");
+        updateStatusDisplay();
+    }
 }
 
 // ===================== 事件绑定 =====================
@@ -1008,6 +1109,12 @@ function bindEvents() {
     
     // 重新开始
     document.getElementById("btn-reset").addEventListener("click", resetGame);
+    
+    // 新增：难度选择按钮
+    const diffBtns = document.querySelectorAll(".diff-btn");
+    diffBtns.forEach(btn => {
+        btn.addEventListener("click", () => selectDifficulty(btn));
+    });
 }
 
 // ===================== 初始化游戏 =====================
@@ -1015,8 +1122,9 @@ function initGame() {
     // 初始化前先检查关键DOM元素是否存在
     const requiredElements = [
         "current-circle", "current-position", "current-grade", 
-        "step-count", "dice-count", "board-title", "board-container",
-        "result-list", "game-result", "btn-roll", "btn-reset"
+        "step-count", "current-difficulty", "dice-count", 
+        "board-title", "board-container", "result-list", 
+        "game-result", "btn-roll", "btn-reset"
     ];
     
     for (const id of requiredElements) {
@@ -1032,6 +1140,8 @@ function initGame() {
     bindEvents();
     // 初始化近五次结果显示
     updateRecentResults("尚未开始");
+    // 初始化结果提示
+    updateResultDetail(`当前选择【简单】难度(60次)，点击「掷骰子」开始游戏，首次掷骰子从白丁起步`);
 }
 
 // 启动游戏（确保DOM加载完成）
