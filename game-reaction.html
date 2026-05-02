@@ -319,13 +319,13 @@
             // 在测试过程中隐藏记录和按钮
             hideDuringTest() {
                 this.historySection.style.display = 'none';
-                this.clearHistoryBtn.style.display = 'none';
+                // 注意：不要隐藏clearHistoryBtn，因为它的显示状态由updateHistoryDisplay管理
                 this.restartBtn.style.display = 'none';
             },
             
             // 测试结束后显示记录和按钮
             showAfterTest() {
-                this.updateHistoryDisplay();
+                this.updateHistoryDisplay(); // 这会根据是否有历史记录来决定是否显示clearHistoryBtn
             },
             
             // 开始测试
@@ -439,4 +439,17 @@
                 // 重置UI
                 this.container.style.background = '#ffffff';
                 this.status.textContent = '点击开始测试，等待屏幕变蓝';
-                this.result.style.dis
+                this.result.style.display = 'none';
+                this.startBtn.style.display = 'inline-block';
+                this.restartBtn.style.display = 'none';
+                
+                // 显示历史记录（如果有的话）
+                this.updateHistoryDisplay();
+            }
+        };
+
+        // 初始化游戏
+        game.init();
+    </script>
+</body>
+</html>
