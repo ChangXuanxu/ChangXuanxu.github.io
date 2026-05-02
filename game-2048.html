@@ -27,8 +27,20 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
 .game-board { width: 100%; height: 0; padding-bottom: 100%; background: #bbada0; border-radius: 10px; position: relative; margin-bottom: 30px; }
 .grid-cell-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: 10px; padding: 10px; box-sizing: border-box; }
 .grid-cell { background: rgba(238, 228, 218, 0.35); border-radius: 4px; }
-/* 数字方块 - 精确位置控制 */
-.tile { position: absolute; width: calc(25% - 20px); height: calc(25% - 20px); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 35px; transition: all 0.15s ease-in-out; transform: translateZ(0); z-index: 10; }
+/* 数字方块 - 精确位置控制 - 修复版本 */
+.tile { 
+  width: 100%;
+  height: 100%;
+  border-radius: 4px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-weight: bold; 
+  font-size: 35px; 
+  transition: all 0.15s ease-in-out; 
+  transform: translateZ(0); 
+  z-index: 10; 
+}
 /* 数字颜色方案（参考原2048设计） */
 .tile-2 { background: #eee4da; color: #776e65; }
 .tile-4 { background: #ede0c8; color: #776e65; }
@@ -74,7 +86,7 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
       <a href="fun-tools.html">趣味组件</a>
       <a href="blog.html">个人博客</a>
       <a href="games.html">小游戏</a>
-      <a href=" ">联系我</a>
+      <a href="#">联系我</a>
     </div>
   </div>
 </nav>
@@ -190,62 +202,48 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
     }
   }
 
-  // 4. 创建或更新方块元素 - 精确位置控制
-  // 4. 创建或更新方块元素 - 精确位置控制 (替换原函数)
-function createOrUpdateTile(x, y, value, isNew = false) {
-  const key = `${x},${y}`;
-  
-  // 获取或创建方块
-  let tile;
-  if (tileElements[key]) {
-    tile = tileElements[key];
-    // 更新已有方块
-    tile.className = `tile tile-${value}`;
-    tile.textContent = value;
-  } else {
-    // 创建新方块
-    tile = document.createElement('div');
-    tile.className = `tile tile-${value}`;
-    tile.textContent = value;
-    tile.dataset.x = x;
-    tile.dataset.y = y;
-    gameBoard.appendChild(tile);
-    tileElements[key] = tile;
+  // 4. 创建或更新方块元素 - 使用 Grid 定位 (完全重写)
+  function createOrUpdateTile(x, y, value, isNew = false) {
+    const key = `${x},${y}`;
     
-    // 新方块添加出现动画
-    if (isNew) {
-      tile.style.opacity = '0';
-      tile.style.transform = 'scale(0.8)';
-      setTimeout(() => {
-        tile.style.opacity = '1';
-        tile.style.transform = 'scale(1)';
-      }, 10);
+    // 获取或创建方块
+    let tile;
+    if (tileElements[key]) {
+      tile = tileElements[key];
+      // 更新已有方块
+      tile.className = `tile tile-${value}`;
+      tile.textContent = value;
+    } else {
+      // 创建新方块
+      tile = document.createElement('div');
+      tile.className = `tile tile-${value}`;
+      tile.textContent = value;
+      tile.dataset.x = x;
+      tile.dataset.y = y;
+      
+      // 关键：添加到网格容器中，而不是 gameBoard
+      gridContainer.appendChild(tile);
+      tileElements[key] = tile;
+      
+      // 新方块动画
+      if (isNew) {
+        tile.style.opacity = '0';
+        tile.style.transform = 'scale(0.8)';
+        setTimeout(() => {
+          tile.style.opacity = '1';
+          tile.style.transform = 'scale(1)';
+        }, 10);
+      }
     }
+    
+    // 关键：使用 grid-row 和 grid-column 精确定位
+    // 注意：CSS Grid 行列从 1 开始计数
+    tile.style.gridColumn = `${y + 1} / span 1`;
+    tile.style.gridRow = `${x + 1} / span 1`;
+    
+    return tile;
   }
-  
-  // 精确计算位置 - 基于CSS Grid系统
-  // 每个单元格占25%，但需考虑网格间隙(gap)
-  const cellSize = 25;
-  const gap = 10; // 与CSS中的gap值一致
-  
-  // 计算实际单元格宽度 (减去3个间隙)
-  const cellWidth = (100 - 3 * gap) / 4;
-  
-  // 计算左偏移 (考虑间隙)
-  const left = y * (cellWidth + gap) + 1; // +1 避免像素对齐问题
-  // 计算上偏移
-  const top = x * (cellWidth + gap) + 1;
-  
-  // 应用精确位置
-  tile.style.left = `${left}%`;
-  tile.style.top = `${top}%`;
-  
-  // 保持方块大小一致
-  tile.style.width = `${cellWidth}%`;
-  tile.style.height = `${cellWidth}%`;
-  
-  return tile;
-}
+
   // 5. 核心移动逻辑
   function move(direction) {
     if (!canMove) return false;
