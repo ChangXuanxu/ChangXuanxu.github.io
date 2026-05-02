@@ -152,6 +152,33 @@
         .restart-btn:hover {
             background: #e0a800;
         }
+        
+        /* 添加历史记录显示区域 */
+        .history {
+            margin-top: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+            width: 80%;
+            text-align: center;
+        }
+        
+        .history-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .history-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .history-item {
+            padding: 5px;
+            background: #f1f1f1;
+            margin: 3px 0;
+            border-radius: 3px;
+        }
     </style>
 </head>
 <body>
@@ -184,9 +211,16 @@
             <div class="result-item rank-text" id="rankText"></div>
         </div>
         
+        <!-- 历史记录显示 -->
+        <div class="history" id="historySection" style="display: none;">
+            <div class="history-title">历史记录</div>
+            <ul class="history-list" id="historyList"></ul>
+        </div>
+        
         <!-- 控制按钮 -->
         <button class="game-button start-btn" id="startBtn">开始测试</button>
         <button class="game-button restart-btn" id="restartBtn">再来一次</button>
+        <button class="game-button" id="clearHistoryBtn" style="background: #dc3545; display: none;">清空记录</button>
     </div>
 
     <script>
@@ -201,6 +235,9 @@
             rankText: document.getElementById('rankText'),
             startBtn: document.getElementById('startBtn'),
             restartBtn: document.getElementById('restartBtn'),
+            clearHistoryBtn: document.getElementById('clearHistoryBtn'),
+            historySection: document.getElementById('historySection'),
+            historyList: document.getElementById('historyList'),
             
             // 游戏状态
             isTesting: false,    // 是否正在测试中
@@ -210,13 +247,73 @@
             
             // 初始化
             init() {
+                // 从localStorage加载历史数据
+                this.loadHistory();
+                
                 // 绑定事件
                 this.startBtn.addEventListener('click', () => this.startTest());
                 this.restartBtn.addEventListener('click', () => this.resetGame());
+                this.clearHistoryBtn.addEventListener('click', () => this.clearHistory());
                 this.container.addEventListener('click', (e) => this.handleClick(e));
                 
                 // 初始状态
+                this.updateHistoryDisplay();
                 this.resetGame();
+            },
+            
+            // 从localStorage加载历史记录
+            loadHistory() {
+                try {
+                    const saved = localStorage.getItem('reactionTimes');
+                    if (saved) {
+                        this.reactionTimes = JSON.parse(saved);
+                    } else {
+                        this.reactionTimes = [];
+                    }
+                } catch (e) {
+                    console.error('加载历史记录失败:', e);
+                    this.reactionTimes = [];
+                }
+            },
+            
+            // 保存历史记录到localStorage
+            saveHistory() {
+                try {
+                    localStorage.setItem('reactionTimes', JSON.stringify(this.reactionTimes));
+                } catch (e) {
+                    console.error('保存历史记录失败:', e);
+                }
+            },
+            
+            // 清空历史记录
+            clearHistory() {
+                this.reactionTimes = [];
+                this.saveHistory();
+                this.updateHistoryDisplay();
+                this.resetGame();
+            },
+            
+            // 更新历史记录显示
+            updateHistoryDisplay() {
+                if (this.reactionTimes.length > 0) {
+                    this.historySection.style.display = 'block';
+                    this.clearHistoryBtn.style.display = 'inline-block';
+                    
+                    // 清空列表
+                    this.historyList.innerHTML = '';
+                    
+                    // 添加历史记录项（只显示最近10条）
+                    const recentTimes = this.reactionTimes.slice(-10);
+                    recentTimes.forEach((time, index) => {
+                        const li = document.createElement('li');
+                        li.className = 'history-item';
+                        li.textContent = `#${this.reactionTimes.length - recentTimes.length + index + 1}: ${time}ms`;
+                        this.historyList.appendChild(li);
+                    });
+                } else {
+                    this.historySection.style.display = 'none';
+                    this.clearHistoryBtn.style.display = 'none';
+                }
             },
             
             // 开始测试
@@ -249,7 +346,7 @@
             // 处理点击事件（核心逻辑）
             handleClick(e) {
                 // 过滤按钮点击（只响应空白区域）
-                if (e.target === this.startBtn || e.target === this.restartBtn) {
+                if (e.target === this.startBtn || e.target === this.restartBtn || e.target === this.clearHistoryBtn) {
                     return;
                 }
                 
@@ -275,6 +372,7 @@
                     // 只记录有效时间（0-10秒）
                     if (time > 0 && time < 10000) {
                         this.reactionTimes.push(time);
+                        this.saveHistory(); // 保存到本地存储
                     }
                     
                     // 重置状态
@@ -291,7 +389,7 @@
                 // 本轮时间
                 this.currentTime.textContent = `${time} ms`;
                 
-                // 平均时间
+                // 平均时间 - 计算所有历史记录的平均值
                 const avg = this.reactionTimes.length > 0 
                     ? Math.round(this.reactionTimes.reduce((a, b) => a + b) / this.reactionTimes.length)
                     : 0;
@@ -310,14 +408,16 @@
                 this.status.textContent = '测试完成';
                 this.result.style.display = 'block';
                 this.restartBtn.style.display = 'inline-block';
+                
+                // 更新历史记录显示
+                this.updateHistoryDisplay();
             },
             
-            // 重置游戏
+            // 重置游戏（但保留历史记录）
             resetGame() {
-                // 重置状态
+                // 重置状态（但保留反应时间历史）
                 this.isTesting = false;
                 this.isActive = false;
-                this.reactionTimes = [];
                 
                 // 重置UI
                 this.container.style.background = '#ffffff';
