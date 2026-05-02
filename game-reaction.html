@@ -191,7 +191,488 @@
                 <a href="fun-tools.html">趣味组件</a>
                 <a href="blog.html">个人博客</a>
                 <a href="games.html">小游戏</a>
-                <a href="https://www.bilibili.com/video/BV1ev411u7MQ/?spm_id_from=333.337.search-card.all.click&vd_source=2b7a184d1a2e8961062d2e58575270d8">联系我</a>
+                <a href="<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>俄罗斯方块 - 士多啤梨除草机</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft YaHei", sans-serif; }
+body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100vh; padding-top: 80px; }
+/* 导航栏（复用原网站样式） */
+.navbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; z-index: 100; }
+.navbar-content { width: 1200px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+.logo { font-size: 20px; font-weight: bold; color: #007bff; text-decoration: none; }
+.nav-menu a { margin: 0 12px; color: #333; text-decoration: none; font-size: 16px; transition: color 0.2s; }
+.nav-menu a:hover { color: #007bff; }
+/* 游戏容器 */
+.game-container { max-width: 520px; margin: 40px auto; padding: 20px; }
+.game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.title { font-size: 28px; color: #2c3e50; display: flex; align-items: center; gap: 10px; }
+.title span { font-size: 32px; color: #007bff; }
+.score-container { display: flex; gap: 15px; }
+.score-box { background: white; border-radius: 8px; padding: 10px 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); text-align: center; }
+.score-label { font-size: 14px; color: #666; margin-bottom: 4px; }
+.score-value { font-size: 20px; font-weight: bold; color: #2c3e50; }
+.best-value { color: #007bff; }
+/* 游戏面板 */
+.game-board { width: 100%; height: 0; padding-bottom: 100%; background: #111; border-radius: 10px; position: relative; margin-bottom: 30px; overflow: hidden; }
+.game-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+/* 控制按钮布局 */
+.control-panel { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+.ctrl-btn { 
+    background: #8f7a66; 
+    color: white; 
+    border: none; 
+    border-radius: 8px; 
+    padding: 15px 0; 
+    font-size: 18px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: background 0.2s; 
+    user-select: none; 
+    touch-action: manipulation; /* 优化移动端触摸体验 */
+}
+.ctrl-btn:hover { background: #7f6a56; }
+.ctrl-btn:active { background: #6f5a46; }
+.btn-left { grid-column: 1; grid-row: 2; }
+.btn-right { grid-column: 3; grid-row: 2; }
+.btn-up { grid-column: 2; grid-row: 1; }
+.btn-down { grid-column: 2; grid-row: 3; }
+.btn-hard-drop { grid-column: 1 / span 3; grid-row: 2; }
+/* 游戏控制 */
+.game-controls { display: flex; flex-direction: column; gap: 15px; }
+.restart-btn { background: #8f7a66; color: white; border: none; border-radius: 8px; padding: 12px 24px; font-size: 16px; font-weight: 500; cursor: pointer; transition: background 0.2s; width: 100%; }
+.restart-btn:hover { background: #7f6a56; }
+.instructions { background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 20px; margin-top: 20px; }
+.instructions h3 { color: #2c3e50; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.instructions p { color: #666; line-height: 1.6; }
+/* 暂停提示 */
+.pause-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.pause-overlay.active { opacity: 1; pointer-events: all; }
+.pause-overlay h2 { font-size: 48px; color: white; margin-bottom: 20px; }
+.pause-overlay p { font-size: 20px; color: #aaa; margin-bottom: 30px; }
+/* 页脚（复用原网站样式） */
+.footer { text-align: center; padding: 20px; color: #666; border-top: 1px solid #eee; max-width: 1200px; margin: 0 auto; }
+/* 移动端优化 */
+@media (max-width: 500px) {
+  .game-board { margin: 0 auto 25px; }
+  .ctrl-btn { padding: 20px 0; font-size: 24px; }
+  .btn-hard-drop { grid-column: 1 / span 3; grid-row: 3; }
+}
+</style>
+</head>
+<body>
+<!-- 导航栏 -->
+<nav class="navbar">
+  <div class="navbar-content">
+    <a href="index.html" class="logo">士多啤梨除草机</a>
+    <div class="nav-menu">
+      <a href="index.html">首页</a>
+      <a href="fun-tools.html">趣味组件</a>
+      <a href="blog.html">个人博客</a>
+      <a href="games.html">小游戏</a>
+      <a href="#">联系我</a>
+    </div>
+  </div>
+</nav>
+
+<!-- 游戏主体 -->
+<div class="game-container">
+  <div class="game-header">
+    <h1 class="title"><span>🧩</span> 俄罗斯方块</h1>
+    <div class="score-container">
+      <div class="score-box">
+        <div class="score-label">得分</div>
+        <div id="score" class="score-value">0</div>
+      </div>
+      <div class="score-box">
+        <div class="score-label">等级</div>
+        <div id="level" class="score-value">1</div>
+      </div>
+      <div class="score-box">
+        <div class="score-label">消行</div>
+        <div id="lines" class="score-value">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="game-board" id="game-board">
+    <canvas class="game-canvas" id="tetris-canvas"></canvas>
+    <div class="pause-overlay" id="pause-overlay">
+      <h2>暂停</h2>
+      <p>按 P 键继续游戏</p>
+      <button class="restart-btn" onclick="resumeGame()">继续游戏</button>
+    </div>
+  </div>
+
+  <!-- 新增：控制按钮 -->
+  <div class="control-panel">
+    <button class="ctrl-btn btn-up" id="rotate-btn">↻</button>
+    <button class="ctrl-btn btn-left" id="left-btn">←</button>
+    <button class="ctrl-btn btn-down" id="down-btn">↓</button>
+    <button class="ctrl-btn btn-right" id="right-btn">→</button>
+    <button class="ctrl-btn btn-hard-drop" id="hard-drop-btn">瞬降</button>
+  </div>
+
+  <div class="game-controls">
+    <button class="restart-btn" onclick="restartGame()">重新开始</button>
+  </div>
+
+  <div class="instructions">
+    <h3><span>ℹ️</span> 游戏规则</h3>
+    <p>键盘：A/D 左右移动，W 旋转，S 加速下落，空格瞬降。移动端：点击下方按钮操作。当一行被完全填满时，该行将被消除并获得分数。</p>
+  </div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  <p>© 2026 士多啤梨除草机 | 经典俄罗斯方块，考验反应速度与空间想象力</p>
+</div>
+
+<script>
+  // 游戏常量
+  const COLS = 10;
+  const ROWS = 20;
+  const BLOCK_SIZE = 30; // 每个格子的像素大小
+  const COLORS = [
+    null,
+    '#FF0D72', // I - 红色
+    '#0DC2FF', // J - 青色
+    '#0DFF72', // L - 绿色
+    '#F538FF', // O - 紫色
+    '#FF8E0D', // S - 橙色
+    '#FFE138', // T - 黄色
+    '#3877FF'  // Z - 蓝色
+  ];
+
+  // 方块形状定义
+  const SHAPES = [
+    [],
+    [[0,0,0,0], [1,1,1,1], [0,0,0,0], [0,0,0,0]], // I
+    [[2,0,0], [2,2,2], [0,0,0]],                   // J
+    [[0,0,3], [3,3,3], [0,0,0]],                   // L
+    [[4,4], [4,4]],                                // O
+    [[0,5,5], [5,5,0], [0,0,0]],                   // S
+    [[0,6,0], [6,6,6], [0,0,0]],                   // T
+    [[7,7,0], [0,7,7], [0,0,0]]                    // Z
+  ];
+
+  // 游戏状态
+  let canvas, ctx;
+  let board = [];
+  let score = 0;
+  let lines = 0;
+  let level = 1;
+  let gameOver = false;
+  let paused = false;
+  let dropCounter = 0;
+  let dropInterval = 1000; // 初始下落间隔（毫秒）
+  let lastTime = 0;
+
+  // 当前方块
+  let player = {
+    pos: {x: 0, y: 0},
+    matrix: null,
+    score: 0
+  };
+
+  // DOM元素
+  const scoreElement = document.getElementById('score');
+  const levelElement = document.getElementById('level');
+  const linesElement = document.getElementById('lines');
+  const pauseOverlay = document.getElementById('pause-overlay');
+
+  // 初始化游戏
+  function init() {
+    canvas = document.getElementById('tetris-canvas');
+    ctx = canvas.getContext('2d');
+    
+    // 设置画布尺寸
+    canvas.width = COLS * BLOCK_SIZE;
+    canvas.height = ROWS * BLOCK_SIZE;
+    ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
+
+    createBoard();
+    resetGame();
+    requestAnimationFrame(update);
+    setupEventListeners(); // 初始化事件监听器
+  }
+
+  // 设置事件监听器
+  function setupEventListeners() {
+    // 键盘事件 - 修改为ASDW
+    document.addEventListener('keydown', event => {
+      if (gameOver || paused) return;
+
+      switch (event.key.toLowerCase()) { // 使用toLowerCase确保大小写都能响应
+        case 'a': // 左
+          playerMove(-1);
+          break;
+        case 'd': // 右
+          playerMove(1);
+          break;
+        case 's': // 下
+          playerDrop();
+          break;
+        case 'w': // 旋转
+          playerRotate(1);
+          break;
+        case ' ': // 空格 - 瞬降
+          playerHardDrop();
+          break;
+        case 'p': // P键 - 暂停
+          togglePause();
+          break;
+      }
+    });
+
+    // 移动端按钮事件
+    document.getElementById('left-btn').addEventListener('click', () => playerMove(-1));
+    document.getElementById('right-btn').addEventListener('click', () => playerMove(1));
+    document.getElementById('down-btn').addEventListener('click', () => playerDrop());
+    document.getElementById('rotate-btn').addEventListener('click', () => playerRotate(1));
+    document.getElementById('hard-drop-btn').addEventListener('click', () => playerHardDrop());
+  }
+
+  // 创建游戏板
+  function createBoard() {
+    board = [];
+    for (let y = 0; y < ROWS; y++) {
+      board[y] = [];
+      for (let x = 0; x < COLS; x++) {
+        board[y][x] = 0;
+      }
+    }
+  }
+
+  // 重置游戏
+  function resetGame() {
+    createBoard();
+    score = 0;
+    lines = 0;
+    level = 1;
+    gameOver = false;
+    paused = false;
+    dropInterval = 1000;
+    updateScore();
+    resetPlayer();
+  }
+
+  // 重置玩家（下一个方块）
+  function resetPlayer() {
+    const pieces = 'IJLOSTZ';
+    player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+    player.pos.y = 0;
+    player.pos.x = (COLS / 2 | 0) - (player.matrix[0].length / 2 | 0);
+    
+    // 检查游戏结束
+    if (collide()) {
+      gameOver = true;
+      alert('游戏结束！');
+    }
+  }
+
+  // 创建方块
+  function createPiece(type) {
+    if (type === 'I') return SHAPES[1];
+    if (type === 'J') return SHAPES[2];
+    if (type === 'L') return SHAPES[3];
+    if (type === 'O') return SHAPES[4];
+    if (type === 'S') return SHAPES[5];
+    if (type === 'T') return SHAPES[6];
+    if (type === 'Z') return SHAPES[7];
+  }
+
+  // 绘制游戏
+  function draw() {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    drawMatrix(board, {x: 0, y: 0});
+    drawMatrix(player.matrix, player.pos);
+  }
+
+  // 绘制矩阵
+  function drawMatrix(matrix, offset) {
+    matrix.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value !== 0) {
+          ctx.fillStyle = COLORS[value];
+          ctx.fillRect(x + offset.x, y + offset.y, 1, 1);
+          
+          // 添加边框效果
+          ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+          ctx.lineWidth = 0.05;
+          ctx.strokeRect(x + offset.x, y + offset.y, 1, 1);
+        }
+      });
+    });
+  }
+
+  // 碰撞检测
+  function collide() {
+    const [m, o] = [player.matrix, player.pos];
+    for (let y = 0; y < m.length; ++y) {
+      for (let x = 0; x < m[y].length; ++x) {
+        if (m[y][x] !== 0 &&
+           (board[y + o.y] &&
+            board[y + o.y][x + o.x]) !== 0) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  // 合并方块到面板
+  function merge() {
+    player.matrix.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value !== 0) {
+          board[y + player.pos.y][x + player.pos.x] = value;
+        }
+      });
+    });
+  }
+
+  // 旋转方块
+  function rotate(matrix) {
+    const N = matrix.length - 1;
+    const result = matrix.map((row, i) =>
+      row.map((val, j) => matrix[N - j][i])
+    );
+    return result;
+  }
+
+  // 旋转玩家方块
+  function playerRotate(dir) {
+    const pos = player.pos.x;
+    let offset = 1;
+    rotate(player.matrix);
+    while (collide()) {
+      player.pos.x += offset;
+      offset = -(offset + (offset > 0 ? 1 : -1));
+      if (offset > player.matrix[0].length) {
+        rotate(player.matrix);
+        player.pos.x = pos;
+        return;
+      }
+    }
+  }
+
+  // 玩家移动
+  function playerDrop() {
+    player.pos.y++;
+    if (collide()) {
+      player.pos.y--;
+      merge();
+      resetPlayer();
+      clearLines();
+      updateScore();
+    }
+    dropCounter = 0;
+  }
+
+  // 玩家移动水平
+  function playerMove(dir) {
+    player.pos.x += dir;
+    if (collide()) {
+      player.pos.x -= dir;
+    }
+  }
+
+  // 瞬间下落
+  function playerHardDrop() {
+    while (!collide()) {
+      player.pos.y++;
+    }
+    player.pos.y--;
+    playerDrop();
+  }
+
+  // 清除完整行
+  function clearLines() {
+    let lineCount = 0;
+    outer: for (let y = ROWS - 1; y >= 0; --y) {
+      for (let x = 0; x < COLS; ++x) {
+        if (board[y][x] === 0) {
+          continue outer;
+        }
+      }
+
+      // 移除这一行
+      const row = board.splice(y, 1)[0].fill(0);
+      board.unshift(row);
+      ++y; // 检查新插入的行
+
+      lineCount++;
+    }
+
+    if (lineCount > 0) {
+      // 计分：1行=40分，2行=100分，3行=300分，4行=1200分
+      const points = [0, 40, 100, 300, 1200][lineCount] * level;
+      score += points;
+      lines += lineCount;
+      
+      // 每10行升一级
+      level = Math.floor(lines / 10) + 1;
+      // 随着等级提升，下降速度加快（最小100ms）
+      dropInterval = Math.max(100, 1000 - (level - 1) * 100);
+      
+      updateScore();
+    }
+  }
+
+  // 更新分数显示
+  function updateScore() {
+    scoreElement.textContent = score;
+    levelElement.textContent = level;
+    linesElement.textContent = lines;
+  }
+
+  // 游戏主循环
+  function update(time = 0) {
+    if (paused || gameOver) {
+      requestAnimationFrame(update);
+      return;
+    }
+    
+    const deltaTime = time - lastTime;
+    lastTime = time;
+    
+    dropCounter += deltaTime;
+    if (dropCounter > dropInterval) {
+      playerDrop();
+    }
+
+    draw();
+    requestAnimationFrame(update);
+  }
+
+  // 暂停/恢复游戏
+  function togglePause() {
+    paused = !paused;
+    pauseOverlay.classList.toggle('active', paused);
+  }
+
+  function resumeGame() {
+    if (paused) {
+      togglePause();
+    }
+  }
+
+  // 重启游戏
+  function restartGame() {
+    resetGame();
+  }
+
+  // 页面加载完成后初始化
+  document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>">联系我</a>
             </div>
         </div>
     </nav>
