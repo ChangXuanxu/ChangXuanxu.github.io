@@ -74,7 +74,7 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
       <a href="fun-tools.html">趣味组件</a>
       <a href="blog.html">个人博客</a>
       <a href="games.html">小游戏</a>
-      <a href="#" style="color: #007bff; font-weight: bold;">2048</a>
+      <a href=" ">联系我</a>
     </div>
   </div>
 </nav>
@@ -191,51 +191,61 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
   }
 
   // 4. 创建或更新方块元素 - 精确位置控制
-  function createOrUpdateTile(x, y, value, isNew = false) {
-    const key = `${x},${y}`;
+  // 4. 创建或更新方块元素 - 精确位置控制 (替换原函数)
+function createOrUpdateTile(x, y, value, isNew = false) {
+  const key = `${x},${y}`;
+  
+  // 获取或创建方块
+  let tile;
+  if (tileElements[key]) {
+    tile = tileElements[key];
+    // 更新已有方块
+    tile.className = `tile tile-${value}`;
+    tile.textContent = value;
+  } else {
+    // 创建新方块
+    tile = document.createElement('div');
+    tile.className = `tile tile-${value}`;
+    tile.textContent = value;
+    tile.dataset.x = x;
+    tile.dataset.y = y;
+    gameBoard.appendChild(tile);
+    tileElements[key] = tile;
     
-    // 获取或创建方块
-    let tile;
-    if (tileElements[key]) {
-      tile = tileElements[key];
-      // 更新已有方块
-      tile.className = `tile tile-${value}`;
-      tile.textContent = value;
-    } else {
-      // 创建新方块
-      tile = document.createElement('div');
-      tile.className = `tile tile-${value}`;
-      tile.textContent = value;
-      tile.dataset.x = x;
-      tile.dataset.y = y;
-      gameBoard.appendChild(tile);
-      tileElements[key] = tile;
-      
-      // 新方块添加出现动画
-      if (isNew) {
-        tile.style.opacity = '0';
-        tile.style.transform = 'scale(0.8)';
-        setTimeout(() => {
-          tile.style.opacity = '1';
-          tile.style.transform = 'scale(1)';
-        }, 10);
-      }
+    // 新方块添加出现动画
+    if (isNew) {
+      tile.style.opacity = '0';
+      tile.style.transform = 'scale(0.8)';
+      setTimeout(() => {
+        tile.style.opacity = '1';
+        tile.style.transform = 'scale(1)';
+      }, 10);
     }
-    
-    // 精确计算位置 - 基于网格系统
-    const cellSize = 25; // 每个单元格占25%
-    const margin = 10; // 10px gap
-    const marginPercent = (margin * 8) / (gameBoard.offsetWidth || 500) * 100; // 近似计算
-    
-    const left = y * cellSize + (y * marginPercent);
-    const top = x * cellSize + (x * marginPercent);
-    
-    tile.style.left = `${left}%`;
-    tile.style.top = `${top}%`;
-    
-    return tile;
   }
-
+  
+  // 精确计算位置 - 基于CSS Grid系统
+  // 每个单元格占25%，但需考虑网格间隙(gap)
+  const cellSize = 25;
+  const gap = 10; // 与CSS中的gap值一致
+  
+  // 计算实际单元格宽度 (减去3个间隙)
+  const cellWidth = (100 - 3 * gap) / 4;
+  
+  // 计算左偏移 (考虑间隙)
+  const left = y * (cellWidth + gap) + 1; // +1 避免像素对齐问题
+  // 计算上偏移
+  const top = x * (cellWidth + gap) + 1;
+  
+  // 应用精确位置
+  tile.style.left = `${left}%`;
+  tile.style.top = `${top}%`;
+  
+  // 保持方块大小一致
+  tile.style.width = `${cellWidth}%`;
+  tile.style.height = `${cellWidth}%`;
+  
+  return tile;
+}
   // 5. 核心移动逻辑
   function move(direction) {
     if (!canMove) return false;
