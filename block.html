@@ -24,7 +24,7 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
 .score-value { font-size: 20px; font-weight: bold; color: #2c3e50; }
 .best-value { color: #007bff; }
 /* 游戏面板 */
-.game-board { width: 100%; height: 0; padding-bottom: 100%; background: #111; border-radius: 10px; position: relative; margin-bottom: 30px; overflow: hidden; }
+.game-board { width: 100%; height: 0; padding-bottom: 100%; background: #2c3e50; border-radius: 10px; position: relative; margin-bottom: 30px; overflow: hidden; box-shadow: inset 0 0 10px rgba(0,0,0,0.3); }
 .game-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 /* 控制按钮布局 */
 .control-panel { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
@@ -40,9 +40,12 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
     transition: background 0.2s; 
     user-select: none; 
     touch-action: manipulation; /* 优化移动端触摸体验 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .ctrl-btn:hover { background: #7f6a56; }
-.ctrl-btn:active { background: #6f5a46; }
+.ctrl-btn:active { background: #6f5a46; transform: scale(0.95); }
 .btn-left { grid-column: 1; grid-row: 2; }
 .btn-right { grid-column: 3; grid-row: 2; }
 .btn-up { grid-column: 2; grid-row: 1; }
@@ -56,17 +59,16 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
 .instructions h3 { color: #2c3e50; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
 .instructions p { color: #666; line-height: 1.6; }
 /* 暂停提示 */
-.pause-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.pause-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44, 62, 80, 0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
 .pause-overlay.active { opacity: 1; pointer-events: all; }
 .pause-overlay h2 { font-size: 48px; color: white; margin-bottom: 20px; }
-.pause-overlay p { font-size: 20px; color: #aaa; margin-bottom: 30px; }
-/* 页脚（复用原网站样式） */
-.footer { text-align: center; padding: 20px; color: #666; border-top: 1px solid #eee; max-width: 1200px; margin: 0 auto; }
+.pause-overlay p { font-size: 20px; color: #ddd; margin-bottom: 30px; }
 /* 移动端优化 */
 @media (max-width: 500px) {
   .game-board { margin: 0 auto 25px; }
   .ctrl-btn { padding: 20px 0; font-size: 24px; }
   .btn-hard-drop { grid-column: 1 / span 3; grid-row: 3; }
+  .game-container { padding: 15px; }
 }
 </style>
 </head>
@@ -109,12 +111,12 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
     <canvas class="game-canvas" id="tetris-canvas"></canvas>
     <div class="pause-overlay" id="pause-overlay">
       <h2>暂停</h2>
-      <p>按 P 键继续游戏</p>
+      <p>按 P 键或点击继续游戏</p>
       <button class="restart-btn" onclick="resumeGame()">继续游戏</button>
     </div>
   </div>
 
-  <!-- 新增：控制按钮 -->
+  <!-- 控制按钮 - 简化后的布局 -->
   <div class="control-panel">
     <button class="ctrl-btn btn-up" id="rotate-btn">↻</button>
     <button class="ctrl-btn btn-left" id="left-btn">←</button>
@@ -129,7 +131,7 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
 
   <div class="instructions">
     <h3><span>ℹ️</span> 游戏规则</h3>
-    <p>键盘：A/D 左右移动，W 旋转，S 加速下落，空格瞬降。移动端：点击下方按钮操作。当一行被完全填满时，该行将被消除并获得分数。</p>
+    <p>键盘：A/D 或方向键移动，W/↑旋转，S/↓加速下落，空格瞬降，P键暂停。移动端：点击下方按钮操作。</p>
   </div>
 </div>
 
@@ -226,37 +228,46 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
     // 设置画布尺寸
     canvas.width = COLS * BLOCK_SIZE;
     canvas.height = ROWS * BLOCK_SIZE;
-    ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
-
+    
+    // 不再使用scale，而是直接在绘图时使用BLOCK_SIZE
     createBoard();
     resetGame();
     requestAnimationFrame(update);
     setupEventListeners(); // 初始化事件监听器
   }
 
-  // 设置事件监听器
+  // 设置事件监听器 - 简化操作方式
   function setupEventListeners() {
-    // 键盘事件 - 修改为ASDW
+    // 键盘事件 - 支持方向键和ASDW
     document.addEventListener('keydown', event => {
       if (gameOver || paused) return;
 
-      switch (event.key.toLowerCase()) { // 使用toLowerCase确保大小写都能响应
-        case 'a': // 左
+      switch (event.key) {
+        case 'ArrowLeft':
+        case 'a':
+        case 'A':
           playerMove(-1);
           break;
-        case 'd': // 右
+        case 'ArrowRight':
+        case 'd':
+        case 'D':
           playerMove(1);
           break;
-        case 's': // 下
+        case 'ArrowDown':
+        case 's':
+        case 'S':
           playerDrop();
           break;
-        case 'w': // 旋转
+        case 'ArrowUp':
+        case 'w':
+        case 'W':
           playerRotate(1);
           break;
-        case ' ': // 空格 - 瞬降
+        case ' ':
           playerHardDrop();
           break;
-        case 'p': // P键 - 暂停
+        case 'p':
+        case 'P':
           togglePause();
           break;
       }
@@ -268,6 +279,11 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
     document.getElementById('down-btn').addEventListener('click', () => playerDrop());
     document.getElementById('rotate-btn').addEventListener('click', () => playerRotate(1));
     document.getElementById('hard-drop-btn').addEventListener('click', () => playerHardDrop());
+    
+    // 点击游戏面板也可以暂停/继续
+    canvas.addEventListener('click', () => {
+      if (paused) resumeGame();
+    });
   }
 
   // 创建游戏板
@@ -324,10 +340,29 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
 
   // 绘制游戏
   function draw() {
-    ctx.fillStyle = '#000';
+    // 绘制背景
+    ctx.fillStyle = '#2c3e50'; // 与页面设计一致的深蓝色背景
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // 绘制网格线
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x <= COLS; x++) {
+      ctx.beginPath();
+      ctx.moveTo(x * BLOCK_SIZE, 0);
+      ctx.lineTo(x * BLOCK_SIZE, ROWS * BLOCK_SIZE);
+      ctx.stroke();
+    }
+    for (let y = 0; y <= ROWS; y++) {
+      ctx.beginPath();
+      ctx.moveTo(0, y * BLOCK_SIZE);
+      ctx.lineTo(COLS * BLOCK_SIZE, y * BLOCK_SIZE);
+      ctx.stroke();
+    }
+
+    // 绘制已固定的方块
     drawMatrix(board, {x: 0, y: 0});
+    // 绘制当前活动的方块
     drawMatrix(player.matrix, player.pos);
   }
 
@@ -336,13 +371,38 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
     matrix.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value !== 0) {
+          // 绘制方块填充
           ctx.fillStyle = COLORS[value];
-          ctx.fillRect(x + offset.x, y + offset.y, 1, 1);
+          ctx.fillRect(
+            (x + offset.x) * BLOCK_SIZE, 
+            (y + offset.y) * BLOCK_SIZE, 
+            BLOCK_SIZE, 
+            BLOCK_SIZE
+          );
           
-          // 添加边框效果
-          ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-          ctx.lineWidth = 0.05;
-          ctx.strokeRect(x + offset.x, y + offset.y, 1, 1);
+          // 绘制方块边框
+          ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(
+            (x + offset.x) * BLOCK_SIZE, 
+            (y + offset.y) * BLOCK_SIZE, 
+            BLOCK_SIZE, 
+            BLOCK_SIZE
+          );
+          
+          // 添加立体效果
+          ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+          ctx.lineWidth = 1;
+          // 顶部边
+          ctx.beginPath();
+          ctx.moveTo((x + offset.x) * BLOCK_SIZE, (y + offset.y) * BLOCK_SIZE);
+          ctx.lineTo((x + offset.x + 1) * BLOCK_SIZE, (y + offset.y) * BLOCK_SIZE);
+          ctx.stroke();
+          // 左侧边
+          ctx.beginPath();
+          ctx.moveTo((x + offset.x) * BLOCK_SIZE, (y + offset.y) * BLOCK_SIZE);
+          ctx.lineTo((x + offset.x) * BLOCK_SIZE, (y + offset.y + 1) * BLOCK_SIZE);
+          ctx.stroke();
         }
       });
     });
