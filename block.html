@@ -166,6 +166,32 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
     [[7,7,0], [0,7,7], [0,0,0]]                    // Z
   ];
 
+  // SRS旋转系统踢墙规则
+  const KICK_TABLE = {
+    // I型方块的踢墙表
+    I: [
+      // 0 -> R (顺时针)
+      [[0,0], [-2,0], [1,0], [-2,-1], [1,2]],
+      // R -> 2
+      [[0,0], [-1,0], [2,0], [-1,2], [2,-1]],
+      // 2 -> L
+      [[0,0], [2,0], [-1,0], [2,1], [-1,-2]],
+      // L -> 0
+      [[0,0], [1,0], [-2,0], [1,-2], [-2,1]]
+    ],
+    // 所有其他方块的踢墙表
+    other: [
+      // 0 -> R (顺时针)
+      [[0,0], [-1,0], [-1,1], [0,-2], [-1,-2]],
+      // R -> 2
+      [[0,0], [1,0], [1,-1], [0,2], [1,2]],
+      // 2 -> L
+      [[0,0], [1,0], [1,1], [0,-2], [1,-2]],
+      // L -> 0
+      [[0,0], [-1,0], [-1,-1], [0,2], [-1,2]]
+    ]
+  };
+
   // 游戏状态
   let canvas, ctx;
   let board = [];
@@ -182,7 +208,8 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
   let player = {
     pos: {x: 0, y: 0},
     matrix: null,
-    score: 0
+    type: '',
+    rotationState: 0 // 当前旋转状态 (0-3)
   };
 
   // DOM元素
@@ -270,9 +297,12 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
   // 重置玩家（下一个方块）
   function resetPlayer() {
     const pieces = 'IJLOSTZ';
-    player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+    const randType = pieces[Math.floor(Math.random() * pieces.length)];
+    player.type = randType;
+    player.matrix = createPiece(randType);
     player.pos.y = 0;
     player.pos.x = (COLS / 2 | 0) - (player.matrix[0].length / 2 | 0);
+    player.rotationState = 0;
     
     // 检查游戏结束
     if (collide()) {
@@ -344,28 +374,61 @@ body { background-color: #f8f9fa; color: #333; line-height: 1.6; min-height: 100
     });
   }
 
-  // 旋转方块
-  function rotate(matrix) {
-    const N = matrix.length - 1;
-    const result = matrix.map((row, i) =>
-      row.map((val, j) => matrix[N - j][i])
-    );
+  // 矩阵旋转（顺时针90度）
+  function rotateMatrix(matrix) {
+    const N = matrix.length;
+    const result = [];
+    for (let i = 0; i < N; i++) {
+      result[i] = [];
+      for (let j = 0; j < N; j++) {
+        result[i][j] = matrix[N - 1 - j][i];
+      }
+    }
     return result;
   }
 
-  // 旋转玩家方块
+  // 获取当前方块的踢墙表
+  function getKickTable() {
+    return player.type === 'I' ? KICK_TABLE.I : KICK_TABLE.other;
+  }
+
+  // 旋转玩家方块（使用SRS旋转系统）
   function playerRotate(dir) {
-    const pos = player.pos.x;
-    let offset = 1;
-    rotate(player.matrix);
-    while (collide()) {
-      player.pos.x += offset;
-      offset = -(offset + (offset > 0 ? 1 : -1));
-      if (offset > player.matrix[0].length) {
-        rotate(player.matrix);
-        player.pos.x = pos;
-        return;
+    // 保存当前状态
+    const originalRotation = player.rotationState;
+    const originalMatrix = player.matrix;
+    const originalPos = {x: player.pos.x, y: player.pos.y};
+    
+    // 计算新的旋转状态
+    const newRotationState = (player.rotationState + dir + 4) % 4;
+    
+    // 旋转方块矩阵
+    player.matrix = rotateMatrix(player.matrix);
+    player.rotationState = newRotationState;
+    
+    // 获取踢墙表
+    const kickTable = getKickTable();
+    const rotationIndex = (dir > 0) ? originalRotation : (originalRotation + 3) % 4;
+    const kicks = kickTable[rotationIndex];
+    
+    // 尝试踢墙
+    let success = false;
+    for (const kick of kicks) {
+      player.pos.x = originalPos.x + kick[0];
+      player.pos.y = originalPos.y + kick[1];
+      
+      if (!collide()) {
+        success = true;
+        break;
       }
+    }
+    
+    // 如果所有踢墙尝试都失败，恢复到原来的状态
+    if (!success) {
+      player.matrix = originalMatrix;
+      player.rotationState = originalRotation;
+      player.pos.x = originalPos.x;
+      player.pos.y = originalPos.y;
     }
   }
 
