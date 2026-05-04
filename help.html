@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏帮助 · 高考闯关学途卡牌 - 士多啤梨除草机</title>
+    <style>
+        :root {
+            --bg: #f5f0eb;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --text-light: #666;
+            --blue: #3b5998;
+            --gold: #c8963e;
+            --red: #b84c3d;
+            --green: #4a8c5c;
+            --purple: #6b4e7d;
+            --shadow: 0 3px 16px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.11);
+            --radius: 14px;
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+        }
+        body {
+            background-color: #f0ebe3;
+            background-image: radial-gradient(ellipse at 50% 0%, #f7f3ee 0%, #e8dfd5 100%);
+            min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 58px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        .navbar-content {
+            width: 1200px;
+            max-width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+        }
+        .logo {
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--blue);
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+        .nav-menu a {
+            margin: 0 14px;
+            color: #444;
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+        .nav-menu a:hover { color: var(--blue); }
+
+        .back-btn {
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            padding: 8px 18px;
+            background: rgba(255, 255, 255, 0.85);
+            color: #555;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 13px;
+            z-index: 99;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .back-btn:hover {
+            background: #fff;
+            color: #222;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        }
+
+        .help-container {
+            padding-top: 100px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding-bottom: 80px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .help-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        h1 {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--blue);
+            margin: 24px 0 12px;
+            border-left: 5px solid var(--gold);
+            padding-left: 14px;
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 16px 0 8px;
+            color: #444;
+        }
+        p, li {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #555;
+        }
+        ul {
+            padding-left: 24px;
+            margin: 8px 0;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        .highlight {
+            font-weight: 700;
+            color: var(--blue);
+        }
+        .gold {
+            color: var(--gold);
+            font-weight: 600;
+        }
+        .red {
+            color: var(--red);
+            font-weight: 600;
+        }
+        .green {
+            color: var(--green);
+            font-weight: 600;
+        }
+        .tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 0 2px;
+        }
+        .tag-blue {
+            background: #e0e8f5;
+            color: #2d4470;
+        }
+        .tag-gold {
+            background: #f8eedb;
+            color: #a87a2e;
+        }
+        .tag-green {
+            background: #dff0e5;
+            color: #2d6a4f;
+        }
+        .tag-purple {
+            background: #f1e6f5;
+            color: #6b4e7d;
+        }
+        .divider {
+            border: none;
+            border-top: 2px dashed #e0d8cb;
+            margin: 20px 0;
+        }
+        .resonance-box {
+            background: #faf8f5;
+            border-radius: 10px;
+            padding: 12px 18px;
+            margin: 12px 0;
+            border-left: 4px solid var(--gold);
+        }
+        .card-example {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f5f3ef;
+            border-radius: 8px;
+            padding: 4px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+        }
+        .card-example span {
+            font-size: 16px;
+        }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+        }
+
+        @media (max-width: 600px) {
+            .help-container {
+                padding-top: 90px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="logo">士多啤梨除草机</a>
+            <div class="nav-menu">
+                <a href="index.html">首页</a>
+                <a href="fun-tools.html">趣味组件</a>
+                <a href="blog.html">个人博客</a>
+                <a href="games.html">小游戏</a>
+                <a href="#">联系我</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 返回游戏按钮 -->
+    <a href="gaokao-game.html" class="back-btn">← 返回游戏</a>
+
+    <!-- 帮助内容 -->
+    <div class="help-container">
+        <div class="help-card">
+            <h1>📖 游戏帮助 · 学途卡牌规则</h1>
+            <p style="text-align:center; margin-top:8px; color:#888;">语数外基础辅助 · 英语赐福系统 · 六科选考流派</p>
+        </div>
+
+        <!-- 游戏概述 -->
+        <div class="help-card">
+            <h2>🎯 游戏目标</h2>
+            <p>你是一名即将高考的学子，需要通过<strong>九大学科</strong>的考验。你将从<strong>物理、化学、生物、历史、地理、政治</strong>中选择3门作为选考科目，搭配必考的<strong>语文、数学、英语</strong>组成你的专属卡组。每一关你将面对一道学科题目，通过打出卡牌与自动攻击击败它，获取分数，最终完成全部科目考试。</p>
+        </div>
+
+        <!-- 基础规则 -->
+        <div class="help-card">
+            <h2>⚙️ 基础规则</h2>
+            <ul>
+                <li><span class="highlight">精力（⚡）</span>：每回合固定获得<strong>3点精力</strong>（可通过卡牌提升上限），用于打出卡牌。未用完的精力最多<span class="gold">留存2点到下一回合</span>。</li>
+                <li><span class="highlight">手牌</span>：每回合从你的<strong>卡池</strong>中随机抽取<strong>3张卡牌</strong>（部分效果可增加抽牌数）。</li>
+                <li><span class="highlight">学识（⚔️）</span>：影响你<strong>自动答题（基础攻击）</strong>的伤害，部分语文卡牌可临时提升学识。</li>
+                <li><span class="highlight">专注力（❤️）</span>：你的生命值，遭到敌人反击会减少，<strong>归零则游戏结束</strong>。</li>
+                <li><span class="highlight">回合流程</span>：抽牌 → 出牌（消耗精力）→ 点击“结束回合”触发<strong>自动答题</strong>与<strong>敌人反击</strong>，然后进入下一回合。</li>
+                <li><span class="highlight">击败题目</span>：题目血量归零后，获得分数奖励，并进入<strong>知识商店</strong>购买进阶卡牌。</li>
+            </ul>
+        </div>
+
+        <!-- 基础三科 -->
+        <div class="help-card">
+            <h2>📚 基础学科（语文·数学·英语）</h2>
+            <p>语数英作为<strong>必考科目</strong>，它们不直接制造复杂的印记流派，而是为你的选考流派提供<strong>全局辅助</strong>。</p>
+            <div class="flex-row">
+                <div style="flex:1; min-width:200px;">
+                    <h3>📖 语文 · 治疗与增益</h3>
+                    <p>定位：<span class="green">回复专注力</span>、积攒<strong>文思</strong>层数、临时提升学识。</p>
+                    <p>代表卡牌：<span class="card-example"><span>📖</span>温故知新</span> 回复8专注力并获取文思；<span class="card-example"><span>✍️</span>妙笔生花</span> 临时提升学识。</p>
+                </div>
+                <div style="flex:1; min-width:200px;">
+                    <h3>🔢 数学 · 资源与抽牌</h3>
+                    <p>定位：<span class="gold">获得额外精力</span>、多抽牌、减免手牌费用。</p>
+                    <p>代表卡牌：<span class="card-example"><span>📐</span>逻辑推导</span> 0费抽1牌+1精力；<span class="card-example"><span>🧮</span>简化运算</span> 本回合手牌费用-1。</p>
+                </div>
+            </div>
+            <hr class="divider">
+            <h3>🌟 英语 · 赐福系统</h3>
+            <p>英语引入了独特的<strong>「赐福」</strong>资源。赐福是一种跨回合积累的能量，部分英语卡牌可以<strong>消耗赐福</strong>来换取大量精力、抽牌或治疗。</p>
+            <p>代表卡牌：<span class="card-example"><span>📿</span>圣言诵读</span> 获得2赐福+抽1牌；<span class="card-example"><span>🕊️</span>恩典降临</span> 获得3赐福+回复5专注；<span class="card-example"><span>🌈</span>神启</span> 消耗3赐福，获得2精力+抽1牌。</p>
+            <p><span class="tag tag-purple">赐福管理</span> <span class="tag tag-blue">额外行动力</span> <span class="tag tag-gold">卡池循环</span></p>
+        </div>
+
+        <!-- 选考六科 -->
+        <div class="help-card">
+            <h2>🧪 选考六科 · 流派详解</h2>
+            <p>选考科目拥有独特的<strong>印记机制与流派联动</strong>，是输出的核心。每个科目都有专属的计数器或标记，恰当组合能打出高额爆发。</p>
+
+            <h3>⚛️ 物理 · 动量流派</h3>
+            <p>为敌人叠加<strong>动量</strong>层数，再使用“力的作用”等卡牌消耗所有动量造成<strong>巨额伤害</strong>。电磁风暴可施加<strong>易伤</strong>，提高后续攻击。</p>
+            <p><span class="tag tag-blue">动量标记</span> <span class="tag tag-red">易伤</span></p>
+
+            <h3>🧪 化学 · 酸碱反应</h3>
+            <p>给敌人附加<strong>酸</strong>或<strong>碱</strong>标记。当酸与碱同时存在时，打出碱性卡牌会触发<strong>中和反应</strong>，造成额外伤害。催化剂可引爆所有标记，铝热剂附加灼烧。</p>
+            <p><span class="tag tag-red">酸标记</span> <span class="tag tag-blue">碱标记</span> <span class="tag tag-gold">中和爆发</span> <span class="tag tag-red">灼烧</span></p>
+
+            <h3>🧬 生物 · 进化成长</h3>
+            <p>通过“细胞分裂”等卡牌积累<strong>进化点</strong>。进化点可以消耗造成伤害（自然代谢），或通过“溶酶体爆破”等卡牌按倍数输出。部分卡牌在专注力低时获得额外进化点。</p>
+            <p><span class="tag tag-green">进化点</span> <span class="tag tag-gold">低生命收益</span></p>
+
+            <h3>📜 历史 · 年代印记</h3>
+            <p>积攒<strong>年代印记</strong>层数，用于减免手牌费用（读史明智），或通过“朝代更迭”一次性消耗所有印记造成伤害并回复专注力。</p>
+            <p><span class="tag tag-gold">年代印记</span> <span class="tag tag-blue">费用减免</span></p>
+
+            <h3>🌍 地理 · 地形改造</h3>
+            <p>改变战场<strong>地形</strong>，不同的地形提供不同增益：<strong>山地</strong>增加伤害，<strong>平原</strong>每回合回复专注力，<strong>海洋</strong>提供更稳定的回复。部分卡牌还可附加致盲效果。</p>
+            <p><span class="tag tag-green">地形效果</span> <span class="tag tag-blue">致盲</span></p>
+
+            <h3>⚖️ 政治 · 光环与缴械</h3>
+            <p>施加<strong>同一性光环</strong>，使我方所有伤害提升。矛盾分析可造成伤害并为光环铺路，真理之辨能<strong>缴械</strong>敌人使其无法反击。</p>
+            <p><span class="tag tag-purple">光环增益</span> <span class="tag tag-red">缴械</span></p>
+        </div>
+
+        <!-- 学科共鸣 -->
+        <div class="help-card">
+            <h2>✨ 学科共鸣（被动）</h2>
+            <p>当你选择的6门学科中包含特定<strong>两两组合</strong>时，会激活强大的被动效果：</p>
+            <div class="resonance-box">
+                <strong>🖋️ 笔墨春秋（语文+历史）</strong>：获得文思时额外+1年代印记。<br>
+                <strong>🔬 数理推演（物理+数学）</strong>：造成伤害时有一定几率获得证明层数。<br>
+                <strong>🌺 分子花园（化学+生物）</strong>：酸碱中和反应时额外施加1层灼烧。<br>
+                <strong>🏛️ 江山社稷（地理+政治）</strong>：地形增益效果翻倍。<br>
+                <strong>🌏 格物致知（物理+地理）</strong>：动量相关伤害+3。<br>
+                <strong>🌐 国际关系（英语+政治）</strong>：获得赐福时额外+1。
+            </div>
+        </div>
+
+        <!-- 商店与进阶 -->
+        <div class="help-card">
+            <h2>🛒 知识商店与卡池扩充</h2>
+            <p>击败题目后进入商店，你可以使用累积的<strong>分数</strong>购买<strong>进阶卡牌</strong>。购买的卡牌将<strong>永久加入你的卡池</strong>，在后续战斗中可被抽取。适当购买强力卡牌是通关的关键。</p>
+            <p>如果不想购买，可以点击“跳过购买”继续下一题。</p>
+        </div>
+
+        <!-- 小贴士 -->
+        <div class="help-card">
+            <h2>💡 实用技巧</h2>
+            <ul>
+                <li>优先使用<strong>数学卡牌</strong>过牌和获取精力，再打出高费选考卡牌。</li>
+                <li>保持<strong>专注力</strong>健康，适时使用语文治疗卡。</li>
+                <li>积累<strong>赐福</strong>后再用英语消耗牌，能产生大量资源。</li>
+                <li>注意敌人身上的<strong>标记组合</strong>（如酸+碱），触发联动伤害。</li>
+                <li>模考关卡（每5关）难度更高，但分数奖励也更丰厚。</li>
+            </ul>
+        </div>
+
+        <p style="text-align:center; color:#aaa; margin-top:32px;">祝你金榜题名，学途顺利！🎓</p>
+    </div>
+</body>
+</html>
