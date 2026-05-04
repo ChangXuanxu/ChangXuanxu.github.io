@@ -819,7 +819,7 @@
 
                 <div class="hand-panel">
                     <div class="hand-title-row">
-                        <span class="hand-title">🃏 当前手牌</span>
+                        <span class="hand-title" id="handTitle">🃏 当前手牌</span>
                         <span class="energy-display" id="energyDots"></span>
                     </div>
                     <div class="card-container" id="cardContainer"><div style="color:#bbb;font-size:14px;padding:30px;">抽牌中...</div></div>
@@ -859,7 +859,6 @@
             };
             const SUBJECT_ICONS = { '语文':'📚','数学':'🔢','英语':'🌟','物理':'⚛️','化学':'🧪','生物':'🧬','历史':'📜','地理':'🌍','政治':'⚖️' };
 
-            // 基础学科卡牌（语文、数学、英语）
             const BASE_CARDS = {
                 '语文': [
                     { id: 'cn1', name: '温故知新', cost: 1, icon: '📖', desc: '回复8点专注力\n获得1层【文思】', effect: 'heal_wensi', heal: 8, wensi: 1 },
@@ -875,7 +874,6 @@
                 ],
             };
 
-            // 选考学科基础卡（保留并扩充）
             const ELECTIVE_BASE_CARDS = {
                 '物理': [
                     { id: 'ph1', name: '惯性冲击', cost: 1, icon: '💥', desc: '造成7点伤害\n施加1层【动量】', effect: 'damage_momentum', damage: 7, momentum: 1 },
@@ -909,7 +907,6 @@
                 ],
             };
 
-            // 进阶卡牌（商店购买）
             const ADVANCED_CARDS = {
                 '语文': [
                     { id: 'cn3', name: '文以载道', cost: 2, icon: '📜', desc: '消耗所有文思\n每层回复5专注+造成4伤害', effect: 'wensi_convert', perHeal: 5, perDamage: 4 },
@@ -917,7 +914,7 @@
                 ],
                 '数学': [
                     { id: 'ma3', name: '最优解', cost: 1, icon: '🎯', desc: '抽2张牌\n本回合精力上限+2', effect: 'draw_energy_boost', draw: 2, maxEnergyBoost: 2 },
-                    { id: 'ma4', name: '归纳法', cost: 2, icon: '🧩', desc: '将1张手牌复制加入手牌\n(不触发效果)', effect: 'copy_card' },
+                    { id: 'ma4', name: '归纳法', cost: 2, icon: '🧩', desc: '选择1张手牌\n将其复制加入手牌', effect: 'copy_card' },
                 ],
                 '英语': [
                     { id: 'en3', name: '神启', cost: 1, icon: '🌈', desc: '消耗3层赐福\n额外获得2精力和1张牌', effect: 'grace_inspire', graceCost: 3, energy: 2, draw: 1 },
@@ -984,6 +981,7 @@
                 enemyDifficulty: $('#enemyDifficulty'),
                 enemyMarkers: $('#enemyMarkers'),
                 cardContainer: $('#cardContainer'),
+                handTitle: $('#handTitle'),
                 countersRow: $('#countersRow'),
                 endTurnBtn: $('#endTurnBtn'),
                 shopCards: $('#shopCards'),
@@ -1032,10 +1030,11 @@
                     probCritThisTurn: false,
                     tempKnowledge: 0,
                     discountActive: false,
+                    choosingCard: false,
+                    chooseCallback: null,
                 };
                 cardPool = [];
                 ownedCardIds = new Set();
-                // 加入基础卡
                 for (const subj of allSubjects) {
                     if (BASE_CARDS[subj]) {
                         for (const card of BASE_CARDS[subj]) {
@@ -1090,6 +1089,14 @@
                 updateCountersDisplay();
                 updateEnemyMarkersDisplay();
                 updateResonanceDisplay();
+                // 特殊状态提醒
+                if (gameState.choosingCard) {
+                    dom.handTitle.textContent = '🃏 请点击一张手牌以复制';
+                    dom.endTurnBtn.disabled = true;
+                } else {
+                    dom.handTitle.textContent = '🃏 当前手牌';
+                    dom.endTurnBtn.disabled = false;
+                }
             }
 
             function updateCountersDisplay() {
@@ -1142,21 +1149,28 @@
                 }
                 const totalEnergy = gameState.energy;
                 const discount = gameState.discountActive ? 1 : 0;
+                const isChoosing = gameState.choosingCard;
+
                 for (const card of gameState.hand) {
                     const effectiveCost = Math.max(0, card.cost - discount);
                     const canAfford = totalEnergy >= effectiveCost;
                     let conditionMet = true, reason = '';
-                    if (card.effect === 'grace_inspire' && gameState.counters.grace < (card.graceCost || 3)) { conditionMet = false; reason = '赐福不足'; }
-                    if (card.effect === 'grace_guard' && gameState.counters.grace < (card.graceCost || 2)) { conditionMet = false; reason = '赐福不足'; }
-                    if (card.effect === 'consume_momentum' && (gameState.enemyMarkers._momentum || 0) === 0) { conditionMet = false; reason = '无动量'; }
-                    if (card.effect === 'evo_damage' && gameState.counters.evo < (card.evoCost || 1)) { conditionMet = false; reason = '进化点不足'; }
-                    if (card.effect === 'double_momentum' && (gameState.enemyMarkers._momentum || 0) === 0) { conditionMet = false; reason = '无动量'; }
+                    if (!isChoosing) {
+                        if (card.effect === 'grace_inspire' && gameState.counters.grace < (card.graceCost || 3)) { conditionMet = false; reason = '赐福不足'; }
+                        if (card.effect === 'grace_guard' && gameState.counters.grace < (card.graceCost || 2)) { conditionMet = false; reason = '赐福不足'; }
+                        if (card.effect === 'consume_momentum' && (gameState.enemyMarkers._momentum || 0) === 0) { conditionMet = false; reason = '无动量'; }
+                        if (card.effect === 'evo_damage' && gameState.counters.evo < (card.evoCost || 1)) { conditionMet = false; reason = '进化点不足'; }
+                        if (card.effect === 'double_momentum' && (gameState.enemyMarkers._momentum || 0) === 0) { conditionMet = false; reason = '无动量'; }
+                        if (card.effect === 'copy_card' && gameState.hand.length === 0) { conditionMet = false; reason = '无手牌可复制'; }
+                    }
                     const colorInfo = getSubjectColor(card.subject);
                     const cardEl = document.createElement('div');
                     cardEl.className = 'card';
-                    if (!canAfford) cardEl.classList.add('unplayable');
-                    if (!conditionMet && canAfford) cardEl.classList.add('condition-not-met');
-                    cardEl.style.background = colorInfo.bg;
+                    if (!isChoosing) {
+                        if (!canAfford) cardEl.classList.add('unplayable');
+                        if (!conditionMet && canAfford) cardEl.classList.add('condition-not-met');
+                    }
+                    cardEl.style.background = isChoosing ? 'linear-gradient(145deg, #f5e56c, #d4b830)' : colorInfo.bg;
                     cardEl.innerHTML = `
                 <div class="card-cost-badge">${effectiveCost}</div>
                 <div class="card-icon">${card.icon}</div>
@@ -1165,6 +1179,13 @@
                 <div class="card-subject-tag">${card.subject}</div>
               `;
                     cardEl.addEventListener('click', () => {
+                        if (isChoosing) {
+                            // 自选复制模式
+                            if (gameState.chooseCallback) {
+                                gameState.chooseCallback(card);
+                            }
+                            return;
+                        }
                         if (!canAfford) { addLog('⚠️ 精力不足'); return; }
                         if (!conditionMet) { addLog('⚠️ ' + reason); return; }
                         playCard(card, effectiveCost);
@@ -1180,7 +1201,7 @@
                 executeCardEffect(card);
                 renderHand();
                 updateDisplay();
-                if (gameState.energy <= 0) dom.endTurnBtn.classList.add('flash');
+                if (gameState.energy <= 0 && !gameState.choosingCard) dom.endTurnBtn.classList.add('flash');
             }
 
             function executeCardEffect(card) {
@@ -1214,7 +1235,26 @@
                     case 'wensi_convert': const wc = gs.counters.wensi; gs.counters.wensi = 0; dealDamage(wc * card.perDamage); gs.focus = clamp(gs.focus + wc * card.perHeal, 0, gs.maxFocus); addLog(`  ↳ 消耗${wc}文思，造成${wc*card.perDamage}伤害，回复${wc*card.perHeal}专注`); break;
                     case 'wensi_boost': gs.counters.wensi += card.wensi; gs.specialEffects.nextBonus = (gs.specialEffects.nextBonus || 0) + card.nextBonus; addLog(`  ↳ 文思+${card.wensi}，下张选考牌伤害+${card.nextBonus}`); break;
                     case 'draw_energy_boost': for (let i = 0; i < card.draw; i++) { if (cardPool.length > 0) { const ec = cardPool[Math.floor(Math.random() * cardPool.length)]; gs.hand.push({...ec}); addLog(`  ↳ 抽到【${ec.name}】`); } } gs.maxEnergy += card.maxEnergyBoost; gs.energy = clamp(gs.energy + card.maxEnergyBoost, 0, gs.maxEnergy); addLog(`  ↳ 精力上限+${card.maxEnergyBoost}`); break;
-                    case 'copy_card': if (gs.hand.length > 0) { const copy = {...gs.hand[0]}; gs.hand.push(copy); addLog(`  ↳ 复制【${copy.name}】`); } break;
+                    case 'copy_card':
+                        if (gs.hand.length === 0) {
+                            addLog(`  ↳ 没有手牌可复制`);
+                            break;
+                        }
+                        gs.choosingCard = true;
+                        gs.chooseCallback = function(chosenCard) {
+                            const copy = {...chosenCard};
+                            gs.hand.push(copy);
+                            addLog(`  ↳ 复制【${copy.name}】`);
+                            gs.choosingCard = false;
+                            gs.chooseCallback = null;
+                            updateDisplay();
+                            renderHand();
+                            if (gs.enemyHealth <= 0) completeBattle();
+                        };
+                        addLog(`  ↳ 请点击一张手牌进行复制`);
+                        renderHand();
+                        updateDisplay();
+                        break;
                     case 'grace_inspire': gs.counters.grace -= card.graceCost; gs.energy = clamp(gs.energy + card.energy, 0, gs.maxEnergy + 2); if (cardPool.length > 0) { const ec = cardPool[Math.floor(Math.random() * cardPool.length)]; gs.hand.push({...ec}); addLog(`  ↳ 消耗${card.graceCost}赐福，精力+${card.energy}，抽到【${ec.name}】`); } break;
                     case 'grace_guard': gs.counters.grace -= card.graceCost; gs.focus = clamp(gs.focus + card.heal, 0, gs.maxFocus); addLog(`  ↳ 消耗${card.graceCost}赐福，回复${card.heal}专注力`); break;
                     case 'damage_vuln': dealDamage(card.damage); gs.enemyStatus.vuln = Math.max(gs.enemyStatus.vuln, card.vulnDuration); break;
@@ -1257,6 +1297,8 @@
                 gameState.discountActive = false;
                 gameState.tempKnowledge = 0;
                 gameState.probCritThisTurn = false;
+                gameState.choosingCard = false;
+                gameState.chooseCallback = null;
                 drawHand();
                 updateDisplay();
                 dom.endTurnBtn.classList.remove('flash');
@@ -1264,6 +1306,10 @@
             }
 
             function endTurn() {
+                if (gameState.choosingCard) {
+                    addLog('⚠️ 请先完成手牌选择');
+                    return;
+                }
                 gameState.retainedEnergy = Math.min(2, gameState.energy);
                 gameState.energy = 0;
                 addLog(`⏭ 结束回合，留存${gameState.retainedEnergy}精力`);
@@ -1278,7 +1324,7 @@
                 if (gameState.enemyStatus.disarm > 0) addLog(`🔒 敌人被缴械`);
                 else if (gameState.enemyStatus.silence > 0) addLog(`🔇 敌人被沉默`);
                 else {
-                    let cdmg = Math.floor(8 * gameState.enemyDifficulty + randInt(-3, 3));
+                    let cdmg = Math.floor(6 * gameState.enemyDifficulty + randInt(-2, 2));
                     if (gameState.enemyStatus.blind > 0) cdmg = Math.floor(cdmg / 2);
                     cdmg = Math.max(1, cdmg);
                     gameState.focus -= cdmg;
@@ -1299,12 +1345,9 @@
                 if (gameState.enemyStatus.vuln > 0) gameState.enemyStatus.vuln--;
                 if (gameState.enemyStatus.blind > 0) gameState.enemyStatus.blind--;
                 if (gameState.enemyStatus.disarm > 0) gameState.enemyStatus.disarm--;
-                if (gameState.haloDuration > 0) { gameState.haloDuration--; if (gameState.haloDuration <= 0) { gameState.haloActive = false;
-                        gameState.haloBonus = 0; } }
+                if (gameState.haloDuration > 0) { gameState.haloDuration--; if (gameState.haloDuration <= 0) { gameState.haloActive = false; gameState.haloBonus = 0; } }
                 updateDisplay();
-                if (gameState.focus <= 0) { gameState.focus = 0;
-                    updateDisplay();
-                    gameOver('专注力耗尽...'); return; }
+                if (gameState.focus <= 0) { gameState.focus = 0; updateDisplay(); gameOver('专注力耗尽...'); return; }
                 if (gameState.enemyHealth <= 0) { completeBattle(); return; }
                 startTurn();
             }
@@ -1417,15 +1460,22 @@
                 dom.currentSubject.textContent = subj;
                 dom.enemyVisual.textContent = SUBJECT_ICONS[subj] || '❓';
                 const isExam = gameState.currentStage % 5 === 0;
-                let baseHP = isExam ? randInt(140, 200) : randInt(75, 120);
-                let diff = isExam ? 0.55 + Math.random() * 0.25 : 0.65 + Math.random() * 0.2;
+                // 难度递增公式：基础值随整体进度线性增加
+                const progress = gameState.currentSubjectIndex * 5 + gameState.currentStage;
+                let baseHP = 55 + progress * 5 + randInt(0, 15);
+                let diff = 0.35 + progress * 0.018;
+                diff = Math.min(diff, 0.78);
+                if (isExam) {
+                    baseHP = Math.floor(baseHP * 1.6);
+                    diff = Math.min(diff + 0.08, 0.82);
+                }
                 gameState.enemyMaxHealth = baseHP;
                 gameState.enemyHealth = baseHP;
                 gameState.enemyDifficulty = Math.round(diff * 100) / 100;
                 gameState.turnInStage = 0;
                 gameState.retainedEnergy = 0;
                 dom.enemyName.textContent = isExam ? `📋【模考】${subj}·综合题` : `${subj}·${['选择题','填空题','综合题'][randInt(0,2)]}`;
-                addLog(`📝 新题目：${dom.enemyName.textContent} (HP:${baseHP})`, true);
+                addLog(`📝 新题目：${dom.enemyName.textContent} (HP:${baseHP} 难度:${gameState.enemyDifficulty.toFixed(2)})`, true);
                 updateDisplay();
                 dom.battleArea.style.display = 'flex';
                 dom.shopArea.style.display = 'none';
@@ -1502,8 +1552,8 @@
                 }
             });
 
-            console.log('🎓 学途卡牌 · 重构版已就绪');
-            console.log('  语数外基础辅助 | 英语赐福系统 | 选考六科流派');
+            console.log('🎓 学途卡牌 · 平衡版已就绪');
+            console.log('  难度平滑递增 | 归纳法自选复制 | 语文数学辅助');
         })();
     </script>
 </body>
