@@ -15,35 +15,34 @@
             --red: #b84c3d;
             --green: #4a8c5c;
             --purple: #6b4e7d;
-            --shadow: 0 3px 16px rgba(0, 0, 0, 0.07);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.11);
+            --shadow: 0 3px 16px rgba(0,0,0,0.07);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.11);
             --radius: 14px;
-            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
         }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+            font-family: "PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
         }
         body {
             background-color: #f0ebe3;
-            background-image: radial-gradient(ellipse at 50% 0%, #f7f3ee 0%, #e8dfd5 100%);
+            background-image: radial-gradient(ellipse at 50% 0%,#f7f3ee 0%,#e8dfd5 100%);
             min-height: 100vh;
             color: var(--text);
             overflow-x: hidden;
         }
-
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             height: 58px;
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255,255,255,0.92);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 6px rgba(0,0,0,0.06);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -72,37 +71,34 @@
             transition: color 0.2s;
         }
         .nav-menu a:hover { color: var(--blue); }
-
         .back-btn {
             position: fixed;
             top: 70px;
             left: 20px;
             padding: 8px 18px;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255,255,255,0.85);
             color: #555;
             border-radius: 20px;
             text-decoration: none;
             font-size: 13px;
             z-index: 99;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             transition: all 0.2s;
             backdrop-filter: blur(4px);
         }
         .back-btn:hover {
             background: #fff;
             color: #222;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
         }
-
         .help-container {
             padding-top: 100px;
-            max-width: 900px;
+            max-width: 960px;
             margin: 0 auto;
             padding-bottom: 80px;
             padding-left: 20px;
             padding-right: 20px;
         }
-
         .help-card {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -110,7 +106,6 @@
             margin-bottom: 24px;
             box-shadow: var(--shadow-lg);
         }
-
         h1 {
             font-size: 30px;
             font-weight: 800;
@@ -129,8 +124,17 @@
         h3 {
             font-size: 18px;
             font-weight: 700;
-            margin: 16px 0 8px;
+            margin: 20px 0 10px;
             color: #444;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #555;
+            margin: 14px 0 6px;
         }
         p, li {
             font-size: 15px;
@@ -144,46 +148,28 @@
         li {
             margin-bottom: 6px;
         }
-        .highlight {
-            font-weight: 700;
-            color: var(--blue);
-        }
-        .gold {
-            color: var(--gold);
-            font-weight: 600;
-        }
-        .red {
-            color: var(--red);
-            font-weight: 600;
-        }
-        .green {
-            color: var(--green);
-            font-weight: 600;
-        }
+        .highlight { font-weight: 700; color: var(--blue); }
+        .gold { color: var(--gold); font-weight: 600; }
+        .red { color: var(--red); font-weight: 600; }
+        .green { color: var(--green); font-weight: 600; }
+        .purple { color: var(--purple); font-weight: 600; }
         .tag {
             display: inline-block;
             padding: 2px 10px;
             border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            margin: 0 2px;
+            font-size: 11px;
+            font-weight: 700;
+            margin: 0 3px;
+            white-space: nowrap;
         }
-        .tag-blue {
-            background: #e0e8f5;
-            color: #2d4470;
-        }
-        .tag-gold {
-            background: #f8eedb;
-            color: #a87a2e;
-        }
-        .tag-green {
-            background: #dff0e5;
-            color: #2d6a4f;
-        }
-        .tag-purple {
-            background: #f1e6f5;
-            color: #6b4e7d;
-        }
+        .tag-blue { background: #e0e8f5; color: #2d4470; }
+        .tag-gold { background: #f8eedb; color: #a87a2e; }
+        .tag-green { background: #dff0e5; color: #2d6a4f; }
+        .tag-purple { background: #f1e6f5; color: #6b4e7d; }
+        .tag-red { background: #fde8e0; color: #c0392b; }
+        .tag-cyan { background: #e0f0f5; color: #2471a3; }
+        .tag-orange { background: #fef3e0; color: #d4740e; }
+
         .divider {
             border: none;
             border-top: 2px dashed #e0d8cb;
@@ -196,42 +182,89 @@
             margin: 12px 0;
             border-left: 4px solid var(--gold);
         }
-        .card-example {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+        .card-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .card-table th {
             background: #f5f3ef;
-            border-radius: 8px;
-            padding: 4px 12px;
+            padding: 10px 8px;
+            text-align: left;
+            font-weight: 700;
+            color: #555;
             font-size: 13px;
-            font-weight: 600;
-            color: #444;
+            border-bottom: 2px solid #e0d8cb;
         }
-        .card-example span {
-            font-size: 16px;
+        .card-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+            line-height: 1.5;
         }
-        .flex-row {
+        .card-table .card-name-cell {
+            font-weight: 700;
+            color: #2c3e50;
+            white-space: nowrap;
+        }
+        .card-table .card-cost-cell {
+            text-align: center;
+            font-weight: 700;
+            color: #c8963e;
+        }
+        .card-table .card-effect-cell {
+            font-size: 13px;
+            color: #666;
+        }
+        .subject-header {
             display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
             align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            padding: 8px 0;
         }
-
+        .subject-header .subject-icon {
+            font-size: 28px;
+        }
+        .subject-header .subject-name {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .mechanism-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin: 12px 0;
+        }
+        .mechanism-item {
+            background: #faf9f7;
+            border-radius: 10px;
+            padding: 14px 16px;
+            border: 1px solid #eee;
+        }
+        .mechanism-item strong {
+            display: block;
+            font-size: 15px;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        .mechanism-item p {
+            font-size: 13px;
+            color: #777;
+            margin: 0;
+            line-height: 1.6;
+        }
         @media (max-width: 600px) {
-            .help-container {
-                padding-top: 90px;
-            }
-            h1 {
-                font-size: 24px;
-            }
-            h2 {
-                font-size: 18px;
-            }
+            .help-container { padding-top: 90px; }
+            h1 { font-size: 24px; }
+            h2 { font-size: 18px; }
+            .card-table { font-size: 12px; }
+            .card-table th, .card-table td { padding: 6px 4px; }
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="navbar-content">
             <a href="index.html" class="logo">士多啤梨除草机</a>
@@ -244,120 +277,181 @@
             </div>
         </div>
     </nav>
-
-    <!-- 返回游戏按钮 -->
     <a href="gaokao-game.html" class="back-btn">← 返回游戏</a>
 
-    <!-- 帮助内容 -->
     <div class="help-container">
         <div class="help-card">
-            <h1>📖 游戏帮助 · 学途卡牌规则</h1>
-            <p style="text-align:center; margin-top:8px; color:#888;">语数外基础辅助 · 英语赐福系统 · 六科选考流派</p>
+            <h1>📖 学途卡牌 · 完整图鉴与机制</h1>
+            <p style="text-align:center; margin-top:8px; color:#888;">基础辅助 · 英语赐福 · 选考流派 · 卡牌一览 · 组合共鸣</p>
         </div>
 
-        <!-- 游戏概述 -->
+        <!-- 游戏机制速览 -->
         <div class="help-card">
-            <h2>🎯 游戏目标</h2>
-            <p>你是一名即将高考的学子，需要通过<strong>九大学科</strong>的考验。你将从<strong>物理、化学、生物、历史、地理、政治</strong>中选择3门作为选考科目，搭配必考的<strong>语文、数学、英语</strong>组成你的专属卡组。每一关你将面对一道学科题目，通过打出卡牌与自动攻击击败它，获取分数，最终完成全部科目考试。</p>
-        </div>
-
-        <!-- 基础规则 -->
-        <div class="help-card">
-            <h2>⚙️ 基础规则</h2>
-            <ul>
-                <li><span class="highlight">精力（⚡）</span>：每回合固定获得<strong>3点精力</strong>（可通过卡牌提升上限），用于打出卡牌。未用完的精力最多<span class="gold">留存2点到下一回合</span>。</li>
-                <li><span class="highlight">手牌</span>：每回合从你的<strong>卡池</strong>中随机抽取<strong>3张卡牌</strong>（部分效果可增加抽牌数）。</li>
-                <li><span class="highlight">学识（⚔️）</span>：影响你<strong>自动答题（基础攻击）</strong>的伤害，部分语文卡牌可临时提升学识。</li>
-                <li><span class="highlight">专注力（❤️）</span>：你的生命值，遭到敌人反击会减少，<strong>归零则游戏结束</strong>。</li>
-                <li><span class="highlight">回合流程</span>：抽牌 → 出牌（消耗精力）→ 点击“结束回合”触发<strong>自动答题</strong>与<strong>敌人反击</strong>，然后进入下一回合。</li>
-                <li><span class="highlight">击败题目</span>：题目血量归零后，获得分数奖励，并进入<strong>知识商店</strong>购买进阶卡牌。</li>
-            </ul>
-        </div>
-
-        <!-- 基础三科 -->
-        <div class="help-card">
-            <h2>📚 基础学科（语文·数学·英语）</h2>
-            <p>语数英作为<strong>必考科目</strong>，它们不直接制造复杂的印记流派，而是为你的选考流派提供<strong>全局辅助</strong>。</p>
-            <div class="flex-row">
-                <div style="flex:1; min-width:200px;">
-                    <h3>📖 语文 · 治疗与增益</h3>
-                    <p>定位：<span class="green">回复专注力</span>、积攒<strong>文思</strong>层数、临时提升学识。</p>
-                    <p>代表卡牌：<span class="card-example"><span>📖</span>温故知新</span> 回复8专注力并获取文思；<span class="card-example"><span>✍️</span>妙笔生花</span> 临时提升学识。</p>
-                </div>
-                <div style="flex:1; min-width:200px;">
-                    <h3>🔢 数学 · 资源与抽牌</h3>
-                    <p>定位：<span class="gold">获得额外精力</span>、多抽牌、减免手牌费用。</p>
-                    <p>代表卡牌：<span class="card-example"><span>📐</span>逻辑推导</span> 0费抽1牌+1精力；<span class="card-example"><span>🧮</span>简化运算</span> 本回合手牌费用-1。</p>
-                </div>
+            <h2>⚙️ 核心机制速览</h2>
+            <div class="mechanism-grid">
+                <div class="mechanism-item"><strong>⚡ 精力</strong><p>打出卡牌消耗的资源。每回合固定获得3点，可通过卡牌提升上限，未用完最多留存2点。</p></div>
+                <div class="mechanism-item"><strong>⚔️ 学识</strong><p>影响“自动答题”基础攻击的伤害，部分语文卡可临时提升学识。</p></div>
+                <div class="mechanism-item"><strong>❤️ 专注力</strong><p>你的生命值，受到敌人反击会减少，归零则游戏结束。</p></div>
+                <div class="mechanism-item"><strong>✨ 赐福</strong><p>英语专属跨回合资源，积攒后可消耗换取精力、抽牌或治疗。</p></div>
+                <div class="mechanism-item"><strong>📝 文思</strong><p>语文学科计数器，通过卡牌积累，可用“文以载道”等牌消耗转化为输出或治疗。</p></div>
+                <div class="mechanism-item"><strong>📐 证明</strong><p>数学学科计数器（部分卡牌产生），目前通过共鸣“数理推演”获得。</p></div>
+                <div class="mechanism-item"><strong>🧬 进化点</strong><p>生物学科计数器，积累后可消耗造成伤害或通过“溶酶体爆破”按倍数输出。</p></div>
+                <div class="mechanism-item"><strong>📅 年代印记</strong><p>历史学科计数器，用于减免费用或通过“朝代更迭”一次性爆发。</p></div>
+                <div class="mechanism-item"><strong>⛰️ 地形</strong><p>地理学科专属，改变战场获得不同增益：山地+伤害、平原+回复、海洋稳定回复。</p></div>
+                <div class="mechanism-item"><strong>💡 光环</strong><p>政治学科专属，使我方所有伤害获得固定加成。</p></div>
             </div>
             <hr class="divider">
-            <h3>🌟 英语 · 赐福系统</h3>
-            <p>英语引入了独特的<strong>「赐福」</strong>资源。赐福是一种跨回合积累的能量，部分英语卡牌可以<strong>消耗赐福</strong>来换取大量精力、抽牌或治疗。</p>
-            <p>代表卡牌：<span class="card-example"><span>📿</span>圣言诵读</span> 获得2赐福+抽1牌；<span class="card-example"><span>🕊️</span>恩典降临</span> 获得3赐福+回复5专注；<span class="card-example"><span>🌈</span>神启</span> 消耗3赐福，获得2精力+抽1牌。</p>
-            <p><span class="tag tag-purple">赐福管理</span> <span class="tag tag-blue">额外行动力</span> <span class="tag tag-gold">卡池循环</span></p>
+            <h3>🎯 敌人标记与状态</h3>
+            <div class="mechanism-grid">
+                <div class="mechanism-item"><strong>🧪 酸/碱标记</strong><p>化学流派核心，酸碱共存时打出碱牌触发中和反应造成额外伤害。</p></div>
+                <div class="mechanism-item"><strong>💥 动量</strong><p>物理流派核心，叠加层数后用“力的作用”消耗造成巨额伤害。</p></div>
+                <div class="mechanism-item"><strong>🔥 灼烧</strong><p>每回合结束时对敌人造成固定伤害，持续若干回合。</p></div>
+                <div class="mechanism-item"><strong>🔇 沉默</strong><p>敌人无法反击。</p></div>
+                <div class="mechanism-item"><strong>🎯 易伤</strong><p>敌人受到的所有伤害提升30%。</p></div>
+                <div class="mechanism-item"><strong>🌪️ 致盲</strong><p>敌人反击伤害减半。</p></div>
+                <div class="mechanism-item"><strong>🔒 缴械</strong><p>敌人本回合无法反击。</p></div>
+            </div>
+            <hr class="divider">
+            <h3>📋 卡牌操作</h3>
+            <div class="mechanism-grid">
+                <div class="mechanism-item"><strong>🃏 复制（归纳法）</strong><p>打出后进入选择模式，点击一张手牌将其复制加入手牌。</p></div>
+                <div class="mechanism-item"><strong>🗑️ 移除（反证法）</strong><p>打出后进入选择模式，点击一张手牌将其从卡池中永久删除。</p></div>
+                <div class="mechanism-item"><strong>📋 卡池查看</strong><p>点击“卡池”按钮查看当前拥有的所有卡牌，按科目分类展示。</p></div>
+            </div>
         </div>
 
-        <!-- 选考六科 -->
+        <!-- 全卡牌图鉴 -->
         <div class="help-card">
-            <h2>🧪 选考六科 · 流派详解</h2>
-            <p>选考科目拥有独特的<strong>印记机制与流派联动</strong>，是输出的核心。每个科目都有专属的计数器或标记，恰当组合能打出高额爆发。</p>
+            <h2>🃏 全卡牌图鉴</h2>
 
-            <h3>⚛️ 物理 · 动量流派</h3>
-            <p>为敌人叠加<strong>动量</strong>层数，再使用“力的作用”等卡牌消耗所有动量造成<strong>巨额伤害</strong>。电磁风暴可施加<strong>易伤</strong>，提高后续攻击。</p>
-            <p><span class="tag tag-blue">动量标记</span> <span class="tag tag-red">易伤</span></p>
+            <!-- 语文 -->
+            <div class="subject-header"><span class="subject-icon">📚</span><span class="subject-name">语文 · 治疗与增益</span></div>
+            <table class="card-table">
+                <thead><tr><th>卡牌</th><th>费用</th><th>效果描述</th><th>来源</th></tr></thead>
+                <tbody>
+                    <tr><td class="card-name-cell">📖 温故知新</td><td class="card-cost-cell">1</td><td class="card-effect-cell">回复8点专注力，获得1层【文思】</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">✍️ 妙笔生花</td><td class="card-cost-cell">1</td><td class="card-effect-cell">本回合学识+4（提高基础攻击伤害）</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">📜 文以载道</td><td class="card-cost-cell">2</td><td class="card-effect-cell">消耗所有文思，每层回复5专注力并造成4点伤害</td><td>商店</td></tr>
+                    <tr><td class="card-name-cell">✨ 厚积薄发</td><td class="card-cost-cell">2</td><td class="card-effect-cell">获得3层文思，下一张选考卡牌伤害+6</td><td>商店</td></tr>
+                </tbody>
+            </table>
 
-            <h3>🧪 化学 · 酸碱反应</h3>
-            <p>给敌人附加<strong>酸</strong>或<strong>碱</strong>标记。当酸与碱同时存在时，打出碱性卡牌会触发<strong>中和反应</strong>，造成额外伤害。催化剂可引爆所有标记，铝热剂附加灼烧。</p>
-            <p><span class="tag tag-red">酸标记</span> <span class="tag tag-blue">碱标记</span> <span class="tag tag-gold">中和爆发</span> <span class="tag tag-red">灼烧</span></p>
+            <!-- 数学 -->
+            <div class="subject-header"><span class="subject-icon">🔢</span><span class="subject-name">数学 · 资源与抽牌</span></div>
+            <table class="card-table">
+                <thead><tr><th>卡牌</th><th>费用</th><th>效果描述</th><th>来源</th></tr></thead>
+                <tbody>
+                    <tr><td class="card-name-cell">📐 逻辑推导</td><td class="card-cost-cell">0</td><td class="card-effect-cell">抽1张牌，获得1点精力</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">🧮 简化运算</td><td class="card-cost-cell">1</td><td class="card-effect-cell">本回合所有手牌费用-1（最低0费）</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">🎯 最优解</td><td class="card-cost-cell">1</td><td class="card-effect-cell">抽2张牌，本回合精力上限+2</td><td>商店</td></tr>
+                    <tr><td class="card-name-cell">🧩 归纳法</td><td class="card-cost-cell">2</td><td class="card-effect-cell">选择1张手牌，将其复制加入手牌</td><td>商店</td></tr>
+                    <tr><td class="card-name-cell">🗑️ 反证法</td><td class="card-cost-cell">1</td><td class="card-effect-cell">选择1张手牌，将其从卡池中永久移除</td><td>商店</td></tr>
+                </tbody>
+            </table>
 
-            <h3>🧬 生物 · 进化成长</h3>
-            <p>通过“细胞分裂”等卡牌积累<strong>进化点</strong>。进化点可以消耗造成伤害（自然代谢），或通过“溶酶体爆破”等卡牌按倍数输出。部分卡牌在专注力低时获得额外进化点。</p>
-            <p><span class="tag tag-green">进化点</span> <span class="tag tag-gold">低生命收益</span></p>
+            <!-- 英语 -->
+            <div class="subject-header"><span class="subject-icon">🌟</span><span class="subject-name">英语 · 赐福系统</span></div>
+            <table class="card-table">
+                <thead><tr><th>卡牌</th><th>费用</th><th>效果描述</th><th>来源</th></tr></thead>
+                <tbody>
+                    <tr><td class="card-name-cell">📿 圣言诵读</td><td class="card-cost-cell">1</td><td class="card-effect-cell">获得2层【赐福】，抽1张牌</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">🕊️ 恩典降临</td><td class="card-cost-cell">2</td><td class="card-effect-cell">获得3层【赐福】，回复5点专注力</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">🌈 神启</td><td class="card-cost-cell">1</td><td class="card-effect-cell">消耗3层赐福，获得2精力和1张牌</td><td>商店</td></tr>
+                    <tr><td class="card-name-cell">🛡️ 圣灵守护</td><td class="card-cost-cell">2</td><td class="card-effect-cell">消耗2层赐福，回复15点专注力</td><td>商店</td></tr>
+                </tbody>
+            </table>
 
-            <h3>📜 历史 · 年代印记</h3>
-            <p>积攒<strong>年代印记</strong>层数，用于减免手牌费用（读史明智），或通过“朝代更迭”一次性消耗所有印记造成伤害并回复专注力。</p>
-            <p><span class="tag tag-gold">年代印记</span> <span class="tag tag-blue">费用减免</span></p>
+            <!-- 物理 -->
+            <div class="subject-header"><span class="subject-icon">⚛️</span><span class="subject-name">物理 · 动量流派</span></div>
+            <table class="card-table">
+                <thead><tr><th>卡牌</th><th>费用</th><th>效果描述</th><th>来源</th></tr></thead>
+                <tbody>
+                    <tr><td class="card-name-cell">💥 惯性冲击</td><td class="card-cost-cell">1</td><td class="card-effect-cell">造成7点伤害，施加1层【动量】</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">⚡ 力的作用</td><td class="card-cost-cell">2</td><td class="card-effect-cell">消耗所有动量，每层造成9点伤害</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">🔋 能量守恒</td><td class="card-cost-cell">1</td><td class="card-effect-cell">造成6点伤害，恢复2点精力</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">🌩️ 电磁风暴</td><td class="card-cost-cell">2</td><td class="card-effect-cell">造成12点伤害，施加【易伤】2回合</td><td>商店</td></tr>
+                    <tr><td class="card-name-cell">🔄 角动量守恒</td><td class="card-cost-cell">1</td><td class="card-effect-cell">将敌人动量层数翻倍</td><td>商店</td></tr>
+                </tbody>
+            </table>
 
-            <h3>🌍 地理 · 地形改造</h3>
-            <p>改变战场<strong>地形</strong>，不同的地形提供不同增益：<strong>山地</strong>增加伤害，<strong>平原</strong>每回合回复专注力，<strong>海洋</strong>提供更稳定的回复。部分卡牌还可附加致盲效果。</p>
-            <p><span class="tag tag-green">地形效果</span> <span class="tag tag-blue">致盲</span></p>
+            <!-- 化学 -->
+            <div class="subject-header"><span class="subject-icon">🧪</span><span class="subject-name">化学 · 酸碱反应</span></div>
+            <table class="card-table">
+                <thead><tr><th>卡牌</th><th>费用</th><th>效果描述</th><th>来源</th></tr></thead>
+                <tbody>
+                    <tr><td class="card-name-cell">🧪 酸性试剂</td><td class="card-cost-cell">1</td><td class="card-effect-cell">造成5点伤害，施加2层【酸】</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">⚗️ 碱性试剂</td><td class="card-cost-cell">1</td><td class="card-effect-cell">造成5点伤害，施加2层【碱】；若敌有酸则触发中和+15伤害</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">🧂 盐析效应</td><td class="card-cost-cell">1</td><td class="card-effect-cell">移除敌人所有酸/碱标记，每层造成4点伤害</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">🔥 催化剂</td><td class="card-cost-cell">1</td><td class="card-effect-cell">触发所有酸/碱标记，每层造成4点伤害</td><td>商店</td></tr>
+                    <tr><td class="card-name-cell">💥 铝热剂</td><td class="card-cost-cell">3</td><td class="card-effect-cell">造成20点伤害，施加3层【灼烧】（持续3回合）</td><td>商店</td></tr>
+                </tbody>
+            </table>
 
-            <h3>⚖️ 政治 · 光环与缴械</h3>
-            <p>施加<strong>同一性光环</strong>，使我方所有伤害提升。矛盾分析可造成伤害并为光环铺路，真理之辨能<strong>缴械</strong>敌人使其无法反击。</p>
-            <p><span class="tag tag-purple">光环增益</span> <span class="tag tag-red">缴械</span></p>
+            <!-- 生物 -->
+            <div class="subject-header"><span class="subject-icon">🧬</span><span class="subject-name">生物 · 进化成长</span></div>
+            <table class="card-table">
+                <thead><tr><th>卡牌</th><th>费用</th><th>效果描述</th><th>来源</th></tr></thead>
+                <tbody>
+                    <tr><td class="card-name-cell">🦠 细胞分裂</td><td class="card-cost-cell">1</td><td class="card-effect-cell">获得1【进化点】，回复4点专注力</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">🌿 自然代谢</td><td class="card-cost-cell">1</td><td class="card-effect-cell">消耗1进化点，造成10点伤害</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">🤝 共生关系</td><td class="card-cost-cell">1</td><td class="card-effect-cell">获得1进化点，抽1张牌</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">🧬 适者生存</td><td class="card-cost-cell">2</td><td class="card-effect-cell">获得2进化点；若专注力低于40额外+1</td><td>商店</td></tr>
+                    <tr><td class="card-name-cell">💣 溶酶体爆破</td><td class="card-cost-cell">2</td><td class="card-effect-cell">造成8+进化点×5点伤害</td><td>商店</td></tr>
+                </tbody>
+            </table>
+
+            <!-- 历史 -->
+            <div class="subject-header"><span class="subject-icon">📜</span><span class="subject-name">历史 · 年代印记</span></div>
+            <table class="card-table">
+                <thead><tr><th>卡牌</th><th>费用</th><th>效果描述</th><th>来源</th></tr></thead>
+                <tbody>
+                    <tr><td class="card-name-cell">📅 年代纪</td><td class="card-cost-cell">1</td><td class="card-effect-cell">获得1层【年代印记】，造成5点伤害</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">📖 读史明智</td><td class="card-cost-cell">1</td><td class="card-effect-cell">本回合手牌费用-年代印记数（最低0费）</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">⛏️ 考古发现</td><td class="card-cost-cell">2</td><td class="card-effect-cell">获得2层年代印记，造成8点伤害</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">👑 朝代更迭</td><td class="card-cost-cell">3</td><td class="card-effect-cell">消耗所有年代印记，每层造成7伤害+回复2专注</td><td>商店</td></tr>
+                    <tr><td class="card-name-cell">🔮 以史为鉴</td><td class="card-cost-cell">2</td><td class="card-effect-cell">获得2层年代印记，下回合多抽1张牌</td><td>商店</td></tr>
+                </tbody>
+            </table>
+
+            <!-- 地理 -->
+            <div class="subject-header"><span class="subject-icon">🌍</span><span class="subject-name">地理 · 地形改造</span></div>
+            <table class="card-table">
+                <thead><tr><th>卡牌</th><th>费用</th><th>效果描述</th><th>来源</th></tr></thead>
+                <tbody>
+                    <tr><td class="card-name-cell">🏔️ 板块运动</td><td class="card-cost-cell">1</td><td class="card-effect-cell">造成6点伤害，地形变为【山地】（+2伤害）</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">🌬️ 季风气候</td><td class="card-cost-cell">1</td><td class="card-effect-cell">造成5点伤害，地形变为【平原】（每回合+2专注）</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">🌊 洋流调节</td><td class="card-cost-cell">2</td><td class="card-effect-cell">地形变为【海洋】（每回合+3专注）</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">🌪️ 沙尘暴</td><td class="card-cost-cell">2</td><td class="card-effect-cell">造成10点伤害，【致盲】1回合</td><td>商店</td></tr>
+                    <tr><td class="card-name-cell">🌊 沧海桑田</td><td class="card-cost-cell">3</td><td class="card-effect-cell">造成18点伤害，随机变换地形</td><td>商店</td></tr>
+                </tbody>
+            </table>
+
+            <!-- 政治 -->
+            <div class="subject-header"><span class="subject-icon">⚖️</span><span class="subject-name">政治 · 光环与缴械</span></div>
+            <table class="card-table">
+                <thead><tr><th>卡牌</th><th>费用</th><th>效果描述</th><th>来源</th></tr></thead>
+                <tbody>
+                    <tr><td class="card-name-cell">📊 宏观调控</td><td class="card-cost-cell">1</td><td class="card-effect-cell">获得1点精力，造成4点伤害</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">💡 矛盾分析</td><td class="card-cost-cell">1</td><td class="card-effect-cell">施加【同一性光环】2回合，我方所有伤害+3</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">👥 群众路线</td><td class="card-cost-cell">1</td><td class="card-effect-cell">回复6点专注力，抽1张牌</td><td>基础</td></tr>
+                    <tr><td class="card-name-cell">⚖️ 真理之辨</td><td class="card-cost-cell">2</td><td class="card-effect-cell">造成10点伤害，【缴械】1回合</td><td>商店</td></tr>
+                    <tr><td class="card-name-cell">🎯 主要矛盾</td><td class="card-cost-cell">2</td><td class="card-effect-cell">造成12点伤害；若在光环中伤害翻倍</td><td>商店</td></tr>
+                </tbody>
+            </table>
         </div>
 
         <!-- 学科共鸣 -->
         <div class="help-card">
-            <h2>✨ 学科共鸣（被动）</h2>
-            <p>当你选择的6门学科中包含特定<strong>两两组合</strong>时，会激活强大的被动效果：</p>
+            <h2>✨ 学科共鸣（被动组合效果）</h2>
+            <p>当你选择的6门学科中包含特定两两组合时，自动激活以下被动效果：</p>
             <div class="resonance-box">
                 <strong>🖋️ 笔墨春秋（语文+历史）</strong>：获得文思时额外+1年代印记。<br>
-                <strong>🔬 数理推演（物理+数学）</strong>：造成伤害时有一定几率获得证明层数。<br>
+                <strong>🔬 数理推演（物理+数学）</strong>：造成伤害时有一定几率获得1层证明。<br>
                 <strong>🌺 分子花园（化学+生物）</strong>：酸碱中和反应时额外施加1层灼烧。<br>
-                <strong>🏛️ 江山社稷（地理+政治）</strong>：地形增益效果翻倍。<br>
+                <strong>🏛️ 江山社稷（地理+政治）</strong>：地形增益效果（伤害/回复）翻倍。<br>
                 <strong>🌏 格物致知（物理+地理）</strong>：动量相关伤害+3。<br>
                 <strong>🌐 国际关系（英语+政治）</strong>：获得赐福时额外+1。
             </div>
-        </div>
-
-        <!-- 商店与进阶 -->
-        <div class="help-card">
-            <h2>🛒 知识商店与卡池扩充</h2>
-            <p>击败题目后进入商店，你可以使用累积的<strong>分数</strong>购买<strong>进阶卡牌</strong>。购买的卡牌将<strong>永久加入你的卡池</strong>，在后续战斗中可被抽取。适当购买强力卡牌是通关的关键。</p>
-            <p>如果不想购买，可以点击“跳过购买”继续下一题。</p>
-        </div>
-
-        <!-- 小贴士 -->
-        <div class="help-card">
-            <h2>💡 实用技巧</h2>
-            <ul>
-                <li>优先使用<strong>数学卡牌</strong>过牌和获取精力，再打出高费选考卡牌。</li>
-                <li>保持<strong>专注力</strong>健康，适时使用语文治疗卡。</li>
-                <li>积累<strong>赐福</strong>后再用英语消耗牌，能产生大量资源。</li>
-                <li>注意敌人身上的<strong>标记组合</strong>（如酸+碱），触发联动伤害。</li>
-                <li>模考关卡（每5关）难度更高，但分数奖励也更丰厚。</li>
-            </ul>
         </div>
 
         <p style="text-align:center; color:#aaa; margin-top:32px;">祝你金榜题名，学途顺利！🎓</p>
