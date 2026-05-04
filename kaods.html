@@ -746,6 +746,83 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(59,89,152,0.3);
 }
+        .view-deck-btn {
+    padding: 8px 18px;
+    font-size: 14px;
+    background: #f8f6f3;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #555;
+    transition: all 0.2s;
+}
+.view-deck-btn:hover {
+    background: #e8e4dc;
+    border-color: #999;
+}
+/* 卡池弹窗 */
+.deck-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+}
+.deck-modal.active {
+    display: flex;
+}
+.deck-modal-content {
+    background: white;
+    border-radius: 14px;
+    padding: 24px;
+    max-width: 700px;
+    width: 90%;
+    max-height: 70vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.deck-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.deck-modal-header h3 {
+    font-size: 20px;
+    color: #2c3e50;
+}
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #999;
+    line-height: 1;
+}
+.deck-card-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #faf9f7;
+    margin-bottom: 8px;
+    border: 1px solid #eee;
+}
+.deck-card-item .card-mini-icon { font-size: 28px; }
+.deck-card-item .card-mini-info { flex: 1; }
+.deck-card-item .card-mini-name { font-weight: 700; color: #444; }
+.deck-card-item .card-mini-desc { font-size: 12px; color: #888; }
+.deck-card-item .card-mini-cost {
+    background: #eee;
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-weight: 700;
+    font-size: 13px;
+}
     </style>
 </head>
 <body>
@@ -825,6 +902,8 @@
                     <div class="card-container" id="cardContainer"><div style="color:#bbb;font-size:14px;padding:30px;">抽牌中...</div></div>
                     <div class="counters-row" id="countersRow"></div>
                     <button class="end-turn-btn" id="endTurnBtn">⏭ 结束回合 · 自动答题</button>
+                    <div id="resonanceDisplay" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+                    <button class="view-deck-btn" id="viewDeckBtn">📋 卡池</button>
                 </div>
             </div>
 
@@ -915,6 +994,7 @@
                 '数学': [
                     { id: 'ma3', name: '最优解', cost: 1, icon: '🎯', desc: '抽2张牌\n本回合精力上限+2', effect: 'draw_energy_boost', draw: 2, maxEnergyBoost: 2 },
                     { id: 'ma4', name: '归纳法', cost: 2, icon: '🧩', desc: '选择1张手牌\n将其复制加入手牌', effect: 'copy_card' },
+                    { id: 'ma5', name: '反证法', cost: 1, icon: '🗑️', desc: '选择1张手牌\n将其从卡池中永久移除', effect: 'remove_card' },
                 ],
                 '英语': [
                     { id: 'en3', name: '神启', cost: 1, icon: '🌈', desc: '消耗3层赐福\n额外获得2精力和1张牌', effect: 'grace_inspire', graceCost: 3, energy: 2, draw: 1 },
@@ -988,6 +1068,11 @@
                 shopSkipBtn: $('#shopSkipBtn'),
                 battleLog: $('#battleLog'),
                 resonanceDisplay: $('#resonanceDisplay'),
+                viewDeckBtn: $('#viewDeckBtn'),
+deckModal: $('#deckModal'),
+closeDeckModal: $('#closeDeckModal'),
+deckCardList: $('#deckCardList'),
+deckCardCount: $('#deckCardCount'),
             };
 
             let selectedOptionalSubjects = [];
@@ -1162,6 +1247,7 @@
                         if (card.effect === 'evo_damage' && gameState.counters.evo < (card.evoCost || 1)) { conditionMet = false; reason = '进化点不足'; }
                         if (card.effect === 'double_momentum' && (gameState.enemyMarkers._momentum || 0) === 0) { conditionMet = false; reason = '无动量'; }
                         if (card.effect === 'copy_card' && gameState.hand.length === 0) { conditionMet = false; reason = '无手牌可复制'; }
+                        if (card.effect === 'remove_card' && gameState.hand.length === 0) { conditionMet = false; reason = '无手牌可移除'; }
                     }
                     const colorInfo = getSubjectColor(card.subject);
                     const cardEl = document.createElement('div');
@@ -1255,6 +1341,32 @@
                         renderHand();
                         updateDisplay();
                         break;
+                        case 'remove_card':
+    if (gs.hand.length === 0) {
+        addLog(`  ↳ 没有手牌可移除`);
+        break;
+    }
+    gs.choosingCard = true;
+    gs.chooseCallback = function(chosenCard) {
+        // 从手牌中移除
+        const idx = gs.hand.indexOf(chosenCard);
+        if (idx >= 0) gs.hand.splice(idx, 1);
+        // 从卡池中移除
+        const poolIdx = cardPool.findIndex(c => c.id === chosenCard.id && c.subject === chosenCard.subject);
+        if (poolIdx >= 0) {
+            cardPool.splice(poolIdx, 1);
+            addLog(`  ↳ 【${chosenCard.name}】已从卡池中永久移除`);
+        }
+        gs.choosingCard = false;
+        gs.chooseCallback = null;
+        updateDisplay();
+        renderHand();
+        if (gs.enemyHealth <= 0) completeBattle();
+    };
+    addLog(`  ↳ 请点击一张手牌进行移除`);
+    renderHand();
+    updateDisplay();
+    break;
                     case 'grace_inspire': gs.counters.grace -= card.graceCost; gs.energy = clamp(gs.energy + card.energy, 0, gs.maxEnergy + 2); if (cardPool.length > 0) { const ec = cardPool[Math.floor(Math.random() * cardPool.length)]; gs.hand.push({...ec}); addLog(`  ↳ 消耗${card.graceCost}赐福，精力+${card.energy}，抽到【${ec.name}】`); } break;
                     case 'grace_guard': gs.counters.grace -= card.graceCost; gs.focus = clamp(gs.focus + card.heal, 0, gs.maxFocus); addLog(`  ↳ 消耗${card.graceCost}赐福，回复${card.heal}专注力`); break;
                     case 'damage_vuln': dealDamage(card.damage); gs.enemyStatus.vuln = Math.max(gs.enemyStatus.vuln, card.vulnDuration); break;
@@ -1367,6 +1479,33 @@
                 addLog(`💔 游戏结束：${reason}`, true);
                 setTimeout(() => { if (confirm(`游戏结束！${reason}\n总分：${gameState.score}\n重新开始？`)) restartGame(); }, 800);
             }
+            function openDeckView() {
+    if (!dom.deckModal) return;
+    dom.deckModal.classList.add('active');
+    const cardsBySubject = {};
+    cardPool.forEach(c => {
+        if (!cardsBySubject[c.subject]) cardsBySubject[c.subject] = [];
+        cardsBySubject[c.subject].push(c);
+    });
+    let html = '';
+    for (const [subj, cards] of Object.entries(cardsBySubject)) {
+        html += `<h4 style="margin:12px 0 6px;color:#3b5998;">${SUBJECT_ICONS[subj]||''} ${subj} (${cards.length}张)</h4>`;
+        cards.sort((a,b) => a.cost - b.cost);
+        cards.forEach(card => {
+            html += `
+            <div class="deck-card-item">
+                <div class="card-mini-icon">${card.icon}</div>
+                <div class="card-mini-info">
+                    <div class="card-mini-name">${card.name}</div>
+                    <div class="card-mini-desc">${card.desc.replace(/\n/g,' ')}</div>
+                </div>
+                <div class="card-mini-cost">${card.cost}费</div>
+            </div>`;
+        });
+    }
+    dom.deckCardList.innerHTML = html || '<p style="color:#999;">暂无卡牌</p>';
+    dom.deckCardCount.textContent = cardPool.length;
+}
             function gameComplete() {
                 addLog(`🏆 所有科目完成！总分：${gameState.score}`, true);
                 setTimeout(() => { if (confirm(`恭喜！总分：${gameState.score}\n重新开始？`)) restartGame(); }, 1000);
@@ -1551,6 +1690,9 @@
                     hideShop();
                 }
             });
+            dom.viewDeckBtn.addEventListener('click', openDeckView);
+dom.closeDeckModal.addEventListener('click', () => dom.deckModal.classList.remove('active'));
+dom.deckModal.addEventListener('click', (e) => { if (e.target === dom.deckModal) dom.deckModal.classList.remove('active'); });
 
             console.log('🎓 学途卡牌 · 平衡版已就绪');
             console.log('  难度平滑递增 | 归纳法自选复制 | 语文数学辅助');
