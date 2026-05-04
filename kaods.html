@@ -18,7 +18,6 @@
             --teal: #3d7a7a;
             --orange: #c0783c;
             --cyan: #4a8a9a;
-            --brown: #8b5e3c;
             --shadow: 0 3px 16px rgba(0, 0, 0, 0.07);
             --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.11);
             --radius: 14px;
@@ -39,7 +38,6 @@
             color: var(--text);
         }
 
-        /* 导航栏 */
         .navbar {
             position: fixed;
             top: 0;
@@ -81,7 +79,6 @@
             color: var(--blue);
         }
 
-        /* 返回按钮 */
         .back-btn {
             position: fixed;
             top: 70px;
@@ -103,7 +100,6 @@
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
         }
 
-        /* 游戏主容器 */
         .game-container {
             padding-top: 80px;
             display: flex;
@@ -128,7 +124,6 @@
             letter-spacing: 2px;
         }
 
-        /* 选择科目界面 */
         .subject-selection {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -250,7 +245,6 @@
             transform: none;
         }
 
-        /* 游戏主界面 */
         .game-main {
             display: none;
             width: 100%;
@@ -259,17 +253,10 @@
             animation: fadeIn 0.4s ease;
         }
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 顶部状态栏 */
         .game-header {
             display: flex;
             flex-wrap: wrap;
@@ -311,14 +298,10 @@
             font-weight: 700;
             color: var(--text);
         }
-        .stat-value.energy-val {
-            color: #c8963e;
-        }
-        .stat-value.focus-val {
-            color: #b84c3d;
-        }
+        .stat-value.energy-val { color: #c8963e; }
+        .stat-value.focus-val { color: #b84c3d; }
+        .stat-value.grace-val { color: #9b59b6; }
 
-        /* 共鸣显示 */
         .resonance-badge {
             display: inline-block;
             background: linear-gradient(135deg, #f0e6d3, #e8d8b8);
@@ -331,7 +314,6 @@
             border: 1px solid #dcc8a0;
         }
 
-        /* 战斗区域 */
         .battle-area {
             display: flex;
             justify-content: space-between;
@@ -351,7 +333,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 340px;
+            min-height: 360px;
         }
         .enemy-card-visual {
             width: 140px;
@@ -420,52 +402,17 @@
             animation: popIn 0.3s ease;
         }
         @keyframes popIn {
-            from {
-                transform: scale(0.7);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
-        .marker-acid {
-            background: #fde8e0;
-            color: #c0392b;
-            border: 1px solid #f5c6b8;
-        }
-        .marker-base {
-            background: #e0ecf5;
-            color: #2471a3;
-            border: 1px solid #b8d4e8;
-        }
-        .marker-burn {
-            background: #fef3e0;
-            color: #d4740e;
-            border: 1px solid #fad4a0;
-        }
-        .marker-silence {
-            background: #e8e8e8;
-            color: #555;
-            border: 1px solid #ccc;
-        }
-        .marker-vuln {
-            background: #fde0e0;
-            color: #a02020;
-            border: 1px solid #f5b8b8;
-        }
-        .marker-blind {
-            background: #f5f0e8;
-            color: #8b7355;
-            border: 1px solid #dcc8a0;
-        }
-        .marker-disarm {
-            background: #fef0f0;
-            color: #a04040;
-            border: 1px solid #f5c0c0;
-        }
+        .marker-acid { background: #fde8e0; color: #c0392b; border: 1px solid #f5c6b8; }
+        .marker-base { background: #e0ecf5; color: #2471a3; border: 1px solid #b8d4e8; }
+        .marker-burn { background: #fef3e0; color: #d4740e; border: 1px solid #fad4a0; }
+        .marker-silence { background: #e8e8e8; color: #555; border: 1px solid #ccc; }
+        .marker-vuln { background: #fde0e0; color: #a02020; border: 1px solid #f5b8b8; }
+        .marker-blind { background: #f5f0e8; color: #8b7355; border: 1px solid #dcc8a0; }
+        .marker-disarm { background: #fef0f0; color: #a04040; border: 1px solid #f5c0c0; }
 
-        /* 手牌区域 */
         .hand-panel {
             flex: 1;
             min-width: 300px;
@@ -507,16 +454,14 @@
             background: #c8963e;
             display: inline-block;
         }
-        .energy-dot.spent {
-            background: #ddd;
-        }
+        .energy-dot.spent { background: #ddd; }
         .card-container {
             display: flex;
             justify-content: center;
             gap: 14px;
             flex-wrap: wrap;
             min-height: 200px;
-            align-items: center;
+            align-items: flex-start;
         }
         .card {
             width: 148px;
@@ -571,10 +516,7 @@
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
             border: 2px solid #ddd;
         }
-        .card-icon {
-            font-size: 38px;
-            margin-bottom: 6px;
-        }
+        .card-icon { font-size: 38px; margin-bottom: 6px; }
         .card-name-display {
             font-size: 14px;
             font-weight: 700;
@@ -621,16 +563,10 @@
             animation: pulseBtn 0.8s ease infinite;
         }
         @keyframes pulseBtn {
-            0%,
-            100% {
-                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
-            }
-            50% {
-                box-shadow: 0 0 0 10px rgba(200, 150, 62, 0.25);
-            }
+            0%, 100% { box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12); }
+            50% { box-shadow: 0 0 0 10px rgba(200, 150, 62, 0.25); }
         }
 
-        /* 计数器显示 */
         .counters-row {
             display: flex;
             flex-wrap: wrap;
@@ -647,8 +583,19 @@
             color: #555;
             letter-spacing: 0.3px;
         }
+        .grace-display {
+            background: #f3eaf8;
+            color: #9b59b6;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid #d4b8e8;
+        }
 
-        /* 商店 */
         .shop-area {
             display: none;
             background: var(--card-bg);
@@ -727,21 +674,9 @@
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
             border: 2px solid #4a8c5c;
         }
-        .shop-card-icon {
-            font-size: 36px;
-            margin-bottom: 4px;
-        }
-        .shop-card-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 3px;
-        }
-        .shop-card-desc {
-            font-size: 10px;
-            color: #555;
-            line-height: 1.4;
-        }
+        .shop-card-icon { font-size: 36px; margin-bottom: 4px; }
+        .shop-card-name { font-size: 14px; font-weight: 700; color: #2c3e50; margin-bottom: 3px; }
+        .shop-card-desc { font-size: 10px; color: #555; line-height: 1.4; }
         .shop-skip-btn {
             padding: 10px 30px;
             font-size: 14px;
@@ -753,12 +688,8 @@
             transition: all var(--transition);
             font-weight: 600;
         }
-        .shop-skip-btn:hover {
-            border-color: #999;
-            color: #333;
-        }
+        .shop-skip-btn:hover { border-color: #999; color: #333; }
 
-        /* 日志 */
         .log-container {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -770,18 +701,8 @@
             width: 100%;
             max-width: 1100px;
         }
-        .log-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: #888;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-        .log-content {
-            color: #666;
-            line-height: 1.7;
-            font-size: 13px;
-        }
+        .log-title { font-size: 14px; font-weight: 700; color: #888; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .log-content { color: #666; line-height: 1.7; font-size: 13px; }
         .log-entry {
             margin-bottom: 3px;
             padding-left: 12px;
@@ -789,61 +710,45 @@
             animation: fadeIn 0.25s ease;
             font-size: 12px;
         }
-        .log-entry.highlight {
-            border-left-color: #c8963e;
-            font-weight: 600;
-            color: #444;
-        }
+        .log-entry.highlight { border-left-color: #c8963e; font-weight: 600; color: #444; }
 
-        /* 响应式 */
         @media (max-width: 768px) {
-            .battle-area {
-                flex-direction: column;
-                align-items: center;
-            }
-            .enemy-panel {
-                flex: 0 0 auto;
-                width: 100%;
-                min-height: auto;
-                padding: 18px;
-            }
-            .hand-panel {
-                width: 100%;
-                min-width: auto;
-            }
-            .card {
-                width: 120px;
-                min-height: 170px;
-                padding: 10px 6px 8px;
-            }
-            .card-icon {
-                font-size: 28px;
-            }
-            .card-name-display {
-                font-size: 12px;
-            }
-            .card-desc-display {
-                font-size: 9px;
-            }
-            .game-title {
-                font-size: 26px;
-            }
-            .player-stats {
-                gap: 4px;
-            }
-            .stat-box {
-                padding: 6px 10px;
-                min-width: 55px;
-            }
-            .stat-value {
-                font-size: 15px;
-            }
+            .battle-area { flex-direction: column; align-items: center; }
+            .enemy-panel { flex: 0 0 auto; width: 100%; min-height: auto; padding: 18px; }
+            .hand-panel { width: 100%; min-width: auto; }
+            .card { width: 120px; min-height: 170px; padding: 10px 6px 8px; }
+            .card-icon { font-size: 28px; }
+            .card-name-display { font-size: 12px; }
+            .card-desc-display { font-size: 9px; }
+            .game-title { font-size: 26px; }
+            .player-stats { gap: 4px; }
+            .stat-box { padding: 6px 10px; min-width: 55px; }
+            .stat-value { font-size: 15px; }
         }
+        .help-btn {
+    display: inline-block;
+    padding: 10px 24px;
+    margin: 8px 0 16px;
+    background: #fff;
+    color: #3b5998;
+    border: 2px solid #3b5998;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.25s;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.help-btn:hover {
+    background: #3b5998;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(59,89,152,0.3);
+}
     </style>
 </head>
 <body>
-
-    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="navbar-content">
             <a href="index.html" class="logo">士多啤梨除草机</a>
@@ -856,31 +761,25 @@
             </div>
         </div>
     </nav>
-
-    <!-- 返回按钮 -->
     <a href="games.html" class="back-btn">← 返回小游戏合集</a>
 
-    <!-- 游戏容器 -->
     <div class="game-container">
         <h1 class="game-title">🎓 高考闯关 · 学途卡牌</h1>
-        <p class="game-subtitle">九大学科流派 · 构筑你的卡组 · 征服每一道题</p>
-
-        <!-- 选择科目界面 -->
+        <p class="game-subtitle">语数外辅助 · 英语赐福 · 六科流派</p>
+        <a href="help.html" class="help-btn" title="查看游戏规则">📖 游戏帮助</a>
         <div class="subject-selection" id="subjectSelection">
             <h2 class="section-title">📋 选择你的考试科目</h2>
-            <p class="section-desc">高考模式：语数英<strong>必考</strong> + 6选3<strong>选考</strong>科目</p>
-
+            <p class="section-desc">语数英<strong>基础辅助</strong> + 6选3<strong>选考流派</strong></p>
             <div class="subjects-group">
-                <div class="group-title">🔒 必考科目（自动选中）</div>
+                <div class="group-title">🔒 基础学科（自动拥有）</div>
                 <div class="mandatory-subjects">
-                    <button class="subject-btn selected" data-subject="语文">📚 语文<span class="mandatory-tag">必考</span></button>
-                    <button class="subject-btn selected" data-subject="数学">🔢 数学<span class="mandatory-tag">必考</span></button>
-                    <button class="subject-btn selected" data-subject="英语">🇬🇧 英语<span class="mandatory-tag">必考</span></button>
+                    <button class="subject-btn selected" data-subject="语文">📚 语文<span class="mandatory-tag">治疗·增伤</span></button>
+                    <button class="subject-btn selected" data-subject="数学">🔢 数学<span class="mandatory-tag">精力·抽牌</span></button>
+                    <button class="subject-btn selected" data-subject="英语">🌟 英语<span class="mandatory-tag">赐福系统</span></button>
                 </div>
             </div>
-
             <div class="subjects-group">
-                <div class="group-title">📝 选考科目（请选择 <span style="color:#c8963e;">3门</span>）</div>
+                <div class="group-title">📝 选考流派（选择 <span style="color:#c8963e;">3门</span>）</div>
                 <div class="optional-subjects">
                     <button class="subject-btn optional" data-subject="物理">⚛️ 物理</button>
                     <button class="subject-btn optional" data-subject="化学">🧪 化学</button>
@@ -891,13 +790,10 @@
                 </div>
                 <div class="selected-count" id="selectedCount">已选择 <strong>0</strong> / 3 门选考科目</div>
             </div>
-
             <button class="start-btn" id="start-game" disabled>⚔️ 开始高考闯关</button>
         </div>
 
-        <!-- 游戏主界面 -->
         <div class="game-main" id="gameMain">
-            <!-- 状态栏 -->
             <div class="game-header">
                 <div class="level-info" id="currentLevel">第 1 门 · 第 1 关</div>
                 <div id="resonanceDisplay" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
@@ -906,13 +802,12 @@
                     <div class="stat-box"><div class="stat-label">学识⚔️</div><div class="stat-value" id="playerKnowledge">8</div></div>
                     <div class="stat-box"><div class="stat-label">专注力❤️</div><div class="stat-value focus-val" id="playerFocus">100</div></div>
                     <div class="stat-box"><div class="stat-label">精力⚡</div><div class="stat-value energy-val" id="energyDisplay">3/3</div></div>
+                    <div class="stat-box"><div class="stat-label">赐福✨</div><div class="stat-value grace-val" id="graceDisplay">0</div></div>
                     <div class="stat-box"><div class="stat-label">当前科目</div><div class="stat-value" id="currentSubject">-</div></div>
                 </div>
             </div>
 
-            <!-- 战斗区域 -->
             <div class="battle-area" id="battleArea">
-                <!-- 敌人面板 -->
                 <div class="enemy-panel">
                     <div class="enemy-card-visual" id="enemyVisual">❓</div>
                     <div class="enemy-name" id="enemyName">未知题目</div>
@@ -922,33 +817,28 @@
                     <div class="enemy-markers" id="enemyMarkers"></div>
                 </div>
 
-                <!-- 手牌面板 -->
                 <div class="hand-panel">
                     <div class="hand-title-row">
                         <span class="hand-title">🃏 当前手牌</span>
                         <span class="energy-display" id="energyDots"></span>
                     </div>
-                    <div class="card-container" id="cardContainer">
-                        <div style="color:#bbb;font-size:14px;padding:30px;">抽牌中...</div>
-                    </div>
+                    <div class="card-container" id="cardContainer"><div style="color:#bbb;font-size:14px;padding:30px;">抽牌中...</div></div>
                     <div class="counters-row" id="countersRow"></div>
                     <button class="end-turn-btn" id="endTurnBtn">⏭ 结束回合 · 自动答题</button>
                 </div>
             </div>
 
-            <!-- 商店 -->
             <div class="shop-area" id="shopArea">
                 <h3 class="shop-title">🛒 知识商店</h3>
-                <p class="shop-subtitle">击败题目！用分数购买进阶卡牌扩充卡池</p>
+                <p class="shop-subtitle">购买进阶卡牌扩充卡池</p>
                 <div class="shop-cards" id="shopCards"></div>
                 <button class="shop-skip-btn" id="shopSkipBtn">跳过购买 · 继续下一题 →</button>
             </div>
 
-            <!-- 日志 -->
             <div class="log-container">
                 <div class="log-title">📜 考试记录</div>
                 <div class="log-content" id="battleLog">
-                    <div class="log-entry">欢迎来到高考闯关！选择科目后开始你的学途之旅。</div>
+                    <div class="log-entry">欢迎来到高考闯关！语文数学辅助，英语赐福，选考流派各显神通。</div>
                 </div>
             </div>
         </div>
@@ -956,11 +846,10 @@
 
     <script>
         (function() {
-            // ==================== 卡牌数据定义 ====================
             const SUBJECT_COLORS = {
                 '语文': { bg: 'linear-gradient(145deg, #e8a840, #c87828)', tag: '#c87828' },
                 '数学': { bg: 'linear-gradient(145deg, #4a90c4, #2d5f8a)', tag: '#2d5f8a' },
-                '英语': { bg: 'linear-gradient(145deg, #4aaf7c, #2d7a50)', tag: '#2d7a50' },
+                '英语': { bg: 'linear-gradient(145deg, #9b59b6, #6c3483)', tag: '#6c3483' },
                 '物理': { bg: 'linear-gradient(145deg, #3b5f8a, #1e3858)', tag: '#1e3858' },
                 '化学': { bg: 'linear-gradient(145deg, #8e5ea0, #5c3870)', tag: '#5c3870' },
                 '生物': { bg: 'linear-gradient(145deg, #3daa8a, #1e7058)', tag: '#1e7058' },
@@ -968,144 +857,107 @@
                 '地理': { bg: 'linear-gradient(145deg, #4a9aaa, #2a6070)', tag: '#2a6070' },
                 '政治': { bg: 'linear-gradient(145deg, #c05048, #8a2828)', tag: '#8a2828' },
             };
-            const SUBJECT_ICONS = {
-                '语文': '📚',
-                '数学': '🔢',
-                '英语': '🇬🇧',
-                '物理': '⚛️',
-                '化学': '🧪',
-                '生物': '🧬',
-                '历史': '📜',
-                '地理': '🌍',
-                '政治': '⚖️'
-            };
+            const SUBJECT_ICONS = { '语文':'📚','数学':'🔢','英语':'🌟','物理':'⚛️','化学':'🧪','生物':'🧬','历史':'📜','地理':'🌍','政治':'⚖️' };
 
-            // 基础卡牌定义（每个学科2张）
+            // 基础学科卡牌（语文、数学、英语）
             const BASE_CARDS = {
                 '语文': [
-                    { id: 'cn1', name: '默写', cost: 1, icon: '📝', desc: '造成6点伤害\n获得2层【文思】',
-                        effect: 'damage_wensi', damage: 6, wensi: 2 },
-                    { id: 'cn2', name: '修辞', cost: 1, icon: '🎙️', desc: '造成4点伤害\n【沉默】敌人1回合', effect: 'damage_silence',
-                        damage: 4, silence: 1 },
+                    { id: 'cn1', name: '温故知新', cost: 1, icon: '📖', desc: '回复8点专注力\n获得1层【文思】', effect: 'heal_wensi', heal: 8, wensi: 1 },
+                    { id: 'cn2', name: '妙笔生花', cost: 1, icon: '✍️', desc: '本回合学识+4\n(提高基础攻击)', effect: 'temp_knowledge', bonus: 4 },
                 ],
                 '数学': [
-                    { id: 'ma1', name: '公理', cost: 0, icon: '📐', desc: '获得1层【证明】\n抽1张牌', effect: 'proof_draw',
-                    proof: 1, draw: 1 },
-                    { id: 'ma2', name: '数列求和', cost: 2, icon: '🔢', desc: '造成5+证明×3伤害', effect: 'damage_proof',
-                        baseDamage: 5, proofMultiplier: 3 },
+                    { id: 'ma1', name: '逻辑推导', cost: 0, icon: '📐', desc: '抽1张牌\n获得1点精力', effect: 'draw_energy', draw: 1, energy: 1 },
+                    { id: 'ma2', name: '简化运算', cost: 1, icon: '🧮', desc: '本回合手牌费用-1\n(最低0费)', effect: 'discount' },
                 ],
                 '英语': [
-                    { id: 'en1', name: '词汇冲刺', cost: 1, icon: '🔤', desc: '造成8点伤害\n若有时态额外+4', effect: 'damage_tense',
-                        damage: 8, tenseBonus: 4 },
-                    { id: 'en2', name: '过去时态', cost: 1, icon: '⏪', desc: '进入【过去时】2回合\n受到反击伤害减半', effect: 'past_tense',
-                        duration: 2 },
-                ],
-                '物理': [
-                    { id: 'ph1', name: '惯性冲击', cost: 1, icon: '💥', desc: '造成7点伤害\n施加1层【动量】', effect: 'damage_momentum',
-                        damage: 7, momentum: 1 },
-                    { id: 'ph2', name: '力的作用', cost: 2, icon: '⚡', desc: '消耗所有动量\n每层造成9点伤害', effect: 'consume_momentum',
-                        perMomentum: 9 },
-                ],
-                '化学': [
-                    { id: 'ch1', name: '酸性试剂', cost: 1, icon: '🧪', desc: '造成5点伤害\n施加2层【酸】标记', effect: 'damage_acid',
-                        damage: 5, acid: 2 },
-                    { id: 'ch2', name: '碱性试剂', cost: 1, icon: '⚗️', desc: '造成5点伤害\n施加2层【碱】标记\n若敌有酸→中和+15伤害',
-                        effect: 'damage_base', damage: 5, baseMark: 2, neutralDamage: 15 },
-                ],
-                '生物': [
-                    { id: 'bi1', name: '细胞分裂', cost: 1, icon: '🦠', desc: '获得1【进化点】\n回复4点专注力', effect: 'evo_heal',
-                        evo: 1, heal: 4 },
-                    { id: 'bi2', name: '自然代谢', cost: 1, icon: '🌿', desc: '消耗1进化点\n造成10点伤害', effect: 'evo_damage',
-                        evoCost: 1, damage: 10 },
-                ],
-                '历史': [
-                    { id: 'hi1', name: '年代纪', cost: 1, icon: '📅', desc: '获得1层【年代印记】\n造成5点伤害', effect: 'damage_era',
-                        damage: 5, era: 1 },
-                    { id: 'hi2', name: '读史明智', cost: 1, icon: '📖', desc: '本回合手牌费用-年代印记数\n（最低0费）', effect: 'era_discount',
-                        descShort: '年代减费' },
-                ],
-                '地理': [
-                    { id: 'ge1', name: '板块运动', cost: 1, icon: '🏔️', desc: '造成6点伤害\n地形变为【山地】(+2伤害)', effect: 'damage_terrain',
-                        damage: 6, terrain: '山地', terrainBonus: 2 },
-                    { id: 'ge2', name: '季风气候', cost: 1, icon: '🌬️', desc: '造成5点伤害\n地形变为【平原】(+2专注/回合)',
-                        effect: 'damage_terrain_heal', damage: 5, terrain: '平原', healPerTurn: 2 },
-                ],
-                '政治': [
-                    { id: 'po1', name: '宏观调控', cost: 1, icon: '📊', desc: '获得1点精力\n造成4点伤害', effect: 'energy_damage',
-                        energyGain: 1, damage: 4 },
-                    { id: 'po2', name: '矛盾分析', cost: 1, icon: '💡', desc: '施加【同一性光环】2回合\n我方所有伤害+3', effect: 'halo',
-                        duration: 2, bonusDamage: 3 },
+                    { id: 'en1', name: '圣言诵读', cost: 1, icon: '📿', desc: '获得2层【赐福】\n抽1张牌', effect: 'grace_draw', grace: 2, draw: 1 },
+                    { id: 'en2', name: '恩典降临', cost: 2, icon: '🕊️', desc: '获得3层【赐福】\n回复5点专注力', effect: 'grace_heal', grace: 3, heal: 5 },
                 ],
             };
 
-            // 进阶卡牌定义（每个学科2张，商店出售）
+            // 选考学科基础卡（保留并扩充）
+            const ELECTIVE_BASE_CARDS = {
+                '物理': [
+                    { id: 'ph1', name: '惯性冲击', cost: 1, icon: '💥', desc: '造成7点伤害\n施加1层【动量】', effect: 'damage_momentum', damage: 7, momentum: 1 },
+                    { id: 'ph2', name: '力的作用', cost: 2, icon: '⚡', desc: '消耗所有动量\n每层造成9点伤害', effect: 'consume_momentum', perMomentum: 9 },
+                    { id: 'ph5', name: '能量守恒', cost: 1, icon: '🔋', desc: '造成6点伤害\n恢复2点精力', effect: 'damage_energy', damage: 6, energy: 2 },
+                ],
+                '化学': [
+                    { id: 'ch1', name: '酸性试剂', cost: 1, icon: '🧪', desc: '造成5点伤害\n施加2层【酸】', effect: 'damage_acid', damage: 5, acid: 2 },
+                    { id: 'ch2', name: '碱性试剂', cost: 1, icon: '⚗️', desc: '造成5点伤害\n施加2层【碱】\n若敌有酸→中和+15', effect: 'damage_base', damage: 5, baseMark: 2, neutralDamage: 15 },
+                    { id: 'ch5', name: '盐析效应', cost: 1, icon: '🧂', desc: '移除敌人所有酸/碱标记\n每层造成4点伤害', effect: 'salt_out', perMarker: 4 },
+                ],
+                '生物': [
+                    { id: 'bi1', name: '细胞分裂', cost: 1, icon: '🦠', desc: '获得1【进化点】\n回复4点专注力', effect: 'evo_heal', evo: 1, heal: 4 },
+                    { id: 'bi2', name: '自然代谢', cost: 1, icon: '🌿', desc: '消耗1进化点\n造成10点伤害', effect: 'evo_damage', evoCost: 1, damage: 10 },
+                    { id: 'bi5', name: '共生关系', cost: 1, icon: '🤝', desc: '获得1进化点\n抽1张牌', effect: 'evo_draw', evo: 1, draw: 1 },
+                ],
+                '历史': [
+                    { id: 'hi1', name: '年代纪', cost: 1, icon: '📅', desc: '获得1层【年代印记】\n造成5点伤害', effect: 'damage_era', damage: 5, era: 1 },
+                    { id: 'hi2', name: '读史明智', cost: 1, icon: '📖', desc: '本回合手牌费用-年代印记数\n（最低0费）', effect: 'era_discount' },
+                    { id: 'hi5', name: '考古发现', cost: 2, icon: '⛏️', desc: '获得2层年代印记\n造成8点伤害', effect: 'damage_era2', damage: 8, era: 2 },
+                ],
+                '地理': [
+                    { id: 'ge1', name: '板块运动', cost: 1, icon: '🏔️', desc: '造成6点伤害\n地形变为【山地】(+2伤害)', effect: 'damage_terrain', damage: 6, terrain: '山地', terrainBonus: 2 },
+                    { id: 'ge2', name: '季风气候', cost: 1, icon: '🌬️', desc: '造成5点伤害\n地形变为【平原】(+2专注/回合)', effect: 'damage_terrain_heal', damage: 5, terrain: '平原', healPerTurn: 2 },
+                    { id: 'ge5', name: '洋流调节', cost: 2, icon: '🌊', desc: '地形变为【海洋】\n每回合回复3专注力', effect: 'terrain_ocean', terrain: '海洋', healPerTurn: 3 },
+                ],
+                '政治': [
+                    { id: 'po1', name: '宏观调控', cost: 1, icon: '📊', desc: '获得1点精力\n造成4点伤害', effect: 'energy_damage', energyGain: 1, damage: 4 },
+                    { id: 'po2', name: '矛盾分析', cost: 1, icon: '💡', desc: '施加【同一性光环】2回合\n我方所有伤害+3', effect: 'halo', duration: 2, bonusDamage: 3 },
+                    { id: 'po5', name: '群众路线', cost: 1, icon: '👥', desc: '回复6点专注力\n抽1张牌', effect: 'heal_draw', heal: 6, draw: 1 },
+                ],
+            };
+
+            // 进阶卡牌（商店购买）
             const ADVANCED_CARDS = {
                 '语文': [
-                    { id: 'cn3', name: '过秦论', cost: 3, icon: '📜', desc: '消耗所有文思\n每层造成8点伤害\n最低10点', effect: 'consume_wensi',
-                        perWensi: 8, minDamage: 10 },
-                    { id: 'cn4', name: '意境升华', cost: 2, icon: '✨', desc: '获得3层【文思】\n回复6点专注力', effect: 'wensi_heal',
-                        wensi: 3, heal: 6 },
+                    { id: 'cn3', name: '文以载道', cost: 2, icon: '📜', desc: '消耗所有文思\n每层回复5专注+造成4伤害', effect: 'wensi_convert', perHeal: 5, perDamage: 4 },
+                    { id: 'cn4', name: '厚积薄发', cost: 2, icon: '✨', desc: '获得3层文思\n下张选考牌伤害+6', effect: 'wensi_boost', wensi: 3, nextBonus: 6 },
                 ],
                 '数学': [
-                    { id: 'ma3', name: '费马大定理', cost: 3, icon: '🏆', desc: '需3层证明\n造成35点真实伤害', effect: 'proof_nuke',
-                        proofReq: 3, damage: 35 },
-                    { id: 'ma4', name: '概率论', cost: 1, icon: '🎲', desc: '获得2层证明\n本回合30%概率暴击\n(基础攻击翻倍)', effect: 'proof_crit',
-                        proof: 2, critChance: 0.3 },
+                    { id: 'ma3', name: '最优解', cost: 1, icon: '🎯', desc: '抽2张牌\n本回合精力上限+2', effect: 'draw_energy_boost', draw: 2, maxEnergyBoost: 2 },
+                    { id: 'ma4', name: '归纳法', cost: 2, icon: '🧩', desc: '将1张手牌复制加入手牌\n(不触发效果)', effect: 'copy_card' },
                 ],
                 '英语': [
-                    { id: 'en3', name: '将来时态', cost: 2, icon: '⏩', desc: '进入【将来时】2回合\n下回合精力+2', effect: 'future_tense',
-                        duration: 2, energyNext: 2 },
-                    { id: 'en4', name: '完形填空', cost: 2, icon: '📝', desc: '根据时态:\n过去→回复8专注\n将来→造成14伤害', effect: 'tense_flex',
-                        pastHeal: 8, futureDamage: 14 },
+                    { id: 'en3', name: '神启', cost: 1, icon: '🌈', desc: '消耗3层赐福\n额外获得2精力和1张牌', effect: 'grace_inspire', graceCost: 3, energy: 2, draw: 1 },
+                    { id: 'en4', name: '圣灵守护', cost: 2, icon: '🛡️', desc: '消耗2层赐福\n回复15点专注力', effect: 'grace_guard', graceCost: 2, heal: 15 },
                 ],
                 '物理': [
-                    { id: 'ph3', name: '电磁风暴', cost: 2, icon: '🌩️', desc: '造成12点伤害\n施加【易伤】2回合\n(受伤害+30%)', effect: 'damage_vuln',
-                        damage: 12, vulnDuration: 2 },
+                    { id: 'ph3', name: '电磁风暴', cost: 2, icon: '🌩️', desc: '造成12点伤害\n施加【易伤】2回合', effect: 'damage_vuln', damage: 12, vulnDuration: 2 },
                     { id: 'ph4', name: '角动量守恒', cost: 1, icon: '🔄', desc: '将敌人动量层数翻倍', effect: 'double_momentum' },
                 ],
                 '化学': [
-                    { id: 'ch3', name: '催化剂', cost: 1, icon: '🔥', desc: '触发所有标记\n每层酸/碱造成4点伤害', effect: 'catalyst',
-                    perMarker: 4 },
-                    { id: 'ch4', name: '铝热剂', cost: 3, icon: '💥', desc: '造成20点伤害\n施加3层【灼烧】\n(每回合-3血持续3回合)',
-                        effect: 'thermite', damage: 20, burn: 3 },
+                    { id: 'ch3', name: '催化剂', cost: 1, icon: '🔥', desc: '触发所有标记\n每层酸/碱造成4点伤害', effect: 'catalyst', perMarker: 4 },
+                    { id: 'ch4', name: '铝热剂', cost: 3, icon: '💥', desc: '造成20点伤害\n施加3层【灼烧】', effect: 'thermite', damage: 20, burn: 3 },
                 ],
                 '生物': [
-                    { id: 'bi3', name: '适者生存', cost: 2, icon: '🧬', desc: '获得2【进化点】\n若专注<40额外+1', effect: 'survival',
-                        evo: 2, lowFocusBonus: 1 },
-                    { id: 'bi4', name: '溶酶体爆破', cost: 2, icon: '💣', desc: '造成8+进化点×5伤害', effect: 'lysosome',
-                        baseDamage: 8, evoMultiplier: 5 },
+                    { id: 'bi3', name: '适者生存', cost: 2, icon: '🧬', desc: '获得2【进化点】\n若专注<40额外+1', effect: 'survival', evo: 2, lowFocusBonus: 1 },
+                    { id: 'bi4', name: '溶酶体爆破', cost: 2, icon: '💣', desc: '造成8+进化点×5伤害', effect: 'lysosome', baseDamage: 8, evoMultiplier: 5 },
                 ],
                 '历史': [
-                    { id: 'hi3', name: '朝代更迭', cost: 3, icon: '👑', desc: '消耗所有年代印记\n每层造成7伤害+回复2专注', effect: 'consume_era',
-                        perEra: 7, healPerEra: 2 },
-                    { id: 'hi4', name: '以史为鉴', cost: 2, icon: '🔮', desc: '获得2层年代印记\n下回合多抽1张牌', effect: 'era_draw',
-                        era: 2, nextDrawBonus: 1 },
+                    { id: 'hi3', name: '朝代更迭', cost: 3, icon: '👑', desc: '消耗所有年代印记\n每层造成7伤害+回复2专注', effect: 'consume_era', perEra: 7, healPerEra: 2 },
+                    { id: 'hi4', name: '以史为鉴', cost: 2, icon: '🔮', desc: '获得2层年代印记\n下回合多抽1张牌', effect: 'era_draw', era: 2, nextDrawBonus: 1 },
                 ],
                 '地理': [
-                    { id: 'ge3', name: '沙尘暴', cost: 2, icon: '🌪️', desc: '造成10点伤害\n【致盲】1回合\n(反击伤害减半)', effect: 'damage_blind',
-                        damage: 10, blind: 1 },
-                    { id: 'ge4', name: '沧海桑田', cost: 3, icon: '🌊', desc: '造成18点伤害\n随机变换地形', effect: 'damage_random_terrain',
-                        damage: 18 },
+                    { id: 'ge3', name: '沙尘暴', cost: 2, icon: '🌪️', desc: '造成10点伤害\n【致盲】1回合', effect: 'damage_blind', damage: 10, blind: 1 },
+                    { id: 'ge4', name: '沧海桑田', cost: 3, icon: '🌊', desc: '造成18点伤害\n随机变换地形', effect: 'damage_random_terrain', damage: 18 },
                 ],
                 '政治': [
-                    { id: 'po3', name: '真理之辨', cost: 2, icon: '⚖️', desc: '造成10点伤害\n【缴械】1回合\n(敌人不反击)', effect: 'damage_disarm',
-                        damage: 10, disarm: 1 },
-                    { id: 'po4', name: '主要矛盾', cost: 2, icon: '🎯', desc: '造成12点伤害\n若在光环中伤害翻倍', effect: 'damage_halo',
-                        damage: 12, haloDouble: true },
+                    { id: 'po3', name: '真理之辨', cost: 2, icon: '⚖️', desc: '造成10点伤害\n【缴械】1回合', effect: 'damage_disarm', damage: 10, disarm: 1 },
+                    { id: 'po4', name: '主要矛盾', cost: 2, icon: '🎯', desc: '造成12点伤害\n若在光环中伤害翻倍', effect: 'damage_halo', damage: 12, haloDouble: true },
                 ],
             };
 
-            // 学科共鸣定义
             const RESONANCE_PAIRS = [
                 { pair: ['语文', '历史'], name: '笔墨春秋', desc: '获得文思时额外+1年代印记', icon: '🖋️' },
-                { pair: ['物理', '数学'], name: '数理推演', desc: '暴击时获得1层证明', icon: '🔬' },
+                { pair: ['物理', '数学'], name: '数理推演', desc: '造成伤害时可能获得1层证明', icon: '🔬' },
                 { pair: ['化学', '生物'], name: '分子花园', desc: '反应伤害额外施加1层灼烧', icon: '🌺' },
                 { pair: ['地理', '政治'], name: '江山社稷', desc: '地形增益效果翻倍', icon: '🏛️' },
                 { pair: ['物理', '地理'], name: '格物致知', desc: '动量相关伤害+3', icon: '🌏' },
-                { pair: ['英语', '政治'], name: '国际关系', desc: '切换时态时额外获得1精力', icon: '🌐' },
+                { pair: ['英语', '政治'], name: '国际关系', desc: '获得赐福时额外+1', icon: '🌐' },
             ];
 
-            // ==================== DOM元素 ====================
             const $ = (sel) => document.querySelector(sel);
             const $$ = (sel) => document.querySelectorAll(sel);
 
@@ -1123,6 +975,7 @@
                 playerFocus: $('#playerFocus'),
                 energyDisplay: $('#energyDisplay'),
                 energyDots: $('#energyDots'),
+                graceDisplay: $('#graceDisplay'),
                 currentSubject: $('#currentSubject'),
                 enemyVisual: $('#enemyVisual'),
                 enemyName: $('#enemyName'),
@@ -1139,14 +992,12 @@
                 resonanceDisplay: $('#resonanceDisplay'),
             };
 
-            // ==================== 游戏状态 ====================
             let selectedOptionalSubjects = [];
             let allSubjects = [];
             let activeResonances = [];
             let gameState = null;
-            let cardPool = []; // 当前卡池（所有拥有的卡）
-            let ownedCardIds = new Set(); // 已拥有的卡ID
-            let battleInterval = null;
+            let cardPool = [];
+            let ownedCardIds = new Set();
 
             function resetGameState() {
                 const subs = [...allSubjects];
@@ -1156,60 +1007,35 @@
                     focus: 100,
                     maxFocus: 100,
                     currentSubjectIndex: 0,
-                    currentStage: 1, // 每科5关：1-4小测，5模考
+                    currentStage: 1,
                     subjectsRemaining: subs.length,
                     enemyHealth: 100,
                     enemyMaxHealth: 100,
                     enemyDifficulty: 0.75,
                     energy: 3,
                     maxEnergy: 3,
-                    retainedEnergy: 0, // 留存的精力（最多2）
+                    retainedEnergy: 0,
                     hand: [],
-                    // 特殊效果
-                    specialEffects: {
-                        doubleDamage: 0,
-                        damageReduction: 0,
-                        critChance: 0,
-                        extraDraw: 0,
-                    },
-                    // 学科计数器（跨回合）
-                    counters: {
-                        wensi: 0, // 文思
-                        proof: 0, // 证明
-                        evo: 0, // 进化点
-                        era: 0, // 年代印记
-                    },
-                    // 敌人标记
-                    enemyMarkers: {
-                        acid: 0,
-                        base: 0,
-                        burn: 0,
-                        burnDuration: 0,
-                    },
-                    // 敌人状态（剩余回合）
-                    enemyStatus: {
-                        silence: 0,
-                        vuln: 0,
-                        blind: 0,
-                        disarm: 0,
-                    },
-                    // 全局状态
+                    specialEffects: { doubleDamage: 0, damageReduction: 0, critChance: 0, extraDraw: 0 },
+                    counters: { wensi: 0, grace: 0, evo: 0, era: 0, momentum: 0 },
+                    enemyMarkers: { acid: 0, base: 0, burn: 0, burnDuration: 0, _momentum: 0 },
+                    enemyStatus: { silence: 0, vuln: 0, blind: 0, disarm: 0 },
                     terrain: '默认',
                     terrainBonus: 0,
                     terrainHeal: 0,
-                    tense: null, // 'past' | 'future' | null
+                    tense: null,
                     tenseDuration: 0,
                     haloActive: false,
                     haloDuration: 0,
                     haloBonus: 0,
-                    // 回合计数
                     turnInStage: 0,
-                    // 概率论暴击标记
                     probCritThisTurn: false,
+                    tempKnowledge: 0,
+                    discountActive: false,
                 };
                 cardPool = [];
                 ownedCardIds = new Set();
-                // 加入所有基础卡
+                // 加入基础卡
                 for (const subj of allSubjects) {
                     if (BASE_CARDS[subj]) {
                         for (const card of BASE_CARDS[subj]) {
@@ -1217,8 +1043,13 @@
                             ownedCardIds.add(card.id);
                         }
                     }
+                    if (ELECTIVE_BASE_CARDS[subj]) {
+                        for (const card of ELECTIVE_BASE_CARDS[subj]) {
+                            cardPool.push({ ...card, subject: subj });
+                            ownedCardIds.add(card.id);
+                        }
+                    }
                 }
-                // 计算共鸣
                 activeResonances = [];
                 for (const rp of RESONANCE_PAIRS) {
                     if (allSubjects.includes(rp.pair[0]) && allSubjects.includes(rp.pair[1])) {
@@ -1227,26 +1058,14 @@
                 }
             }
 
-            // ==================== 工具函数 ====================
-            function shuffle(arr) {
-                const a = [...arr];
-                for (let i = a.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [a[i], a[j]] = [a[j], a[i]];
-                }
-                return a;
-            }
-
+            function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
             function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-
             function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
-
             function addLog(text, highlight = false) {
                 const entry = document.createElement('div');
                 entry.className = 'log-entry' + (highlight ? ' highlight' : '');
                 const now = new Date();
-                const ts = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2,
-                    '0') + ':' + now.getSeconds().toString().padStart(2, '0');
+                const ts = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0') + ':' + now.getSeconds().toString().padStart(2, '0');
                 entry.textContent = `[${ts}] ${text}`;
                 dom.battleLog.appendChild(entry);
                 dom.battleLog.scrollTop = dom.battleLog.scrollHeight;
@@ -1255,59 +1074,44 @@
             function updateDisplay() {
                 if (!gameState) return;
                 dom.playerScore.textContent = gameState.score;
-                dom.playerKnowledge.textContent = gameState.knowledge;
+                dom.playerKnowledge.textContent = gameState.knowledge + (gameState.tempKnowledge || 0);
                 dom.playerFocus.textContent = gameState.focus;
                 const totalEnergy = gameState.energy;
                 dom.energyDisplay.textContent = totalEnergy + '/' + gameState.maxEnergy;
-                // 精力点显示
                 let dotsHTML = '';
-                for (let i = 0; i < gameState.maxEnergy; i++) {
-                    dotsHTML +=
-                        `<span class="energy-dot${i >= totalEnergy ? ' spent' : ''}" style="width:11px;height:11px;"></span>`;
-                }
+                for (let i = 0; i < gameState.maxEnergy; i++) dotsHTML += `<span class="energy-dot${i >= totalEnergy ? ' spent' : ''}" style="width:11px;height:11px;"></span>`;
                 dom.energyDots.innerHTML = dotsHTML;
-                dom.currentLevel.textContent =
-                    `第 ${gameState.currentSubjectIndex + 1} 门 · 第 ${gameState.currentStage} 关`;
-                dom.enemyHealthText.textContent =
-                    `血量 ${Math.max(0, gameState.enemyHealth)} / ${gameState.enemyMaxHealth}`;
+                dom.graceDisplay.textContent = gameState.counters.grace;
+                dom.currentLevel.textContent = `第 ${gameState.currentSubjectIndex + 1} 门 · 第 ${gameState.currentStage} 关`;
+                dom.enemyHealthText.textContent = `血量 ${Math.max(0, gameState.enemyHealth)} / ${gameState.enemyMaxHealth}`;
                 const hpPercent = Math.max(0, gameState.enemyHealth) / gameState.enemyMaxHealth * 100;
                 dom.enemyHealthFill.style.width = hpPercent + '%';
-                if (hpPercent < 30) dom.enemyHealthFill.style.background = 'linear-gradient(90deg, #e74c3c, #a01010)';
-                else dom.enemyHealthFill.style.background = 'linear-gradient(90deg, #e74c3c, #c0392b)';
                 dom.enemyDifficulty.textContent = gameState.enemyDifficulty.toFixed(2);
-                // 更新计数器显示
                 updateCountersDisplay();
-                // 更新敌人标记
                 updateEnemyMarkersDisplay();
-                // 更新共鸣显示
                 updateResonanceDisplay();
             }
 
             function updateCountersDisplay() {
-                if (!gameState) return;
                 const c = gameState.counters;
                 let html = '';
                 if (c.wensi > 0) html += `<span class="counter-badge">📝文思:${c.wensi}</span>`;
-                if (c.proof > 0) html += `<span class="counter-badge">📐证明:${c.proof}</span>`;
+                if (c.grace > 0) html += `<span class="grace-display">✨赐福:${c.grace}</span>`;
                 if (c.evo > 0) html += `<span class="counter-badge">🧬进化点:${c.evo}</span>`;
                 if (c.era > 0) html += `<span class="counter-badge">📅年代:${c.era}</span>`;
-                if (gameState.terrain !== '默认') html +=
-                    `<span class="counter-badge">⛰️地形:${gameState.terrain}</span>`;
-                if (gameState.tense) html +=
-                    `<span class="counter-badge">⏳时态:${gameState.tense==='past'?'过去':'将来'}(${gameState.tenseDuration}回合)</span>`;
-                if (gameState.haloActive) html +=
-                    `<span class="counter-badge">💡光环(+${gameState.haloBonus})</span>`;
+                if (gameState.terrain !== '默认') html += `<span class="counter-badge">⛰️地形:${gameState.terrain}</span>`;
+                if (gameState.haloActive) html += `<span class="counter-badge">💡光环(+${gameState.haloBonus})</span>`;
                 dom.countersRow.innerHTML = html || '<span style="font-size:11px;color:#bbb;">无特殊状态</span>';
             }
 
             function updateEnemyMarkersDisplay() {
-                if (!gameState) return;
                 const m = gameState.enemyMarkers;
                 const s = gameState.enemyStatus;
                 let html = '';
                 if (m.acid > 0) html += `<span class="marker-tag marker-acid">酸×${m.acid}</span>`;
                 if (m.base > 0) html += `<span class="marker-tag marker-base">碱×${m.base}</span>`;
                 if (m.burn > 0) html += `<span class="marker-tag marker-burn">灼烧×${m.burn}(${m.burnDuration}回合)</span>`;
+                if (m._momentum > 0) html += `<span class="marker-tag" style="background:#e0ecf5;color:#1e5888;">动量×${m._momentum}</span>`;
                 if (s.silence > 0) html += `<span class="marker-tag marker-silence">沉默</span>`;
                 if (s.vuln > 0) html += `<span class="marker-tag marker-vuln">易伤</span>`;
                 if (s.blind > 0) html += `<span class="marker-tag marker-blind">致盲</span>`;
@@ -1316,80 +1120,37 @@
             }
 
             function updateResonanceDisplay() {
-                if (activeResonances.length === 0) {
-                    dom.resonanceDisplay.innerHTML = '';
-                    return;
-                }
-                dom.resonanceDisplay.innerHTML = activeResonances.map(r =>
-                    `<span class="resonance-badge" title="${r.desc}">${r.icon} ${r.name}</span>`
-                ).join('');
+                if (activeResonances.length === 0) { dom.resonanceDisplay.innerHTML = ''; return; }
+                dom.resonanceDisplay.innerHTML = activeResonances.map(r => `<span class="resonance-badge" title="${r.desc}">${r.icon} ${r.name}</span>`).join('');
             }
 
-            function getSubjectColor(subject) {
-                return SUBJECT_COLORS[subject] || { bg: 'linear-gradient(145deg, #888, #555)', tag: '#555' };
-            }
+            function getSubjectColor(subject) { return SUBJECT_COLORS[subject] || { bg: 'linear-gradient(145deg, #888, #555)', tag: '#555' }; }
 
-            // ==================== 手牌与抽牌 ====================
             function drawHand() {
                 if (!gameState || cardPool.length === 0) return;
                 const drawCount = 3 + (gameState.specialEffects.extraDraw || 0);
                 gameState.specialEffects.extraDraw = 0;
-                const shuffled = shuffle(cardPool);
-                gameState.hand = shuffled.slice(0, Math.min(drawCount, shuffled.length));
+                gameState.hand = shuffle(cardPool).slice(0, Math.min(drawCount, cardPool.length));
                 renderHand();
             }
 
             function renderHand() {
                 dom.cardContainer.innerHTML = '';
                 if (!gameState || gameState.hand.length === 0) {
-                    dom.cardContainer.innerHTML =
-                    '<div style="color:#bbb;font-size:14px;padding:30px;">卡池为空...</div>';
+                    dom.cardContainer.innerHTML = '<div style="color:#bbb;font-size:14px;padding:30px;">卡池为空...</div>';
                     return;
                 }
                 const totalEnergy = gameState.energy;
-                // 计算读史明智折扣
-                let eraDiscount = 0;
-                // 检查手牌中是否有读史明智已生效（简化：在手牌渲染时检查）
-                const hasEraDiscount = gameState.hand.some(c => c.id === 'hi2' && c._eraDiscountApplied);
-                if (hasEraDiscount) eraDiscount = gameState.counters.era;
-
+                const discount = gameState.discountActive ? 1 : 0;
                 for (const card of gameState.hand) {
-                    const effectiveCost = Math.max(0, card.cost - (card.id === 'hi2' ? 0 : eraDiscount));
+                    const effectiveCost = Math.max(0, card.cost - discount);
                     const canAfford = totalEnergy >= effectiveCost;
-                    let conditionMet = true;
-                    let conditionReason = '';
-                    if (card.effect === 'consume_wensi' && gameState.counters.wensi === 0 && (card.minDamage || 0) ===
-                        0) {
-                        // 过秦论最低10伤害，文思为0也可打出
-                        if (!card.minDamage || gameState.counters.wensi === 0 && card.minDamage < 1) {
-                            conditionMet = false;
-                            conditionReason = '文思不足';
-                        }
-                    }
-                    if (card.effect === 'proof_nuke' && gameState.counters.proof < (card.proofReq || 3)) {
-                        conditionMet = false;
-                        conditionReason = `需${card.proofReq||3}层证明`;
-                    }
-                    if (card.effect === 'consume_momentum' && gameState.enemyMarkers.acid === undefined &&
-                        gameState.counters
-                        .wensi === undefined) {
-                        // 力的作用：检查动量（动量存在敌人标记中？不，动量存在敌人身上）
-                        // 动量简化：存储在enemyMarkers中
-                        const momentum = gameState.enemyMarkers._momentum || 0;
-                        if (momentum === 0) {
-                            conditionMet = false;
-                            conditionReason = '无动量层数';
-                        }
-                    }
-                    if (card.effect === 'evo_damage' && gameState.counters.evo < (card.evoCost || 1)) {
-                        conditionMet = false;
-                        conditionReason = '进化点不足';
-                    }
-                    if (card.effect === 'double_momentum' && (gameState.enemyMarkers._momentum || 0) === 0) {
-                        conditionMet = false;
-                        conditionReason = '无动量层数';
-                    }
-
+                    let conditionMet = true, reason = '';
+                    if (card.effect === 'grace_inspire' && gameState.counters.grace < (card.graceCost || 3)) { conditionMet = false; reason = '赐福不足'; }
+                    if (card.effect === 'grace_guard' && gameState.counters.grace < (card.graceCost || 2)) { conditionMet = false; reason = '赐福不足'; }
+                    if (card.effect === 'consume_momentum' && (gameState.enemyMarkers._momentum || 0) === 0) { conditionMet = false; reason = '无动量'; }
+                    if (card.effect === 'evo_damage' && gameState.counters.evo < (card.evoCost || 1)) { conditionMet = false; reason = '进化点不足'; }
+                    if (card.effect === 'double_momentum' && (gameState.enemyMarkers._momentum || 0) === 0) { conditionMet = false; reason = '无动量'; }
                     const colorInfo = getSubjectColor(card.subject);
                     const cardEl = document.createElement('div');
                     cardEl.className = 'card';
@@ -1404,597 +1165,204 @@
                 <div class="card-subject-tag">${card.subject}</div>
               `;
                     cardEl.addEventListener('click', () => {
-                        if (!canAfford) {
-                            addLog('⚠️ 精力不足，无法打出【' + card.name + '】');
-                            shakeElement(cardEl);
-                            return;
-                        }
-                        if (!conditionMet) {
-                            addLog('⚠️ ' + conditionReason + '，无法打出【' + card.name + '】');
-                            shakeElement(cardEl);
-                            return;
-                        }
+                        if (!canAfford) { addLog('⚠️ 精力不足'); return; }
+                        if (!conditionMet) { addLog('⚠️ ' + reason); return; }
                         playCard(card, effectiveCost);
                     });
                     dom.cardContainer.appendChild(cardEl);
                 }
             }
 
-            function shakeElement(el) {
-                el.style.animation = 'none';
-                el.offsetHeight;
-                el.style.animation = 'shake 0.4s ease';
-                setTimeout(() => { el.style.animation = ''; }, 400);
-            }
-
-            // 添加shake动画
-            const shakeStyle = document.createElement('style');
-            shakeStyle.textContent =
-                '@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}50%{transform:translateX(6px);}75%{transform:translateX(-4px);}}';
-            document.head.appendChild(shakeStyle);
-
             function playCard(card, effectiveCost) {
-                if (!gameState) return;
-                // 扣除精力
                 gameState.energy -= effectiveCost;
-                // 从手牌移除
                 const idx = gameState.hand.indexOf(card);
                 if (idx >= 0) gameState.hand.splice(idx, 1);
-                // 执行卡牌效果
                 executeCardEffect(card);
-                // 重新渲染
                 renderHand();
                 updateDisplay();
-                // 检查精力是否为0
-                if (gameState.energy <= 0) {
-                    dom.endTurnBtn.classList.add('flash');
-                }
+                if (gameState.energy <= 0) dom.endTurnBtn.classList.add('flash');
             }
 
             function executeCardEffect(card) {
                 const gs = gameState;
-                const subj = card.subject;
-                addLog(`🃏 打出【${card.name}】(消耗${card.cost}精力)`);
-
+                addLog(`🃏 打出【${card.name}】`);
                 switch (card.effect) {
-                    case 'damage_wensi':
-                        dealDamage(card.damage);
-                        gs.counters.wensi += card.wensi;
-                        addLog(`  ↳ 获得${card.wensi}层文思`);
-                        checkResonanceWensiEra(card.wensi);
-                        break;
-                    case 'damage_silence':
-                        dealDamage(card.damage);
-                        gs.enemyStatus.silence = Math.max(gs.enemyStatus.silence, card.silence);
-                        addLog(`  ↳ 沉默敌人${card.silence}回合`);
-                        break;
-                    case 'proof_draw':
-                        gs.counters.proof += card.proof;
-                        addLog(`  ↳ 获得${card.proof}层证明，抽1张牌`);
-                        // 抽牌：从卡池随机抽1张加入手牌
-                        if (cardPool.length > 0) {
-                            const extraCard = cardPool[Math.floor(Math.random() * cardPool.length)];
-                            gs.hand.push({ ...extraCard, subject: extraCard.subject });
-                            addLog(`  ↳ 抽到【${extraCard.name}】`);
-                        }
-                        break;
-                    case 'damage_proof':
-                        const proofDmg = card.baseDamage + gs.counters.proof * card.proofMultiplier;
-                        dealDamage(proofDmg);
-                        addLog(`  ↳ 证明层数${gs.counters.proof}，造成${proofDmg}伤害`);
-                        break;
-                    case 'damage_tense':
-                        let tenseDmg = card.damage;
-                        if (gs.tense) { tenseDmg += card.tenseBonus;
-                            addLog(`  ↳ 时态加成+${card.tenseBonus}`); }
-                        dealDamage(tenseDmg);
-                        break;
-                    case 'past_tense':
-                        gs.tense = 'past';
-                        gs.tenseDuration = card.duration;
-                        addLog(`  ↳ 进入过去时态${card.duration}回合，反击伤害减半`);
-                        checkResonanceTenseEnergy();
-                        break;
-                    case 'damage_momentum':
-                        dealDamage(card.damage);
-                        gs.enemyMarkers._momentum = (gs.enemyMarkers._momentum || 0) + card.momentum;
-                        addLog(`  ↳ 施加${card.momentum}层动量（共${gs.enemyMarkers._momentum}层）`);
-                        break;
-                    case 'consume_momentum':
-                        const mom = gs.enemyMarkers._momentum || 0;
-                        const momDmg = mom * card.perMomentum;
-                        dealDamage(momDmg + (hasResonance('格物致知') ? 3 * mom : 0));
-                        addLog(
-                            `  ↳ 消耗${mom}层动量，造成${momDmg}伤害${hasResonance('格物致知')?'(+共鸣+3/层)':''}`);
-                        gs.enemyMarkers._momentum = 0;
-                        break;
-                    case 'damage_acid':
-                        dealDamage(card.damage);
-                        gs.enemyMarkers.acid = (gs.enemyMarkers.acid || 0) + card.acid;
-                        addLog(`  ↳ 施加${card.acid}层酸（共${gs.enemyMarkers.acid}层）`);
-                        break;
-                    case 'damage_base':
-                        dealDamage(card.damage);
-                        gs.enemyMarkers.base = (gs.enemyMarkers.base || 0) + card.baseMark;
-                        addLog(`  ↳ 施加${card.baseMark}层碱（共${gs.enemyMarkers.base}层）`);
-                        if (gs.enemyMarkers.acid > 0) {
-                            const neutralDmg = card.neutralDamage;
-                            dealDamage(neutralDmg);
-                            addLog(`  💥 酸+碱中和反应！额外造成${neutralDmg}伤害`);
-                            gs.enemyMarkers.acid = Math.max(0, gs.enemyMarkers.acid - card.baseMark);
-                            gs.enemyMarkers.base = Math.max(0, gs.enemyMarkers.base - card.baseMark);
-                            if (hasResonance('分子花园')) {
-                                gs.enemyMarkers.burn = (gs.enemyMarkers.burn || 0) + 1;
-                                gs.enemyMarkers.burnDuration = Math.max(gs.enemyMarkers.burnDuration || 0, 2);
-                                addLog(`  🌺 分子花园共鸣：施加1层灼烧`);
-                            }
-                        }
-                        break;
-                    case 'evo_heal':
-                        gs.counters.evo += card.evo;
-                        gs.focus = clamp(gs.focus + card.heal, 0, gs.maxFocus);
-                        addLog(`  ↳ 获得${card.evo}进化点，回复${card.heal}专注力`);
-                        break;
-                    case 'evo_damage':
-                        gs.counters.evo -= card.evoCost;
-                        dealDamage(card.damage);
-                        addLog(`  ↳ 消耗1进化点，造成${card.damage}伤害`);
-                        break;
-                    case 'damage_era':
-                        dealDamage(card.damage);
-                        gs.counters.era += card.era;
-                        addLog(`  ↳ 获得${card.era}层年代印记`);
-                        break;
-                    case 'era_discount':
-                        card._eraDiscountApplied = true;
-                        addLog(`  ↳ 年代印记${gs.counters.era}层，本回合手牌费用-${gs.counters.era}`);
-                        // 重新渲染以反映折扣
-                        setTimeout(() => renderHand(), 50);
-                        break;
-                    case 'damage_terrain':
-                        dealDamage(card.damage);
-                        gs.terrain = card.terrain;
-                        gs.terrainBonus = hasResonance('江山社稷') ? (card.terrainBonus || 0) * 2 : (card
-                            .terrainBonus || 0);
-                        gs.terrainHeal = 0;
-                        addLog(`  ↳ 地形变为【${card.terrain}】(+${gs.terrainBonus}伤害)`);
-                        break;
-                    case 'damage_terrain_heal':
-                        dealDamage(card.damage);
-                        gs.terrain = card.terrain;
-                        gs.terrainBonus = 0;
-                        gs.terrainHeal = hasResonance('江山社稷') ? (card.healPerTurn || 0) * 2 : (card
-                            .healPerTurn || 0);
-                        addLog(`  ↳ 地形变为【${card.terrain}】(+${gs.terrainHeal}专注/回合)`);
-                        break;
-                    case 'energy_damage':
-                        gs.energy = clamp(gs.energy + card.energyGain, 0, gs.maxEnergy);
-                        dealDamage(card.damage);
-                        addLog(`  ↳ 获得${card.energyGain}精力，造成${card.damage}伤害`);
-                        break;
-                    case 'halo':
-                        gs.haloActive = true;
-                        gs.haloDuration = card.duration;
-                        gs.haloBonus = card.bonusDamage;
-                        addLog(`  ↳ 施加同一性光环${card.duration}回合，所有伤害+${card.bonusDamage}`);
-                        break;
-                    case 'consume_wensi':
-                        const wensiCount = gs.counters.wensi;
-                        const wensiDmg = Math.max(card.minDamage || 0, wensiCount * card.perWensi);
-                        dealDamage(wensiDmg);
-                        addLog(`  ↳ 消耗${wensiCount}层文思，造成${wensiDmg}伤害`);
-                        gs.counters.wensi = 0;
-                        break;
-                    case 'wensi_heal':
-                        gs.counters.wensi += card.wensi;
-                        gs.focus = clamp(gs.focus + card.heal, 0, gs.maxFocus);
-                        addLog(`  ↳ 获得${card.wensi}层文思，回复${card.heal}专注力`);
-                        checkResonanceWensiEra(card.wensi);
-                        break;
-                    case 'proof_nuke':
-                        gs.counters.proof -= card.proofReq;
-                        dealDamage(card.damage);
-                        addLog(`  ↳ 消耗${card.proofReq}层证明，造成${card.damage}真实伤害！`);
-                        break;
-                    case 'proof_crit':
-                        gs.counters.proof += card.proof;
-                        gs.probCritThisTurn = true;
-                        gs.specialEffects.critChance = card.critChance;
-                        addLog(`  ↳ 获得${card.proof}层证明，本回合${Math.round(card.critChance*100)}%暴击率`);
-                        checkResonanceProofCrit();
-                        break;
-                    case 'future_tense':
-                        gs.tense = 'future';
-                        gs.tenseDuration = card.duration;
-                        gs.retainedEnergy = clamp(gs.retainedEnergy + card.energyNext, 0, 2);
-                        addLog(`  ↳ 进入将来时态，下回合额外+${card.energyNext}精力`);
-                        checkResonanceTenseEnergy();
-                        break;
-                    case 'tense_flex':
-                        if (gs.tense === 'past') {
-                            gs.focus = clamp(gs.focus + card.pastHeal, 0, gs.maxFocus);
-                            addLog(`  ↳ 过去时态：回复${card.pastHeal}专注力`);
-                        } else if (gs.tense === 'future') {
-                            dealDamage(card.futureDamage);
-                            addLog(`  ↳ 将来时态：造成${card.futureDamage}伤害`);
-                        } else {
-                            dealDamage(6);
-                            addLog(`  ↳ 无时态：造成6点基础伤害`);
-                        }
-                        break;
-                    case 'damage_vuln':
-                        dealDamage(card.damage);
-                        gs.enemyStatus.vuln = Math.max(gs.enemyStatus.vuln, card.vulnDuration);
-                        addLog(`  ↳ 施加易伤${card.vulnDuration}回合`);
-                        break;
-                    case 'double_momentum':
-                        const curMom = gs.enemyMarkers._momentum || 0;
-                        gs.enemyMarkers._momentum = curMom * 2;
-                        addLog(`  ↳ 动量翻倍：${curMom}→${gs.enemyMarkers._momentum}`);
-                        break;
-                    case 'catalyst':
-                        const totalMarkers = (gs.enemyMarkers.acid || 0) + (gs.enemyMarkers.base || 0);
-                        const catDmg = totalMarkers * card.perMarker;
-                        dealDamage(catDmg);
-                        addLog(`  ↳ 触发${totalMarkers}个标记，造成${catDmg}伤害`);
-                        gs.enemyMarkers.acid = 0;
-                        gs.enemyMarkers.base = 0;
-                        break;
-                    case 'thermite':
-                        dealDamage(card.damage);
-                        gs.enemyMarkers.burn = (gs.enemyMarkers.burn || 0) + card.burn;
-                        gs.enemyMarkers.burnDuration = Math.max(gs.enemyMarkers.burnDuration || 0, 3);
-                        addLog(`  ↳ 造成${card.damage}伤害，施加${card.burn}层灼烧(3回合)`);
-                        break;
-                    case 'survival':
-                        let evoGain = card.evo;
-                        if (gs.focus < 40) { evoGain += card.lowFocusBonus;
-                            addLog(`  ↳ 专注力低于40，额外+1进化点`); }
-                        gs.counters.evo += evoGain;
-                        addLog(`  ↳ 获得${evoGain}进化点`);
-                        break;
-                    case 'lysosome':
-                        const lysDmg = card.baseDamage + gs.counters.evo * card.evoMultiplier;
-                        dealDamage(lysDmg);
-                        addLog(`  ↳ 进化点${gs.counters.evo}，造成${lysDmg}伤害`);
-                        break;
-                    case 'consume_era':
-                        const eraCount = gs.counters.era;
-                        const eraDmg = eraCount * card.perEra;
-                        const eraHeal = eraCount * card.healPerEra;
-                        dealDamage(eraDmg);
-                        gs.focus = clamp(gs.focus + eraHeal, 0, gs.maxFocus);
-                        addLog(`  ↳ 消耗${eraCount}层年代印记，造成${eraDmg}伤害，回复${eraHeal}专注力`);
-                        gs.counters.era = 0;
-                        break;
-                    case 'era_draw':
-                        gs.counters.era += card.era;
-                        gs.specialEffects.extraDraw = (gs.specialEffects.extraDraw || 0) + card.nextDrawBonus;
-                        addLog(`  ↳ 获得${card.era}层年代印记，下回合多抽${card.nextDrawBonus}张牌`);
-                        break;
-                    case 'damage_blind':
-                        dealDamage(card.damage);
-                        gs.enemyStatus.blind = Math.max(gs.enemyStatus.blind, card.blind);
-                        addLog(`  ↳ 致盲${card.blind}回合`);
-                        break;
-                    case 'damage_random_terrain':
-                        dealDamage(card.damage);
-                        const terrains = ['山地', '平原', '沙漠', '河流'];
-                        const newTerrain = terrains[Math.floor(Math.random() * terrains.length)];
-                        gs.terrain = newTerrain;
-                        if (newTerrain === '山地') { gs.terrainBonus = hasResonance('江山社稷') ? 4 : 2;
-                            gs.terrainHeal = 0; } else if (newTerrain === '平原') { gs.terrainBonus = 0;
-                            gs.terrainHeal = hasResonance('江山社稷') ? 4 : 2; } else if (newTerrain ===
-                            '沙漠') { gs.terrainBonus = hasResonance('江山社稷') ? 6 : 3;
-                            gs.terrainHeal = 0; } else { gs.terrainBonus = 0;
-                            gs.terrainHeal = 0; }
-                        addLog(`  ↳ 地形变为【${newTerrain}】`);
-                        break;
-                    case 'damage_disarm':
-                        dealDamage(card.damage);
-                        gs.enemyStatus.disarm = Math.max(gs.enemyStatus.disarm, card.disarm);
-                        addLog(`  ↳ 缴械${card.disarm}回合`);
-                        break;
-                    case 'damage_halo':
-                        let haloDmg = card.damage;
-                        if (gs.haloActive && card.haloDouble) { haloDmg *= 2;
-                            addLog(`  ↳ 光环中伤害翻倍！`); }
-                        dealDamage(haloDmg);
-                        break;
-                    default:
-                        addLog(`  ↳ 效果未定义: ${card.effect}`);
+                    case 'heal_wensi': gs.focus = clamp(gs.focus + card.heal, 0, gs.maxFocus); gs.counters.wensi += card.wensi; addLog(`  ↳ 回复${card.heal}专注力，文思+${card.wensi}`); checkResonanceWensiEra(card.wensi); break;
+                    case 'temp_knowledge': gs.tempKnowledge = (gs.tempKnowledge || 0) + card.bonus; addLog(`  ↳ 学识临时+${card.bonus}`); break;
+                    case 'draw_energy': if (cardPool.length > 0) { const ec = cardPool[Math.floor(Math.random() * cardPool.length)]; gs.hand.push({...ec}); addLog(`  ↳ 抽到【${ec.name}】`); } gs.energy = clamp(gs.energy + card.energy, 0, gs.maxEnergy + 2); addLog(`  ↳ 精力+${card.energy}`); break;
+                    case 'discount': gs.discountActive = true; addLog(`  ↳ 本回合手牌费用-1`); break;
+                    case 'grace_draw': gs.counters.grace += card.grace; if (cardPool.length > 0) { const ec = cardPool[Math.floor(Math.random() * cardPool.length)]; gs.hand.push({...ec}); addLog(`  ↳ 赐福+${card.grace}，抽到【${ec.name}】`); } checkResonanceGrace(); break;
+                    case 'grace_heal': gs.counters.grace += card.grace; gs.focus = clamp(gs.focus + card.heal, 0, gs.maxFocus); addLog(`  ↳ 赐福+${card.grace}，回复${card.heal}专注力`); checkResonanceGrace(); break;
+                    case 'damage_momentum': dealDamage(card.damage); gs.enemyMarkers._momentum = (gs.enemyMarkers._momentum || 0) + card.momentum; addLog(`  ↳ 施加${card.momentum}层动量`); break;
+                    case 'consume_momentum': const mom = gs.enemyMarkers._momentum || 0; let momDmg = mom * card.perMomentum; if (hasResonance('格物致知')) momDmg += 3 * mom; dealDamage(momDmg); addLog(`  ↳ 消耗${mom}动量，造成${momDmg}伤害`); gs.enemyMarkers._momentum = 0; break;
+                    case 'damage_energy': dealDamage(card.damage); gs.energy = clamp(gs.energy + card.energy, 0, gs.maxEnergy + 2); addLog(`  ↳ 造成${card.damage}伤害，精力+${card.energy}`); break;
+                    case 'damage_acid': dealDamage(card.damage); gs.enemyMarkers.acid = (gs.enemyMarkers.acid || 0) + card.acid; addLog(`  ↳ 酸+${card.acid}`); break;
+                    case 'damage_base': dealDamage(card.damage); gs.enemyMarkers.base = (gs.enemyMarkers.base || 0) + card.baseMark; if (gs.enemyMarkers.acid > 0) { const nd = card.neutralDamage; dealDamage(nd); addLog(`  💥 中和反应！+${nd}伤害`); gs.enemyMarkers.acid = Math.max(0, gs.enemyMarkers.acid - card.baseMark); gs.enemyMarkers.base = Math.max(0, gs.enemyMarkers.base - card.baseMark); if (hasResonance('分子花园')) { gs.enemyMarkers.burn = (gs.enemyMarkers.burn || 0) + 1; gs.enemyMarkers.burnDuration = Math.max(gs.enemyMarkers.burnDuration || 0, 2); } } break;
+                    case 'salt_out': const tot = (gs.enemyMarkers.acid || 0) + (gs.enemyMarkers.base || 0); dealDamage(tot * card.perMarker); addLog(`  ↳ 盐析：移除${tot}标记，造成${tot*card.perMarker}伤害`); gs.enemyMarkers.acid = 0; gs.enemyMarkers.base = 0; break;
+                    case 'evo_heal': gs.counters.evo += card.evo; gs.focus = clamp(gs.focus + card.heal, 0, gs.maxFocus); addLog(`  ↳ 进化点+${card.evo}，回复${card.heal}专注力`); break;
+                    case 'evo_damage': gs.counters.evo -= card.evoCost; dealDamage(card.damage); addLog(`  ↳ 消耗1进化点，造成${card.damage}伤害`); break;
+                    case 'evo_draw': gs.counters.evo += card.evo; if (cardPool.length > 0) { const ec = cardPool[Math.floor(Math.random() * cardPool.length)]; gs.hand.push({...ec}); addLog(`  ↳ 进化点+${card.evo}，抽到【${ec.name}】`); } break;
+                    case 'damage_era': dealDamage(card.damage); gs.counters.era += card.era; addLog(`  ↳ 年代+${card.era}`); break;
+                    case 'era_discount': gs.discountActive = true; addLog(`  ↳ 年代印记${gs.counters.era}层，费用-${gs.counters.era}`); break;
+                    case 'damage_era2': dealDamage(card.damage); gs.counters.era += card.era; addLog(`  ↳ 造成${card.damage}伤害，年代+${card.era}`); break;
+                    case 'damage_terrain': dealDamage(card.damage); gs.terrain = card.terrain; gs.terrainBonus = hasResonance('江山社稷') ? (card.terrainBonus*2) : card.terrainBonus; gs.terrainHeal = 0; addLog(`  ↳ 地形变为${card.terrain}`); break;
+                    case 'damage_terrain_heal': dealDamage(card.damage); gs.terrain = card.terrain; gs.terrainHeal = hasResonance('江山社稷') ? (card.healPerTurn*2) : card.healPerTurn; addLog(`  ↳ 地形变为${card.terrain}`); break;
+                    case 'terrain_ocean': gs.terrain = card.terrain; gs.terrainHeal = hasResonance('江山社稷') ? (card.healPerTurn*2) : card.healPerTurn; addLog(`  ↳ 地形变为海洋，每回合回复${gs.terrainHeal}专注`); break;
+                    case 'energy_damage': gs.energy = clamp(gs.energy + card.energyGain, 0, gs.maxEnergy + 2); dealDamage(card.damage); addLog(`  ↳ 精力+${card.energyGain}，造成${card.damage}伤害`); break;
+                    case 'halo': gs.haloActive = true; gs.haloDuration = card.duration; gs.haloBonus = card.bonusDamage; addLog(`  ↳ 光环+${card.bonusDamage}伤害，持续${card.duration}回合`); break;
+                    case 'heal_draw': gs.focus = clamp(gs.focus + card.heal, 0, gs.maxFocus); if (cardPool.length > 0) { const ec = cardPool[Math.floor(Math.random() * cardPool.length)]; gs.hand.push({...ec}); addLog(`  ↳ 回复${card.heal}专注，抽到【${ec.name}】`); } break;
+                    case 'wensi_convert': const wc = gs.counters.wensi; gs.counters.wensi = 0; dealDamage(wc * card.perDamage); gs.focus = clamp(gs.focus + wc * card.perHeal, 0, gs.maxFocus); addLog(`  ↳ 消耗${wc}文思，造成${wc*card.perDamage}伤害，回复${wc*card.perHeal}专注`); break;
+                    case 'wensi_boost': gs.counters.wensi += card.wensi; gs.specialEffects.nextBonus = (gs.specialEffects.nextBonus || 0) + card.nextBonus; addLog(`  ↳ 文思+${card.wensi}，下张选考牌伤害+${card.nextBonus}`); break;
+                    case 'draw_energy_boost': for (let i = 0; i < card.draw; i++) { if (cardPool.length > 0) { const ec = cardPool[Math.floor(Math.random() * cardPool.length)]; gs.hand.push({...ec}); addLog(`  ↳ 抽到【${ec.name}】`); } } gs.maxEnergy += card.maxEnergyBoost; gs.energy = clamp(gs.energy + card.maxEnergyBoost, 0, gs.maxEnergy); addLog(`  ↳ 精力上限+${card.maxEnergyBoost}`); break;
+                    case 'copy_card': if (gs.hand.length > 0) { const copy = {...gs.hand[0]}; gs.hand.push(copy); addLog(`  ↳ 复制【${copy.name}】`); } break;
+                    case 'grace_inspire': gs.counters.grace -= card.graceCost; gs.energy = clamp(gs.energy + card.energy, 0, gs.maxEnergy + 2); if (cardPool.length > 0) { const ec = cardPool[Math.floor(Math.random() * cardPool.length)]; gs.hand.push({...ec}); addLog(`  ↳ 消耗${card.graceCost}赐福，精力+${card.energy}，抽到【${ec.name}】`); } break;
+                    case 'grace_guard': gs.counters.grace -= card.graceCost; gs.focus = clamp(gs.focus + card.heal, 0, gs.maxFocus); addLog(`  ↳ 消耗${card.graceCost}赐福，回复${card.heal}专注力`); break;
+                    case 'damage_vuln': dealDamage(card.damage); gs.enemyStatus.vuln = Math.max(gs.enemyStatus.vuln, card.vulnDuration); break;
+                    case 'double_momentum': gs.enemyMarkers._momentum = (gs.enemyMarkers._momentum || 0) * 2; addLog(`  ↳ 动量翻倍`); break;
+                    case 'catalyst': const tm = (gs.enemyMarkers.acid||0)+(gs.enemyMarkers.base||0); dealDamage(tm*card.perMarker); gs.enemyMarkers.acid=0; gs.enemyMarkers.base=0; addLog(`  ↳ 催化${tm}标记，造成${tm*card.perMarker}伤害`); break;
+                    case 'thermite': dealDamage(card.damage); gs.enemyMarkers.burn = (gs.enemyMarkers.burn||0)+card.burn; gs.enemyMarkers.burnDuration = Math.max(gs.enemyMarkers.burnDuration||0,3); break;
+                    case 'survival': let eg = card.evo; if (gs.focus<40) eg+=card.lowFocusBonus; gs.counters.evo += eg; addLog(`  ↳ 进化点+${eg}`); break;
+                    case 'lysosome': dealDamage(card.baseDamage + gs.counters.evo*card.evoMultiplier); break;
+                    case 'consume_era': const ecnt = gs.counters.era; gs.counters.era=0; dealDamage(ecnt*card.perEra); gs.focus = clamp(gs.focus + ecnt*card.healPerEra, 0, gs.maxFocus); addLog(`  ↳ 消耗${ecnt}年代`); break;
+                    case 'era_draw': gs.counters.era += card.era; gs.specialEffects.extraDraw = (gs.specialEffects.extraDraw||0)+card.nextDrawBonus; break;
+                    case 'damage_blind': dealDamage(card.damage); gs.enemyStatus.blind = Math.max(gs.enemyStatus.blind, card.blind); break;
+                    case 'damage_random_terrain': dealDamage(card.damage); const terrains=['山地','平原','沙漠']; const nt=terrains[Math.floor(Math.random()*terrains.length)]; gs.terrain=nt; gs.terrainBonus=nt==='山地'?2:0; gs.terrainHeal=nt==='平原'?2:0; addLog(`  ↳ 地形变为${nt}`); break;
+                    case 'damage_disarm': dealDamage(card.damage); gs.enemyStatus.disarm = Math.max(gs.enemyStatus.disarm, card.disarm); break;
+                    case 'damage_halo': let hd=card.damage; if(gs.haloActive && card.haloDouble) hd*=2; dealDamage(hd); break;
+                    default: addLog(`  ↳ 效果未定义`); break;
                 }
-                // 检查敌人是否被击败
-                if (gs.enemyHealth <= 0) {
-                    completeBattle();
-                }
+                if (gs.enemyHealth <= 0) completeBattle();
             }
 
             function dealDamage(rawDamage) {
-                if (!gameState) return;
                 let dmg = rawDamage;
-                // 光环加成
                 if (gameState.haloActive) dmg += gameState.haloBonus;
-                // 地形加成
                 dmg += gameState.terrainBonus;
-                // 易伤
                 if (gameState.enemyStatus.vuln > 0) dmg = Math.floor(dmg * 1.3);
-                // 难度减伤
                 dmg = Math.max(1, Math.floor(dmg * (1 - gameState.enemyDifficulty * 0.6)));
                 gameState.enemyHealth -= dmg;
                 if (gameState.enemyHealth < 0) gameState.enemyHealth = 0;
                 updateDisplay();
             }
 
-            function hasResonance(name) {
-                return activeResonances.some(r => r.name === name);
-            }
+            function hasResonance(name) { return activeResonances.some(r => r.name === name); }
+            function checkResonanceWensiEra(gain) { if (hasResonance('笔墨春秋') && gain > 0) { gameState.counters.era += 1; addLog(`  🖋️ 笔墨春秋：年代+1`); } }
+            function checkResonanceGrace() { if (hasResonance('国际关系')) { gameState.counters.grace += 1; addLog(`  🌐 国际关系：赐福额外+1`); } }
 
-            function checkResonanceWensiEra(wensiGain) {
-                if (hasResonance('笔墨春秋') && wensiGain > 0) {
-                    gameState.counters.era += 1;
-                    addLog(`  🖋️ 笔墨春秋共鸣：额外+1年代印记`);
-                }
-            }
-
-            function checkResonanceProofCrit() {
-                if (hasResonance('数理推演') && gameState.probCritThisTurn) {
-                    gameState.counters.proof += 1;
-                    addLog(`  🔬 数理推演共鸣：暴击率触发，获得1层证明`);
-                }
-            }
-
-            function checkResonanceTenseEnergy() {
-                if (hasResonance('国际关系')) {
-                    gameState.energy = clamp(gameState.energy + 1, 0, gameState.maxEnergy);
-                    addLog(`  🌐 国际关系共鸣：切换时态额外+1精力`);
-                }
-            }
-
-            // ==================== 回合流程 ====================
             function startTurn() {
-                if (!gameState) return;
                 gameState.turnInStage++;
-                // 恢复精力
                 gameState.energy = gameState.maxEnergy + gameState.retainedEnergy;
                 gameState.retainedEnergy = 0;
                 gameState.energy = clamp(gameState.energy, 0, gameState.maxEnergy + 2);
-                // 重置读史明智标记
-                gameState.hand.forEach(c => { if (c._eraDiscountApplied) delete c._eraDiscountApplied; });
-                // 时态下回合精力
-                if (gameState.tense === 'future' && gameState.tenseDuration > 0) {
-                    // 将来时态的额外精力已在 retainedEnergy 中处理
-                }
-                // 概率论暴击重置
+                gameState.discountActive = false;
+                gameState.tempKnowledge = 0;
                 gameState.probCritThisTurn = false;
-                gameState.specialEffects.critChance = 0;
-                // 抽牌
                 drawHand();
-                // 更新显示
                 updateDisplay();
                 dom.endTurnBtn.classList.remove('flash');
-                addLog(`🔄 第${gameState.turnInStage}回合开始，精力恢复`);
+                addLog(`🔄 第${gameState.turnInStage}回合开始`);
             }
 
             function endTurn() {
-                if (!gameState) return;
-                // 留存精力
                 gameState.retainedEnergy = Math.min(2, gameState.energy);
                 gameState.energy = 0;
                 addLog(`⏭ 结束回合，留存${gameState.retainedEnergy}精力`);
-
-                // 自动基础攻击
-                let baseAtk = gameState.knowledge;
-                // 暴击检查
-                let isCrit = false;
-                if (gameState.specialEffects.critChance > 0 && Math.random() < gameState.specialEffects.critChance) {
-                    baseAtk *= 2;
-                    isCrit = true;
-                    addLog(`💥 概率论暴击！基础攻击翻倍！`);
-                    checkResonanceProofCrit();
-                }
-                if (gameState.terrainBonus > 0) baseAtk += gameState.terrainBonus;
+                let baseAtk = gameState.knowledge + (gameState.tempKnowledge || 0);
                 if (gameState.haloActive) baseAtk += gameState.haloBonus;
+                baseAtk += gameState.terrainBonus;
                 if (gameState.enemyStatus.vuln > 0) baseAtk = Math.floor(baseAtk * 1.3);
                 const effAtk = Math.max(1, Math.floor(baseAtk * (1 - gameState.enemyDifficulty * 0.6)));
                 gameState.enemyHealth -= effAtk;
-                if (gameState.enemyHealth < 0) gameState.enemyHealth = 0;
-                addLog(`⚔️ 自动答题：造成${effAtk}点伤害${isCrit?' (暴击!)':''}`);
-
-                // 检查敌人是否被击败
-                if (gameState.enemyHealth <= 0) {
-                    updateDisplay();
-                    completeBattle();
-                    return;
+                addLog(`⚔️ 自动答题：造成${effAtk}点伤害`);
+                if (gameState.enemyHealth <= 0) { updateDisplay(); completeBattle(); return; }
+                if (gameState.enemyStatus.disarm > 0) addLog(`🔒 敌人被缴械`);
+                else if (gameState.enemyStatus.silence > 0) addLog(`🔇 敌人被沉默`);
+                else {
+                    let cdmg = Math.floor(8 * gameState.enemyDifficulty + randInt(-3, 3));
+                    if (gameState.enemyStatus.blind > 0) cdmg = Math.floor(cdmg / 2);
+                    cdmg = Math.max(1, cdmg);
+                    gameState.focus -= cdmg;
+                    addLog(`💢 题目反击：-${cdmg}专注力`);
                 }
-
-                // 敌人反击
-                if (gameState.enemyStatus.disarm > 0) {
-                    addLog(`🔒 敌人被缴械，无法反击`);
-                } else if (gameState.enemyStatus.silence > 0) {
-                    addLog(`🔇 敌人被沉默，无法反击`);
-                } else {
-                    let counterDmg = Math.floor(8 * gameState.enemyDifficulty + randInt(-3, 3));
-                    if (gameState.tense === 'past') counterDmg = Math.floor(counterDmg / 2);
-                    if (gameState.enemyStatus.blind > 0) counterDmg = Math.floor(counterDmg / 2);
-                    if (gameState.enemyStatus.vuln > 0) counterDmg = Math.floor(counterDmg * 0.8);
-                    counterDmg = Math.max(1, counterDmg);
-                    gameState.focus -= counterDmg;
-                    addLog(`💢 题目反击：对你造成${counterDmg}点压力伤害`);
-                }
-
-                // 灼烧伤害
                 if (gameState.enemyMarkers.burn > 0 && gameState.enemyMarkers.burnDuration > 0) {
-                    const burnDmg = gameState.enemyMarkers.burn;
-                    gameState.enemyHealth -= burnDmg;
-                    addLog(`🔥 灼烧效果：敌人受到${burnDmg}点伤害`);
+                    const bd = gameState.enemyMarkers.burn;
+                    gameState.enemyHealth -= bd;
+                    addLog(`🔥 灼烧：-${bd}HP`);
                     gameState.enemyMarkers.burnDuration--;
-                    if (gameState.enemyMarkers.burnDuration <= 0) {
-                        gameState.enemyMarkers.burn = 0;
-                        addLog(`🔥 灼烧效果结束`);
-                    }
+                    if (gameState.enemyMarkers.burnDuration <= 0) gameState.enemyMarkers.burn = 0;
                 }
-
-                // 地形回复
                 if (gameState.terrainHeal > 0) {
                     gameState.focus = clamp(gameState.focus + gameState.terrainHeal, 0, gameState.maxFocus);
-                    addLog(`🌿 ${gameState.terrain}地形：回复${gameState.terrainHeal}专注力`);
+                    addLog(`🌿 地形回复${gameState.terrainHeal}专注力`);
                 }
-
-                // 更新状态计时
                 if (gameState.enemyStatus.silence > 0) gameState.enemyStatus.silence--;
                 if (gameState.enemyStatus.vuln > 0) gameState.enemyStatus.vuln--;
                 if (gameState.enemyStatus.blind > 0) gameState.enemyStatus.blind--;
                 if (gameState.enemyStatus.disarm > 0) gameState.enemyStatus.disarm--;
-                if (gameState.tenseDuration > 0) {
-                    gameState.tenseDuration--;
-                    if (gameState.tenseDuration <= 0) { gameState.tense = null;
-                        addLog(`⏳ 时态效果结束`); }
-                }
-                if (gameState.haloDuration > 0) {
-                    gameState.haloDuration--;
-                    if (gameState.haloDuration <= 0) { gameState.haloActive = false;
-                        gameState.haloBonus = 0;
-                        addLog(`💡 光环效果结束`); }
-                }
-
+                if (gameState.haloDuration > 0) { gameState.haloDuration--; if (gameState.haloDuration <= 0) { gameState.haloActive = false;
+                        gameState.haloBonus = 0; } }
                 updateDisplay();
-
-                // 检查专注力
-                if (gameState.focus <= 0) {
-                    gameState.focus = 0;
+                if (gameState.focus <= 0) { gameState.focus = 0;
                     updateDisplay();
-                    gameOver('专注力耗尽，你被考试压力击垮了...');
-                    return;
-                }
-
-                // 检查敌人
-                if (gameState.enemyHealth <= 0) {
-                    completeBattle();
-                    return;
-                }
-
-                // 下一回合
+                    gameOver('专注力耗尽...'); return; }
+                if (gameState.enemyHealth <= 0) { completeBattle(); return; }
                 startTurn();
             }
 
             function completeBattle() {
-                if (!gameState) return;
                 gameState.enemyHealth = 0;
                 updateDisplay();
                 const subj = allSubjects[gameState.currentSubjectIndex];
-                const difficultyBonus = Math.round((1 - gameState.enemyDifficulty) * 80);
-                const knowledgeBonus = gameState.knowledge * 3;
-                const stageBonus = gameState.currentStage % 5 === 0 ? 30 : 0;
-                const scoreGain = 25 + difficultyBonus + knowledgeBonus + stageBonus;
+                const scoreGain = 25 + Math.round((1 - gameState.enemyDifficulty) * 80) + gameState.knowledge * 3 + (gameState.currentStage % 5 === 0 ? 30 : 0);
                 gameState.score += scoreGain;
-                addLog(`🎉 题目解答完成！获得 ${scoreGain} 分！`, true);
-                if (stageBonus > 0) addLog(`🎯 模考额外奖励 +${stageBonus} 分！`);
+                addLog(`🎉 题目解答完成！+${scoreGain}分`, true);
                 updateDisplay();
-                // 显示商店
                 showShop(subj);
             }
 
             function gameOver(reason) {
                 addLog(`💔 游戏结束：${reason}`, true);
-                addLog(`🏆 最终总分：${gameState.score}，学识：${gameState.knowledge}，通过${gameState.currentSubjectIndex}个科目`);
-                setTimeout(() => {
-                    if (confirm(
-                            `游戏结束！${reason}\n总分：${gameState.score}\n学识：${gameState.knowledge}\n通过科目：${gameState.currentSubjectIndex}\n\n是否重新开始？`
-                            )) {
-                        restartGame();
-                    }
-                }, 800);
+                setTimeout(() => { if (confirm(`游戏结束！${reason}\n总分：${gameState.score}\n重新开始？`)) restartGame(); }, 800);
             }
-
             function gameComplete() {
-                addLog(`🏆 所有科目考试完成！最终总分：${gameState.score}，学识：${gameState.knowledge}`, true);
-                const avgScore = gameState.score / allSubjects.length;
-                let evalText = '';
-                if (avgScore >= 250) evalText = '🎉 顶尖学霸！清北任你选！';
-                else if (avgScore >= 180) evalText = '👍 优秀学生！一本稳了！';
-                else if (avgScore >= 120) evalText = '✅ 不错的成绩！二本以上！';
-                else evalText = '💪 继续努力！下次会更好！';
-                addLog(evalText, true);
-                setTimeout(() => {
-                    if (confirm(
-                            `高考结束！总分：${gameState.score}\n学识：${gameState.knowledge}\n${evalText}\n\n是否重新开始？`
-                            )) {
-                        restartGame();
-                    }
-                }, 1000);
+                addLog(`🏆 所有科目完成！总分：${gameState.score}`, true);
+                setTimeout(() => { if (confirm(`恭喜！总分：${gameState.score}\n重新开始？`)) restartGame(); }, 1000);
             }
 
-            // ==================== 商店 ====================
             function showShop(subject) {
                 gameState.energy = 0;
                 gameState.retainedEnergy = 0;
                 gameState.hand = [];
                 dom.battleArea.style.display = 'none';
                 dom.shopArea.style.display = 'block';
-                dom.endTurnBtn.classList.remove('flash');
                 dom.cardContainer.innerHTML = '';
-                dom.countersRow.innerHTML = '';
-
-                // 收集可购买的进阶卡
                 const available = [];
                 for (const subj of allSubjects) {
                     if (ADVANCED_CARDS[subj]) {
                         for (const card of ADVANCED_CARDS[subj]) {
-                            if (!ownedCardIds.has(card.id)) {
-                                available.push({ ...card, subject: subj });
-                            }
+                            if (!ownedCardIds.has(card.id)) available.push({ ...card, subject: subj });
                         }
                     }
                 }
-                // 优先当前科目
-                const currentSubjectCards = available.filter(c => c.subject === subject);
-                const otherCards = available.filter(c => c.subject !== subject);
-                const shuffledCurrent = shuffle(currentSubjectCards);
-                const shuffledOther = shuffle(otherCards);
-                let shopSelection = [...shuffledCurrent.slice(0, 2), ...shuffledOther.slice(0, 1)];
-                if (shopSelection.length < 3) {
-                    shopSelection = [...shopSelection, ...shuffledOther.slice(1, 3 - shopSelection.length)];
-                }
-                shopSelection = shopSelection.slice(0, 3);
-
+                const shopSelection = shuffle(available).slice(0, 3);
                 dom.shopCards.innerHTML = '';
-                if (shopSelection.length === 0) {
-                    dom.shopCards.innerHTML =
-                        '<div style="color:#999;padding:20px;">所有进阶卡已拥有！直接继续吧~</div>';
-                }
                 for (const card of shopSelection) {
-                    const colorInfo = getSubjectColor(card.subject);
+                    const price = card.cost * 25;
                     const cardEl = document.createElement('div');
                     cardEl.className = 'shop-card';
-                    cardEl.style.background = 'linear-gradient(160deg, #f0faf3, #e0f0e4)';
-                    cardEl.style.borderColor = '#4a8c5c';
-                    cardEl.innerHTML = `
-                <div class="shop-card-price">${card.cost*25}分</div>
-                <div class="shop-card-icon">${card.icon}</div>
-                <div class="shop-card-name">${card.name}</div>
-                <div class="shop-card-desc">${card.desc.replace(/\n/g,'<br>')}<br><small style="color:#888;">[${card.subject}·进阶]</small></div>
-              `;
-                    const price = card.cost * 25;
+                    cardEl.innerHTML = `<div class="shop-card-price">${price}分</div><div class="shop-card-icon">${card.icon}</div><div class="shop-card-name">${card.name}</div><div class="shop-card-desc">${card.desc.replace(/\n/g,'<br>')}<br><small style="color:#888;">[${card.subject}]</small></div>`;
                     if (gameState.score >= price && !ownedCardIds.has(card.id)) {
                         cardEl.addEventListener('click', () => {
-                            if (gameState.score < price) return;
                             gameState.score -= price;
                             cardPool.push({ ...card, subject: card.subject });
                             ownedCardIds.add(card.id);
-                            addLog(`🛒 购买进阶卡【${card.name}】！花费${price}分，已加入卡池`, true);
+                            addLog(`🛒 购买【${card.name}】加入卡池`, true);
                             updateDisplay();
-                            // 刷新商店
                             showShop(subject);
                         });
-                    } else if (ownedCardIds.has(card.id)) {
-                        cardEl.classList.add('owned');
-                        cardEl.innerHTML +=
-                            '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;">✅</div>';
                     } else {
                         cardEl.style.opacity = '0.5';
                         cardEl.style.cursor = 'not-allowed';
-                        cardEl.title = '分数不足';
                     }
                     dom.shopCards.appendChild(cardEl);
                 }
@@ -2011,84 +1379,59 @@
             function nextStage() {
                 gameState.currentStage++;
                 if (gameState.currentStage > 5) {
-                    // 进入下一科目
                     gameState.currentSubjectIndex++;
                     gameState.currentStage = 1;
-                    // 重置计数器
-                    gameState.counters = { wensi: 0, proof: 0, evo: 0, era: 0 };
+                    gameState.counters = { wensi: 0, grace: gameState.counters.grace, evo: 0, era: 0 };
                     gameState.enemyMarkers = { acid: 0, base: 0, burn: 0, burnDuration: 0, _momentum: 0 };
                     gameState.enemyStatus = { silence: 0, vuln: 0, blind: 0, disarm: 0 };
                     gameState.terrain = '默认';
                     gameState.terrainBonus = 0;
                     gameState.terrainHeal = 0;
-                    gameState.tense = null;
-                    gameState.tenseDuration = 0;
                     gameState.haloActive = false;
                     gameState.haloDuration = 0;
                     gameState.haloBonus = 0;
-                    gameState.specialEffects = { doubleDamage: 0, damageReduction: 0, critChance: 0, extraDraw: 0 };
-                    gameState.probCritThisTurn = false;
-                    gameState.turnInStage = 0;
-                    if (gameState.currentSubjectIndex >= allSubjects.length) {
-                        gameComplete();
-                        return;
-                    }
-                    addLog(`🔄 进入下一科目：${allSubjects[gameState.currentSubjectIndex]}！`, true);
+                    gameState.tempKnowledge = 0;
+                    gameState.discountActive = false;
+                    gameState.maxEnergy = 3;
+                    if (gameState.currentSubjectIndex >= allSubjects.length) { gameComplete(); return; }
+                    addLog(`🔄 进入下一科目：${allSubjects[gameState.currentSubjectIndex]}`, true);
                 } else {
-                    // 同科目下一关，保留计数器但重置敌人状态
                     gameState.enemyMarkers = { acid: 0, base: 0, burn: 0, burnDuration: 0, _momentum: 0 };
                     gameState.enemyStatus = { silence: 0, vuln: 0, blind: 0, disarm: 0 };
                     gameState.terrain = '默认';
                     gameState.terrainBonus = 0;
                     gameState.terrainHeal = 0;
-                    gameState.tense = null;
-                    gameState.tenseDuration = 0;
                     gameState.haloActive = false;
                     gameState.haloDuration = 0;
                     gameState.haloBonus = 0;
-                    gameState.specialEffects = { doubleDamage: 0, damageReduction: 0, critChance: 0, extraDraw: 0 };
-                    gameState.probCritThisTurn = false;
-                    gameState.turnInStage = 0;
+                    gameState.tempKnowledge = 0;
+                    gameState.discountActive = false;
                 }
                 updateDisplay();
                 setTimeout(() => startNextBattle(), 600);
             }
 
             function startNextBattle() {
-                if (gameState.currentSubjectIndex >= allSubjects.length) {
-                    gameComplete();
-                    return;
-                }
+                if (gameState.currentSubjectIndex >= allSubjects.length) { gameComplete(); return; }
                 const subj = allSubjects[gameState.currentSubjectIndex];
                 dom.currentSubject.textContent = subj;
                 dom.enemyVisual.textContent = SUBJECT_ICONS[subj] || '❓';
-                // 生成题目
                 const isExam = gameState.currentStage % 5 === 0;
-                let baseHP, difficulty;
-                if (isExam) {
-                    baseHP = randInt(140, 200);
-                    difficulty = 0.55 + Math.random() * 0.25;
-                } else {
-                    baseHP = randInt(75, 120);
-                    difficulty = 0.65 + Math.random() * 0.2;
-                }
+                let baseHP = isExam ? randInt(140, 200) : randInt(75, 120);
+                let diff = isExam ? 0.55 + Math.random() * 0.25 : 0.65 + Math.random() * 0.2;
                 gameState.enemyMaxHealth = baseHP;
                 gameState.enemyHealth = baseHP;
-                gameState.enemyDifficulty = Math.round(difficulty * 100) / 100;
+                gameState.enemyDifficulty = Math.round(diff * 100) / 100;
                 gameState.turnInStage = 0;
                 gameState.retainedEnergy = 0;
-                const typeNames = ['选择题', '填空题', '综合题', '压轴题', '易错题', '重点题', '创新题', '经典题'];
-                const typeName = typeNames[Math.floor(Math.random() * typeNames.length)];
-                dom.enemyName.textContent = isExam ? `📋【模考】${subj}·${typeName}` : `${subj}·${typeName}`;
-                if (isExam) addLog(`🎯 模考关卡！难度更高，奖励更丰厚！`, true);
-                addLog(`📝 新题目：${dom.enemyName.textContent}（HP:${baseHP} 难度:${difficulty.toFixed(2)}）`);
+                dom.enemyName.textContent = isExam ? `📋【模考】${subj}·综合题` : `${subj}·${['选择题','填空题','综合题'][randInt(0,2)]}`;
+                addLog(`📝 新题目：${dom.enemyName.textContent} (HP:${baseHP})`, true);
                 updateDisplay();
                 dom.battleArea.style.display = 'flex';
                 dom.shopArea.style.display = 'none';
                 startTurn();
             }
 
-            // ==================== 游戏流程控制 ====================
             function startGame() {
                 const mandatory = ['语文', '数学', '英语'];
                 allSubjects = [...mandatory, ...selectedOptionalSubjects];
@@ -2102,11 +1445,8 @@
                 dom.enemyVisual.textContent = SUBJECT_ICONS[allSubjects[0]] || '❓';
                 updateDisplay();
                 updateResonanceDisplay();
-                if (activeResonances.length > 0) {
-                    addLog(`✨ 学科共鸣激活：${activeResonances.map(r=>r.icon+' '+r.name).join('、')}`, true);
-                }
                 addLog(`🎓 高考开始！科目顺序：${allSubjects.join(' → ')}`, true);
-                addLog(`🃏 初始卡池：${cardPool.length}张基础卡`, true);
+                addLog(`✨ 基础辅助：语文治疗增伤，数学精力抽牌，英语赐福系统`, true);
                 startNextBattle();
             }
 
@@ -2117,22 +1457,20 @@
                 activeResonances = [];
                 dom.gameMain.style.display = 'none';
                 dom.subjectSelection.style.display = 'block';
-                dom.battleLog.innerHTML = '<div class="log-entry">欢迎来到高考闯关！选择科目后开始你的学途之旅。</div>';
+                dom.battleLog.innerHTML = '<div class="log-entry">欢迎！语文数学辅助，英语赐福，选考流派各显神通。</div>';
                 dom.shopArea.style.display = 'none';
                 dom.battleArea.style.display = 'flex';
-                dom.cardContainer.innerHTML = '<div style="color:#bbb;font-size:14px;padding:30px;">准备中...</div>';
+                dom.cardContainer.innerHTML = '<div style="color:#bbb;">准备中...</div>';
                 dom.countersRow.innerHTML = '';
                 dom.enemyMarkers.innerHTML = '';
                 dom.resonanceDisplay.innerHTML = '';
                 dom.endTurnBtn.classList.remove('flash');
-                // 重置选科
                 dom.optionalBtns.forEach(b => b.classList.remove('selected'));
                 selectedOptionalSubjects = [];
                 dom.selectedCount.innerHTML = '已选择 <strong>0</strong> / 3 门选考科目';
                 dom.startBtn.disabled = true;
             }
 
-            // ==================== 事件绑定 ====================
             dom.optionalBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     const subject = btn.getAttribute('data-subject');
@@ -2140,30 +1478,21 @@
                         btn.classList.remove('selected');
                         selectedOptionalSubjects = selectedOptionalSubjects.filter(s => s !== subject);
                     } else {
-                        if (selectedOptionalSubjects.length >= 3) {
-                            alert('最多只能选择3门选考科目！');
-                            return;
-                        }
+                        if (selectedOptionalSubjects.length >= 3) { alert('最多选择3门选考科目！'); return; }
                         btn.classList.add('selected');
                         selectedOptionalSubjects.push(subject);
                     }
-                    dom.selectedCount.innerHTML =
-                        `已选择 <strong>${selectedOptionalSubjects.length}</strong> / 3 门选考科目`;
+                    dom.selectedCount.innerHTML = `已选择 <strong>${selectedOptionalSubjects.length}</strong> / 3 门选考科目`;
                     dom.startBtn.disabled = selectedOptionalSubjects.length !== 3;
                 });
             });
 
             dom.startBtn.addEventListener('click', startGame);
-            dom.endTurnBtn.addEventListener('click', () => {
-                if (!gameState || gameState.enemyHealth <= 0) return;
-                endTurn();
-            });
+            dom.endTurnBtn.addEventListener('click', () => { if (gameState && gameState.enemyHealth > 0) endTurn(); });
             dom.shopSkipBtn.addEventListener('click', hideShop);
 
-            // 键盘快捷键
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && gameState && gameState.enemyHealth > 0 && dom.battleArea.style
-                    .display !== 'none') {
+                if (e.key === 'Enter' && gameState && gameState.enemyHealth > 0 && dom.battleArea.style.display !== 'none') {
                     e.preventDefault();
                     endTurn();
                 }
@@ -2173,11 +1502,8 @@
                 }
             });
 
-            // ==================== 初始化 ====================
-            console.log('🎓 高考闯关·学途卡牌 已就绪');
-            console.log('  九大学科流派 | 卡牌构筑 | 学科共鸣');
-            console.log('  点击选考科目开始你的学途之旅吧！');
-            console.log('  提示：Enter键快速结束回合，空格键跳过商店');
+            console.log('🎓 学途卡牌 · 重构版已就绪');
+            console.log('  语数外基础辅助 | 英语赐福系统 | 选考六科流派');
         })();
     </script>
 </body>
