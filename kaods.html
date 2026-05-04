@@ -23,7 +23,6 @@
             --radius: 14px;
             --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         * {
             margin: 0;
             padding: 0;
@@ -37,7 +36,6 @@
             overflow-x: hidden;
             color: var(--text);
         }
-
         .navbar {
             position: fixed;
             top: 0;
@@ -78,7 +76,6 @@
         .nav-menu a:hover {
             color: var(--blue);
         }
-
         .back-btn {
             position: fixed;
             top: 70px;
@@ -99,7 +96,6 @@
             color: #222;
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
         }
-
         .game-container {
             padding-top: 80px;
             display: flex;
@@ -123,7 +119,6 @@
             text-align: center;
             letter-spacing: 2px;
         }
-
         .subject-selection {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -244,7 +239,6 @@
             box-shadow: none;
             transform: none;
         }
-
         .game-main {
             display: none;
             width: 100%;
@@ -256,7 +250,6 @@
             from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .game-header {
             display: flex;
             flex-wrap: wrap;
@@ -301,7 +294,6 @@
         .stat-value.energy-val { color: #c8963e; }
         .stat-value.focus-val { color: #b84c3d; }
         .stat-value.grace-val { color: #9b59b6; }
-
         .resonance-badge {
             display: inline-block;
             background: linear-gradient(135deg, #f0e6d3, #e8d8b8);
@@ -313,7 +305,6 @@
             letter-spacing: 0.5px;
             border: 1px solid #dcc8a0;
         }
-
         .battle-area {
             display: flex;
             justify-content: space-between;
@@ -412,7 +403,6 @@
         .marker-vuln { background: #fde0e0; color: #a02020; border: 1px solid #f5b8b8; }
         .marker-blind { background: #f5f0e8; color: #8b7355; border: 1px solid #dcc8a0; }
         .marker-disarm { background: #fef0f0; color: #a04040; border: 1px solid #f5c0c0; }
-
         .hand-panel {
             flex: 1;
             min-width: 300px;
@@ -566,7 +556,6 @@
             0%, 100% { box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12); }
             50% { box-shadow: 0 0 0 10px rgba(200, 150, 62, 0.25); }
         }
-
         .counters-row {
             display: flex;
             flex-wrap: wrap;
@@ -595,7 +584,6 @@
             gap: 4px;
             border: 1px solid #d4b8e8;
         }
-
         .shop-area {
             display: none;
             background: var(--card-bg);
@@ -689,7 +677,6 @@
             font-weight: 600;
         }
         .shop-skip-btn:hover { border-color: #999; color: #333; }
-
         .log-container {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -711,7 +698,106 @@
             font-size: 12px;
         }
         .log-entry.highlight { border-left-color: #c8963e; font-weight: 600; color: #444; }
-
+        .help-btn {
+            display: inline-block;
+            padding: 10px 24px;
+            margin: 8px 0 16px;
+            background: #fff;
+            color: #3b5998;
+            border: 2px solid #3b5998;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.25s;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .help-btn:hover {
+            background: #3b5998;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59,89,152,0.3);
+        }
+        .view-deck-btn {
+            padding: 8px 18px;
+            font-size: 14px;
+            background: #f8f6f3;
+            border: 2px solid #ccc;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #555;
+            transition: all 0.2s;
+        }
+        .view-deck-btn:hover {
+            background: #e8e4dc;
+            border-color: #999;
+        }
+        .deck-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+        .deck-modal.active {
+            display: flex;
+        }
+        .deck-modal-content {
+            background: white;
+            border-radius: 14px;
+            padding: 24px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 70vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        .deck-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .deck-modal-header h3 {
+            font-size: 20px;
+            color: #2c3e50;
+        }
+        .close-modal-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            line-height: 1;
+        }
+        .deck-card-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: #faf9f7;
+            margin-bottom: 8px;
+            border: 1px solid #eee;
+        }
+        .deck-card-item .card-mini-icon { font-size: 28px; }
+        .deck-card-item .card-mini-info { flex: 1; }
+        .deck-card-item .card-mini-name { font-weight: 700; color: #444; }
+        .deck-card-item .card-mini-desc { font-size: 12px; color: #888; }
+        .deck-card-item .card-mini-cost {
+            background: #eee;
+            border-radius: 12px;
+            padding: 2px 10px;
+            font-weight: 700;
+            font-size: 13px;
+        }
         @media (max-width: 768px) {
             .battle-area { flex-direction: column; align-items: center; }
             .enemy-panel { flex: 0 0 auto; width: 100%; min-height: auto; padding: 18px; }
@@ -725,104 +811,6 @@
             .stat-box { padding: 6px 10px; min-width: 55px; }
             .stat-value { font-size: 15px; }
         }
-        .help-btn {
-    display: inline-block;
-    padding: 10px 24px;
-    margin: 8px 0 16px;
-    background: #fff;
-    color: #3b5998;
-    border: 2px solid #3b5998;
-    border-radius: 25px;
-    font-size: 15px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: all 0.25s;
-    letter-spacing: 0.5px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-.help-btn:hover {
-    background: #3b5998;
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(59,89,152,0.3);
-}
-        .view-deck-btn {
-    padding: 8px 18px;
-    font-size: 14px;
-    background: #f8f6f3;
-    border: 2px solid #ccc;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 600;
-    color: #555;
-    transition: all 0.2s;
-}
-.view-deck-btn:hover {
-    background: #e8e4dc;
-    border-color: #999;
-}
-/* 卡池弹窗 */
-.deck-modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-}
-.deck-modal.active {
-    display: flex;
-}
-.deck-modal-content {
-    background: white;
-    border-radius: 14px;
-    padding: 24px;
-    max-width: 700px;
-    width: 90%;
-    max-height: 70vh;
-    overflow-y: auto;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-}
-.deck-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-.deck-modal-header h3 {
-    font-size: 20px;
-    color: #2c3e50;
-}
-.close-modal-btn {
-    background: none;
-    border: none;
-    font-size: 28px;
-    cursor: pointer;
-    color: #999;
-    line-height: 1;
-}
-.deck-card-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 14px;
-    border-radius: 10px;
-    background: #faf9f7;
-    margin-bottom: 8px;
-    border: 1px solid #eee;
-}
-.deck-card-item .card-mini-icon { font-size: 28px; }
-.deck-card-item .card-mini-info { flex: 1; }
-.deck-card-item .card-mini-name { font-weight: 700; color: #444; }
-.deck-card-item .card-mini-desc { font-size: 12px; color: #888; }
-.deck-card-item .card-mini-cost {
-    background: #eee;
-    border-radius: 12px;
-    padding: 2px 10px;
-    font-weight: 700;
-    font-size: 13px;
-}
     </style>
 </head>
 <body>
@@ -902,7 +890,6 @@
                     <div class="card-container" id="cardContainer"><div style="color:#bbb;font-size:14px;padding:30px;">抽牌中...</div></div>
                     <div class="counters-row" id="countersRow"></div>
                     <button class="end-turn-btn" id="endTurnBtn">⏭ 结束回合 · 自动答题</button>
-                    <div id="resonanceDisplay" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
                     <button class="view-deck-btn" id="viewDeckBtn">📋 卡池</button>
                 </div>
             </div>
@@ -919,6 +906,17 @@
                 <div class="log-content" id="battleLog">
                     <div class="log-entry">欢迎来到高考闯关！语文数学辅助，英语赐福，选考流派各显神通。</div>
                 </div>
+            </div>
+        </div>
+
+        <!-- 卡池弹窗 -->
+        <div class="deck-modal" id="deckModal">
+            <div class="deck-modal-content">
+                <div class="deck-modal-header">
+                    <h3>📋 当前卡池 (共 <span id="deckCardCount">0</span> 张)</h3>
+                    <button class="close-modal-btn" id="closeDeckModal">&times;</button>
+                </div>
+                <div id="deckCardList"></div>
             </div>
         </div>
     </div>
@@ -1069,10 +1067,10 @@
                 battleLog: $('#battleLog'),
                 resonanceDisplay: $('#resonanceDisplay'),
                 viewDeckBtn: $('#viewDeckBtn'),
-deckModal: $('#deckModal'),
-closeDeckModal: $('#closeDeckModal'),
-deckCardList: $('#deckCardList'),
-deckCardCount: $('#deckCardCount'),
+                deckModal: $('#deckModal'),
+                closeDeckModal: $('#closeDeckModal'),
+                deckCardList: $('#deckCardList'),
+                deckCardCount: $('#deckCardCount'),
             };
 
             let selectedOptionalSubjects = [];
@@ -1117,6 +1115,7 @@ deckCardCount: $('#deckCardCount'),
                     discountActive: false,
                     choosingCard: false,
                     chooseCallback: null,
+                    chooseMode: null,
                 };
                 cardPool = [];
                 ownedCardIds = new Set();
@@ -1174,9 +1173,9 @@ deckCardCount: $('#deckCardCount'),
                 updateCountersDisplay();
                 updateEnemyMarkersDisplay();
                 updateResonanceDisplay();
-                // 特殊状态提醒
                 if (gameState.choosingCard) {
-                    dom.handTitle.textContent = '🃏 请点击一张手牌以复制';
+                    const modeText = gameState.chooseMode === 'remove' ? '🗑️ 请点击一张手牌永久移除' : '🃏 请点击一张手牌以复制';
+                    dom.handTitle.textContent = modeText;
                     dom.endTurnBtn.disabled = true;
                 } else {
                     dom.handTitle.textContent = '🃏 当前手牌';
@@ -1266,7 +1265,6 @@ deckCardCount: $('#deckCardCount'),
               `;
                     cardEl.addEventListener('click', () => {
                         if (isChoosing) {
-                            // 自选复制模式
                             if (gameState.chooseCallback) {
                                 gameState.chooseCallback(card);
                             }
@@ -1327,12 +1325,14 @@ deckCardCount: $('#deckCardCount'),
                             break;
                         }
                         gs.choosingCard = true;
+                        gs.chooseMode = 'copy';
                         gs.chooseCallback = function(chosenCard) {
                             const copy = {...chosenCard};
                             gs.hand.push(copy);
                             addLog(`  ↳ 复制【${copy.name}】`);
                             gs.choosingCard = false;
                             gs.chooseCallback = null;
+                            gs.chooseMode = null;
                             updateDisplay();
                             renderHand();
                             if (gs.enemyHealth <= 0) completeBattle();
@@ -1341,32 +1341,32 @@ deckCardCount: $('#deckCardCount'),
                         renderHand();
                         updateDisplay();
                         break;
-                        case 'remove_card':
-    if (gs.hand.length === 0) {
-        addLog(`  ↳ 没有手牌可移除`);
-        break;
-    }
-    gs.choosingCard = true;
-    gs.chooseCallback = function(chosenCard) {
-        // 从手牌中移除
-        const idx = gs.hand.indexOf(chosenCard);
-        if (idx >= 0) gs.hand.splice(idx, 1);
-        // 从卡池中移除
-        const poolIdx = cardPool.findIndex(c => c.id === chosenCard.id && c.subject === chosenCard.subject);
-        if (poolIdx >= 0) {
-            cardPool.splice(poolIdx, 1);
-            addLog(`  ↳ 【${chosenCard.name}】已从卡池中永久移除`);
-        }
-        gs.choosingCard = false;
-        gs.chooseCallback = null;
-        updateDisplay();
-        renderHand();
-        if (gs.enemyHealth <= 0) completeBattle();
-    };
-    addLog(`  ↳ 请点击一张手牌进行移除`);
-    renderHand();
-    updateDisplay();
-    break;
+                    case 'remove_card':
+                        if (gs.hand.length === 0) {
+                            addLog(`  ↳ 没有手牌可移除`);
+                            break;
+                        }
+                        gs.choosingCard = true;
+                        gs.chooseMode = 'remove';
+                        gs.chooseCallback = function(chosenCard) {
+                            const idx = gs.hand.indexOf(chosenCard);
+                            if (idx >= 0) gs.hand.splice(idx, 1);
+                            const poolIdx = cardPool.findIndex(c => c.id === chosenCard.id && c.subject === chosenCard.subject);
+                            if (poolIdx >= 0) {
+                                cardPool.splice(poolIdx, 1);
+                                addLog(`  ↳ 【${chosenCard.name}】已从卡池中永久移除`);
+                            }
+                            gs.choosingCard = false;
+                            gs.chooseCallback = null;
+                            gs.chooseMode = null;
+                            updateDisplay();
+                            renderHand();
+                            if (gs.enemyHealth <= 0) completeBattle();
+                        };
+                        addLog(`  ↳ 请点击一张手牌进行移除`);
+                        renderHand();
+                        updateDisplay();
+                        break;
                     case 'grace_inspire': gs.counters.grace -= card.graceCost; gs.energy = clamp(gs.energy + card.energy, 0, gs.maxEnergy + 2); if (cardPool.length > 0) { const ec = cardPool[Math.floor(Math.random() * cardPool.length)]; gs.hand.push({...ec}); addLog(`  ↳ 消耗${card.graceCost}赐福，精力+${card.energy}，抽到【${ec.name}】`); } break;
                     case 'grace_guard': gs.counters.grace -= card.graceCost; gs.focus = clamp(gs.focus + card.heal, 0, gs.maxFocus); addLog(`  ↳ 消耗${card.graceCost}赐福，回复${card.heal}专注力`); break;
                     case 'damage_vuln': dealDamage(card.damage); gs.enemyStatus.vuln = Math.max(gs.enemyStatus.vuln, card.vulnDuration); break;
@@ -1411,6 +1411,7 @@ deckCardCount: $('#deckCardCount'),
                 gameState.probCritThisTurn = false;
                 gameState.choosingCard = false;
                 gameState.chooseCallback = null;
+                gameState.chooseMode = null;
                 drawHand();
                 updateDisplay();
                 dom.endTurnBtn.classList.remove('flash');
@@ -1479,33 +1480,35 @@ deckCardCount: $('#deckCardCount'),
                 addLog(`💔 游戏结束：${reason}`, true);
                 setTimeout(() => { if (confirm(`游戏结束！${reason}\n总分：${gameState.score}\n重新开始？`)) restartGame(); }, 800);
             }
+
             function openDeckView() {
-    if (!dom.deckModal) return;
-    dom.deckModal.classList.add('active');
-    const cardsBySubject = {};
-    cardPool.forEach(c => {
-        if (!cardsBySubject[c.subject]) cardsBySubject[c.subject] = [];
-        cardsBySubject[c.subject].push(c);
-    });
-    let html = '';
-    for (const [subj, cards] of Object.entries(cardsBySubject)) {
-        html += `<h4 style="margin:12px 0 6px;color:#3b5998;">${SUBJECT_ICONS[subj]||''} ${subj} (${cards.length}张)</h4>`;
-        cards.sort((a,b) => a.cost - b.cost);
-        cards.forEach(card => {
-            html += `
-            <div class="deck-card-item">
-                <div class="card-mini-icon">${card.icon}</div>
-                <div class="card-mini-info">
-                    <div class="card-mini-name">${card.name}</div>
-                    <div class="card-mini-desc">${card.desc.replace(/\n/g,' ')}</div>
-                </div>
-                <div class="card-mini-cost">${card.cost}费</div>
-            </div>`;
-        });
-    }
-    dom.deckCardList.innerHTML = html || '<p style="color:#999;">暂无卡牌</p>';
-    dom.deckCardCount.textContent = cardPool.length;
-}
+                if (!dom.deckModal) return;
+                dom.deckModal.classList.add('active');
+                const cardsBySubject = {};
+                cardPool.forEach(c => {
+                    if (!cardsBySubject[c.subject]) cardsBySubject[c.subject] = [];
+                    cardsBySubject[c.subject].push(c);
+                });
+                let html = '';
+                for (const [subj, cards] of Object.entries(cardsBySubject)) {
+                    html += `<h4 style="margin:12px 0 6px;color:#3b5998;">${SUBJECT_ICONS[subj]||''} ${subj} (${cards.length}张)</h4>`;
+                    cards.sort((a,b) => a.cost - b.cost);
+                    cards.forEach(card => {
+                        html += `
+                        <div class="deck-card-item">
+                            <div class="card-mini-icon">${card.icon}</div>
+                            <div class="card-mini-info">
+                                <div class="card-mini-name">${card.name}</div>
+                                <div class="card-mini-desc">${card.desc.replace(/\n/g,' ')}</div>
+                            </div>
+                            <div class="card-mini-cost">${card.cost}费</div>
+                        </div>`;
+                    });
+                }
+                dom.deckCardList.innerHTML = html || '<p style="color:#999;">暂无卡牌</p>';
+                dom.deckCardCount.textContent = cardPool.length;
+            }
+
             function gameComplete() {
                 addLog(`🏆 所有科目完成！总分：${gameState.score}`, true);
                 setTimeout(() => { if (confirm(`恭喜！总分：${gameState.score}\n重新开始？`)) restartGame(); }, 1000);
@@ -1599,7 +1602,6 @@ deckCardCount: $('#deckCardCount'),
                 dom.currentSubject.textContent = subj;
                 dom.enemyVisual.textContent = SUBJECT_ICONS[subj] || '❓';
                 const isExam = gameState.currentStage % 5 === 0;
-                // 难度递增公式：基础值随整体进度线性增加
                 const progress = gameState.currentSubjectIndex * 5 + gameState.currentStage;
                 let baseHP = 55 + progress * 5 + randInt(0, 15);
                 let diff = 0.35 + progress * 0.018;
@@ -1679,6 +1681,9 @@ deckCardCount: $('#deckCardCount'),
             dom.startBtn.addEventListener('click', startGame);
             dom.endTurnBtn.addEventListener('click', () => { if (gameState && gameState.enemyHealth > 0) endTurn(); });
             dom.shopSkipBtn.addEventListener('click', hideShop);
+            dom.viewDeckBtn.addEventListener('click', openDeckView);
+            dom.closeDeckModal.addEventListener('click', () => dom.deckModal.classList.remove('active'));
+            dom.deckModal.addEventListener('click', (e) => { if (e.target === dom.deckModal) dom.deckModal.classList.remove('active'); });
 
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && gameState && gameState.enemyHealth > 0 && dom.battleArea.style.display !== 'none') {
@@ -1690,12 +1695,9 @@ deckCardCount: $('#deckCardCount'),
                     hideShop();
                 }
             });
-            dom.viewDeckBtn.addEventListener('click', openDeckView);
-dom.closeDeckModal.addEventListener('click', () => dom.deckModal.classList.remove('active'));
-dom.deckModal.addEventListener('click', (e) => { if (e.target === dom.deckModal) dom.deckModal.classList.remove('active'); });
 
-            console.log('🎓 学途卡牌 · 平衡版已就绪');
-            console.log('  难度平滑递增 | 归纳法自选复制 | 语文数学辅助');
+            console.log('🎓 学途卡牌 · 完整修复版已就绪');
+            console.log('  卡池查看 | 反证法移除 | 复制选择提示优化');
         })();
     </script>
 </body>
