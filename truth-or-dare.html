@@ -5,450 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>真心话大冒险 - 士多啤梨除草机</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            min-height: 100vh;
-            color: #fff;
-        }
-
-        /* 导航栏 */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: rgba(255,255,255,0.95);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-        }
-
-        .navbar-content {
-            width: 1200px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .logo {
-            font-size: 20px;
-            font-weight: bold;
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        .nav-menu a {
-            margin: 0 12px;
-            color: #333;
-            text-decoration: none;
-            font-size: 16px;
-            transition: color 0.2s;
-        }
-
-        .nav-menu a:hover {
-            color: #007bff;
-        }
-
-        /* 返回按钮 */
-        .back-btn {
-            position: fixed;
-            top: 70px;
-            left: 20px;
-            padding: 8px 16px;
-            background: rgba(255,255,255,0.15);
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 14px;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            transition: background 0.2s;
-        }
-
-        .back-btn:hover {
-            background: rgba(255,255,255,0.25);
-        }
-
-        /* 主容器 */
-        .main-container {
-            max-width: 800px;
-            margin: 100px auto 40px;
-            padding: 0 20px;
-        }
-
-        /* 标题 */
-        .game-title {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .game-title h1 {
-            font-size: 42px;
-            background: linear-gradient(135deg, #f093fb, #f5576c, #fda085);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-        }
-
-        .game-title p {
-            color: #aaa;
-            font-size: 16px;
-        }
-
-        /* 模式切换标签 */
-        .mode-tabs {
-            display: flex;
-            gap: 0;
-            margin-bottom: 24px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 16px;
-            padding: 4px;
-            backdrop-filter: blur(10px);
-        }
-
-        .mode-tab {
-            flex: 1;
-            padding: 14px 20px;
-            text-align: center;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            color: #aaa;
-            border: none;
-            background: transparent;
-        }
-
-        .mode-tab.active.truth {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
-        }
-
-        .mode-tab.active.dare {
-            background: linear-gradient(135deg, #f093fb, #f5576c);
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(245,87,108,0.4);
-        }
-
-        .mode-tab .icon {
-            font-size: 24px;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        /* 类别选择区 */
-        .category-section {
-            margin-bottom: 20px;
-        }
-
-        .category-label {
-            font-size: 14px;
-            color: #aaa;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .category-label .all-btn {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: transparent;
-            color: #aaa;
-            transition: all 0.2s;
-        }
-
-        .category-label .all-btn:hover,
-        .category-label .all-btn.active {
-            background: rgba(255,255,255,0.15);
-            color: #fff;
-            border-color: rgba(255,255,255,0.4);
-        }
-
-        .category-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .category-chip {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.05);
-            color: #ccc;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-        .category-chip:hover {
-            background: rgba(255,255,255,0.12);
-            border-color: rgba(255,255,255,0.3);
-        }
-
-        .category-chip.active.truth-chip {
-            background: rgba(102,126,234,0.3);
-            border-color: #667eea;
-            color: #fff;
-        }
-
-        .category-chip.active.dare-chip {
-            background: rgba(245,87,108,0.3);
-            border-color: #f5576c;
-            color: #fff;
-        }
-
-        .category-chip .count {
-            font-size: 11px;
-            opacity: 0.6;
-            margin-left: 4px;
-        }
-
-        /* 抽取按钮 */
-        .draw-section {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .draw-btn {
-            padding: 18px 60px;
-            font-size: 22px;
-            font-weight: bold;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            color: #fff;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            letter-spacing: 2px;
-        }
-
-        .draw-btn.truth-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            box-shadow: 0 6px 25px rgba(102,126,234,0.4);
-        }
-
-        .draw-btn.dare-btn {
-            background: linear-gradient(135deg, #f093fb, #f5576c);
-            box-shadow: 0 6px 25px rgba(245,87,108,0.4);
-        }
-
-        .draw-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .draw-btn:active {
-            transform: scale(0.96);
-        }
-
-        .draw-btn.spinning {
-            animation: pulse 0.5s ease-in-out;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* 结果卡片 */
-        .result-card {
-            background: rgba(255,255,255,0.08);
-            border-radius: 20px;
-            padding: 40px 30px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            min-height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s ease;
-            margin-top: 10px;
-        }
-
-        .result-card.empty {
-            color: #666;
-            font-size: 18px;
-        }
-
-        .result-card.filled {
-            animation: cardReveal 0.6s ease-out;
-        }
-
-        @keyframes cardReveal {
-            0% {
-                opacity: 0;
-                transform: translateY(20px) scale(0.95);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .result-content {
-            width: 100%;
-        }
-
-        .result-badge {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .result-badge.truth-badge {
-            background: rgba(102,126,234,0.3);
-            color: #b8c4ff;
-        }
-
-        .result-badge.dare-badge {
-            background: rgba(245,87,108,0.3);
-            color: #ffb8c4;
-        }
-
-        .result-text {
-            font-size: 24px;
-            line-height: 1.6;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-
-        .result-category {
-            font-size: 13px;
-            color: #888;
-            margin-top: 10px;
-        }
-
-        /* 重新抽取按钮 */
-        .redraw-btn {
-            display: inline-block;
-            margin-top: 16px;
-            padding: 10px 24px;
-            border-radius: 25px;
-            font-size: 14px;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
-            color: #ccc;
-            transition: all 0.2s;
-        }
-
-        .redraw-btn:hover {
-            background: rgba(255,255,255,0.2);
-            color: #fff;
-        }
-
-        /* 统计信息 */
-        .stats-bar {
-            text-align: center;
-            color: #666;
-            font-size: 13px;
-            margin-top: 20px;
-        }
-
-        /* 页脚 */
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #555;
-            border-top: 1px solid rgba(255,255,255,0.08);
-            max-width: 800px;
-            margin: 0 auto;
-            font-size: 13px;
-        }
-
-        /* 响应式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft YaHei", sans-serif; }
+        body { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; color: #fff; }
+        .navbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(255,255,255,0.95); box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; z-index: 100; }
+        .navbar-content { width: 1200px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        .logo { font-size: 20px; font-weight: bold; color: #007bff; text-decoration: none; }
+        .nav-menu a { margin: 0 12px; color: #333; text-decoration: none; font-size: 16px; transition: color 0.2s; }
+        .nav-menu a:hover { color: #007bff; }
+        .back-btn { position: fixed; top: 70px; left: 20px; padding: 8px 16px; background: rgba(255,255,255,0.15); color: white; border-radius: 8px; text-decoration: none; font-size: 14px; z-index: 100; backdrop-filter: blur(10px); transition: background 0.2s; }
+        .back-btn:hover { background: rgba(255,255,255,0.25); }
+        .main-container { max-width: 800px; margin: 100px auto 40px; padding: 0 20px; }
+        .game-title { text-align: center; margin-bottom: 30px; }
+        .game-title h1 { font-size: 42px; background: linear-gradient(135deg, #f093fb, #f5576c, #fda085); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
+        .game-title p { color: #aaa; font-size: 16px; }
+        .mode-tabs { display: flex; gap: 0; margin-bottom: 24px; background: rgba(255,255,255,0.08); border-radius: 16px; padding: 4px; backdrop-filter: blur(10px); }
+        .mode-tab { flex: 1; padding: 14px 20px; text-align: center; border-radius: 12px; cursor: pointer; font-size: 18px; font-weight: 600; transition: all 0.3s ease; color: #aaa; border: none; background: transparent; }
+        .mode-tab.active.truth { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; box-shadow: 0 4px 15px rgba(102,126,234,0.4); }
+        .mode-tab.active.dare { background: linear-gradient(135deg, #f093fb, #f5576c); color: #fff; box-shadow: 0 4px 15px rgba(245,87,108,0.4); }
+        .mode-tab .icon { font-size: 24px; display: block; margin-bottom: 4px; }
+        .category-section { margin-bottom: 20px; }
+        .category-label { font-size: 14px; color: #aaa; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .category-label .all-btn { padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: #aaa; transition: all 0.2s; }
+        .category-label .all-btn:hover, .category-label .all-btn.active { background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.4); }
+        .category-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+        .category-chip { padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #ccc; transition: all 0.2s; white-space: nowrap; }
+        .category-chip:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); }
+        .category-chip.active.truth-chip { background: rgba(102,126,234,0.3); border-color: #667eea; color: #fff; }
+        .category-chip.active.dare-chip { background: rgba(245,87,108,0.3); border-color: #f5576c; color: #fff; }
+        .category-chip .count { font-size: 11px; opacity: 0.6; margin-left: 4px; }
+        .draw-section { text-align: center; margin: 30px 0; }
+        .draw-btn { padding: 18px 60px; font-size: 22px; font-weight: bold; border: none; border-radius: 50px; cursor: pointer; color: #fff; transition: all 0.3s ease; position: relative; overflow: hidden; letter-spacing: 2px; }
+        .draw-btn.truth-btn { background: linear-gradient(135deg, #667eea, #764ba2); box-shadow: 0 6px 25px rgba(102,126,234,0.4); }
+        .draw-btn.dare-btn { background: linear-gradient(135deg, #f093fb, #f5576c); box-shadow: 0 6px 25px rgba(245,87,108,0.4); }
+        .draw-btn:hover { transform: translateY(-2px); }
+        .draw-btn:active { transform: scale(0.96); }
+        .draw-btn.spinning { animation: pulse 0.5s ease-in-out; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .result-card { background: rgba(255,255,255,0.08); border-radius: 20px; padding: 40px 30px; text-align: center; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); min-height: 120px; display: flex; align-items: center; justify-content: center; transition: all 0.4s ease; margin-top: 10px; }
+        .result-card.empty { color: #666; font-size: 18px; }
+        .result-card.filled { animation: cardReveal 0.6s ease-out; }
+        @keyframes cardReveal { 0% { opacity: 0; transform: translateY(20px) scale(0.95); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+        .result-content { width: 100%; }
+        .result-badge { display: inline-block; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
+        .result-badge.truth-badge { background: rgba(102,126,234,0.3); color: #b8c4ff; }
+        .result-badge.dare-badge { background: rgba(245,87,108,0.3); color: #ffb8c4; }
+        .result-text { font-size: 24px; line-height: 1.6; color: #fff; margin-bottom: 8px; }
+        .result-category { font-size: 13px; color: #888; margin-top: 10px; }
+        .redraw-btn { display: inline-block; margin-top: 16px; padding: 10px 24px; border-radius: 25px; font-size: 14px; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: #ccc; transition: all 0.2s; }
+        .redraw-btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
+        .stats-bar { text-align: center; color: #666; font-size: 13px; margin-top: 20px; }
+        .footer { text-align: center; padding: 20px; color: #555; border-top: 1px solid rgba(255,255,255,0.08); max-width: 800px; margin: 0 auto; font-size: 13px; }
         @media (max-width: 768px) {
-            .navbar {
-                height: auto;
-                padding: 10px 0;
-            }
-
-            .navbar-content {
-                flex-direction: column;
-                padding: 10px 20px;
-            }
-
-            .nav-menu {
-                margin-top: 10px;
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 8px;
-            }
-
-            .main-container {
-                margin-top: 130px;
-            }
-
-            .game-title h1 {
-                font-size: 30px;
-            }
-
-            .mode-tab {
-                font-size: 16px;
-                padding: 12px 14px;
-            }
-
-            .mode-tab .icon {
-                font-size: 20px;
-            }
-
-            .draw-btn {
-                padding: 16px 40px;
-                font-size: 18px;
-            }
-
-            .result-text {
-                font-size: 18px;
-            }
-
-            .result-card {
-                padding: 25px 20px;
-            }
-
-            .category-chips {
-                gap: 6px;
-            }
-
-            .category-chip {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .back-btn {
-                top: auto;
-                bottom: 20px;
-                left: 20px;
-            }
+            .navbar { height: auto; padding: 10px 0; }
+            .navbar-content { flex-direction: column; padding: 10px 20px; }
+            .nav-menu { margin-top: 10px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+            .main-container { margin-top: 130px; }
+            .game-title h1 { font-size: 30px; }
+            .mode-tab { font-size: 16px; padding: 12px 14px; }
+            .mode-tab .icon { font-size: 20px; }
+            .draw-btn { padding: 16px 40px; font-size: 18px; }
+            .result-text { font-size: 18px; }
+            .result-card { padding: 25px 20px; }
+            .category-chips { gap: 6px; }
+            .category-chip { padding: 6px 12px; font-size: 12px; }
+            .back-btn { top: auto; bottom: 20px; left: 20px; }
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="navbar-content">
             <a href="index.html" class="logo">士多啤梨除草机</a>
@@ -461,17 +85,12 @@
             </div>
         </div>
     </nav>
-
     <a href="games.html" class="back-btn">← 返回游戏合集</a>
-
-    <!-- 主容器 -->
     <div class="main-container">
         <div class="game-title">
             <h1>🎭 真心话大冒险</h1>
             <p>选择模式 → 可选类别 → 抽取你的命运！</p>
         </div>
-
-        <!-- 模式选择 -->
         <div class="mode-tabs">
             <button class="mode-tab active truth" onclick="switchMode('truth')">
                 <span class="icon">💬</span> 真心话
@@ -480,8 +99,6 @@
                 <span class="icon">🎯</span> 大冒险
             </button>
         </div>
-
-        <!-- 类别选择 -->
         <div class="category-section">
             <div class="category-label">
                 筛选类别（可选）
@@ -489,15 +106,9 @@
             </div>
             <div class="category-chips" id="categoryChips"></div>
         </div>
-
-        <!-- 抽取按钮 -->
         <div class="draw-section">
-            <button class="draw-btn truth-btn" id="drawBtn" onclick="draw()">
-                🎲 抽取真心话
-            </button>
+            <button class="draw-btn truth-btn" id="drawBtn" onclick="draw()">🎲 抽取真心话</button>
         </div>
-
-        <!-- 结果展示 -->
         <div class="result-card empty" id="resultCard">
             <span id="resultPlaceholder">点击上方按钮抽取属于你的题目 ✨</span>
             <div class="result-content" id="resultContent" style="display:none;">
@@ -507,680 +118,611 @@
                 <button class="redraw-btn" onclick="draw()">🔄 再抽一次</button>
             </div>
         </div>
-
-        <!-- 统计 -->
         <div class="stats-bar" id="statsBar"></div>
     </div>
-
-    <!-- 页脚 -->
     <div class="footer">
         <p>© 2026 士多啤梨除草机 | 题库来源：知乎、百度文库、AhaSlides、Toz App、瑞文网等公开平台</p>
     </div>
-
     <script>
-    // ==================== 数据定义 ====================
+        const truthData = {
+   "破冰热身类": [
+      "你觉得在座谁今天穿搭最好看？",
+      "用三个词形容你左边的玩家。",
+      "你最近单曲循环的一首歌是什么？",
+      "你最擅长的一道菜是什么？",
+      "你最近看过的一部电影/一本书是什么？",
+      "你小时候最想从事的职业是什么？",
+      "你最喜欢自己性格中的哪一点？",
+      "说出一件你明年最想完成的事情。",
+      "如果你能拥有一种超能力，你希望是什么？",
+      "你最近遇到过的最开心的一件事是什么？",
+      "当你最不知道穿什么颜色的时候，你会选择什么颜色？",
+      "如果给你一个机会去世界上任何一个地方旅行，你会去哪里？",
+      "最喜欢哪部电影？最喜欢的食物是什么？",
+      "无聊的时候一般做什么？",
+      "你每天睡多少个小时？",
+      "你最擅长什么运动？",
+      "你喜欢听什么类型的音乐？",
+      "请用三个词形容你自己。",
+      "你收到过最难忘的礼物是什么？",
+      "如果必须选一种动物代表自己，你选什么？"
+   ],
+   "感情与暗恋类": [
+      "你为爱（或为某个暗恋对象）做过的最疯狂/最傻的事是什么？",
+      "你有没有暗恋过在场的某个人？（必须回答“有”或“没有”！）",
+      "你经历过的最糟糕的约会是哪次？讲讲细节！",
+      "你年轻时，哪个明星是你不太可能承认的暗恋对象？",
+      "如果用一部电影来形容你现在的感情生活，会是哪部？",
+      "你会选择你爱的人还是爱你的人？",
+      "现在你心里最喜欢的人是谁？",
+      "第一次爱的人对你有什么影响？",
+      "如果请你从在座的人里面选一位做你的男女朋友，你会选谁？",
+      "上一次接吻是什么时候？和谁？",
+      "暗恋过几个异性？有主动追求过吗？",
+      "理想中的另一半是什么样子？",
+      "你听过/说过的最感人的情话是什么？",
+      "愿意为爱情牺牲到什么程度？",
+      "你最愿意和在场哪个异性私奔？",
+      "有没有那么一瞬间，让你对同性动了心？",
+      "请讲述第一次恋爱的情景。",
+      "谈过几次恋爱？",
+      "你和前任是因为什么分手的？",
+      "第一次约会是多少岁？和谁？",
+      "你有没有对喜欢的人说过谎？",
+      "你为了爱情做过最傻的一件事？",
+      "有没有一直偷偷喜欢的人？",
+      "你会因为什么原因放弃一段感情？",
+      "你对姐弟恋/异地恋有什么看法？",
+      "你相信一见钟情还是日久生情？",
+      "你有没有发过某条信息后马上就后悔了？是哪条？",
+      "说一个你后悔接吻的人。",
+      "你有没有为了让某人吃醋而故意做过什么？",
+      "你觉得一个人身上最奇怪的吸引点是什么？"
+   ],
+   "秘密与谎言类": [
+      "你对父母撒过的、他们至今都不知道的最大谎言是什么？",
+      "你曾答应保守并且至今仍在保守的一个小秘密是什么？（不用说秘密本身！）",
+      "你曾经制造/帮忙传播过的最疯狂的谣言是什么？",
+      "你有没有未经允许偷看过别人的日记或信息？",
+      "你无意中发现的关于某人的最大秘密是什么？",
+      "你有没有为了得到什么而谎报过年龄？",
+      "你最近撒的一个谎是什么（即使是很小的谎）？",
+      "你有没有深度“扒”过某人的社交账号（前任、暗恋对象等）？扒到什么程度？",
+      "你用搜索引擎搜过自己的名字吗？搜到了什么？",
+      "你有没有为了装酷假装自己了解某件事（电影、书、话题）？",
+      "你曾在游戏或比赛中作弊过吗？怎么作弊的？",
+      "你有没有装病来避免和某人出去玩？",
+      "你很庆幸你妈妈不知道你的什么事？",
+      "你有没有把别人的创意/成果据为己有过？",
+      "你曾经在考试中作弊吗？",
+      "你有没有在小時候偷过东西？偷了什么？",
+      "你有没有对前任说过“我还爱你”但其实已经不爱了？",
+      "你最近一次对某人撒谎是为什么？"
+   ],
+   "尴尬与糗事类": [
+      "你被别人撞见的、最尴尬的一件事是什么？",
+      "你在极度疲惫时说过/做过的最尴尬的事是什么？",
+      "你最近做过的最奇怪/最尴尬的梦是什么？",
+      "如果你能从记忆中抹去一件尴尬的事，会是哪一件？",
+      "你出于礼貌而吃过的最难吃的东西是什么？",
+      "你有没有在完全不合适的场合（葬礼、严肃会议……）爆笑过？",
+      "你有没有看一部公认的烂片看哭过？",
+      "你浏览器搜索历史里现在最尴尬的一条是什么？",
+      "从小到大最丢脸出丑的事情是什么？",
+      "最伤心的经历？上次哭是什么时候？",
+      "大学/中学到现在共挂过几门课？",
+      "你上过厕所最奇怪的地方是哪里？",
+      "在公共交通工具上做过的最尴尬的事？",
+      "有没有向一个没有向你挥手的人挥过手？",
+      "有没有把短信发错人？后来发生了什么？",
+      "你在学校最尴尬的时刻是什么？",
+      "你父母在你朋友面前做过的最尴尬的事是什么？",
+      "你考过的最低分是多少？什么科目？",
+      "你童年时期最尴尬的回忆是什么？",
+      "你有没有在听演讲/开会时睡着过？"
+   ],
+   "自我认知类": [
+      "你私下里最引以为豪的一件事是什么，即使这件事可能很奇怪？",
+      "你最不合常理/最不敢承认的恐惧是什么？",
+      "如果你现在可以立刻改变你性格中的一点，会是什么？",
+      "你至今仍在偷偷做的最幼稚的一件事是什么？",
+      "当你以为没人看的时候，你一定会做的事是什么？",
+      "你非常想拥有但又完全不擅长的技能是什么？",
+      "如果给自己的舞技打分（10分制），诚实说几分？",
+      "你那个绝对不敢公开的终极“罪恶快感”（Guilty Pleasure）是什么？",
+      "如果你必须一个星期不用手机，说实话，你会怎么样？",
+      "如果能预知未来，你最不希望看见的是什么？",
+      "觉得失去什么最可怕？",
+      "你觉得你最受不了别人的一件事是什么？",
+      "最欣赏自己哪个部位？对自己哪个部位最不满意？",
+      "如果让自己做电影中的角色，你会选谁？",
+      "你最想实现的三个愿望是什么？",
+      "你最长多久没洗澡？（诚实回答！）",
+      "你有没有对着镜子练习过接吻？",
+      "你给自己打几分（10分制）？为什么？",
+      "如果能改变自己的一件事，你会改变什么？",
+      "你是不是一个外向的人？还是假装外向？",
+      "你对现在的生活满意吗？为什么？",
+      "你认为自己最聪明吗？还是最傻？",
+      "你有什么怪癖是别人不知道的？",
+      "你睡觉要抱玩偶吗？",
+      "你是不是很懒？诚实回答！"
+   ],
+   "他人与社交类": [
+      "你对你左边那个人的第一印象（最真实的）是什么？",
+      "如果你可以读在场某人的心思5分钟，你会选谁？为什么？",
+      "如果必须将在场的人按“僵尸末日生存能力”排名，前三名是谁？",
+      "如果要选在场某人一起搞个砸锅的计划，你会选谁当同伙？",
+      "你私下里最羡慕在场某人的哪个才能或品质？",
+      "别人给你起过的最沙雕、并且流传开来的外号是什么？",
+      "如果可以从在座的人里面选一位交换一天生活，你会选谁？",
+      "你在乎别人看你的眼光吗？会为了众人反对而放弃自己想要的东西吗？",
+      "你觉得在座哪个男生最帅/哪个女生最美？",
+      "选择一个人，诚实告诉他/她你第一次见到时的想法。",
+      "在你心中谁最可信？",
+      "你最讨厌什么样的人？",
+      "你觉得这个房间里谁穿得最糟糕？",
+      "你最讨厌谁？为什么？",
+      "如果你必须选在场一个人跟你一起流落荒岛，你选谁？",
+      "你身边的朋友谁最八卦？",
+      "你最近一次在社交媒体上跟踪的人是谁？",
+      "如果我和其他人同时约你，你会选谁？",
+      "有没有一直喜欢你但你不喜欢的异性？",
+      "你会给在座的谁发“好人卡”？"
+   ],
+   "深度灵魂拷问类": [
+      "你最后悔没有对某人说出口/做过的事是什么？",
+      "你最后悔的一次冲动消费是什么？",
+      "你弄坏/弄丢过的最贵的东西是什么？",
+      "如果你可以向10年后的自己问一个问题，你会问什么？",
+      "如果你能知道一个未解之谜的答案，你会选哪个？",
+      "如果时间能倒流，你希望回到哪一时间？",
+      "世界末日，你可以救一个人，你会救谁？",
+      "如果看到自己最爱的人熟睡在你面前，你会做什么？",
+      "曾经有过最被感动的事是什么？",
+      "如果从天而降99枚金币，你的第一反应是什么？",
+      "讲出你“人生愿望清单”上最疯狂的一项。",
+      "如果能穿越过去，你想回到什么年纪？",
+      "如果有来生，你选择当什么？",
+      "讲述未来5年的事业规划。",
+      "你觉得最美的画面是什么？",
+      "如果明天是世界末日，你现在最想做的是什么？",
+      "如果能让你选择性别，你希望是男还是女？",
+      "如果你爱的人不爱你怎么办？",
+      "你对爱情有什么看法？",
+      "你认为男生就该养家吗？",
+      "你希望谁得到幸福？",
+      "如果你遇到一个精灵，你的三个愿望是什么？",
+      "如果请你从在座的人里面选一个送走（再也不用见到），你选谁？",
+      "如果一天内要用光十万元，你怎么花？",
+      "有没有想过自杀？（⚠️ 慎用，需在绝对安全信任的氛围中）"
+   ],
+   "情侣专属类": [
+      "在我们的关系中，你一直想尝试但还没提过的事情是什么？",
+      "你有没有为了顾及我的感受而对我撒谎？撒谎的内容是什么？",
+      "你最喜欢关于我们的哪段回忆？",
+      "关于我，还有什么让你感到惊讶的吗？",
+      "你对我的第一印象是什么？",
+      "你有没有嫉妒过我的某段友谊？",
+      "我为你做过的最浪漫的事是什么？",
+      "你希望我多做的一件事是什么？",
+      "你最害怕的感情关系是什么样的？",
+      "如果我们现在可以一起去任何地方旅行，你会选择哪里？",
+      "你最喜欢我身上哪个部位？",
+      "你什么时候发现自己喜欢上我的？",
+      "如果让你用一首歌形容我们的关系，你选哪首？",
+      "你有没有梦到过我？梦到了什么？",
+      "你觉得我们之间最需要改善的是什么？",
+      "你第一次见我的时候心里在想什么？",
+      "如果我们分手了，你最怀念的是什么？",
+      "你最想和我一起完成的一件事是什么？",
+      "你相信我们能走多远？",
+      "如果给你一小时当我的男/女朋友，你会做什么？"
+   ],
+   "职场团建类": [
+      "在工作会议中，你遇到过最尴尬的事情是什么？",
+      "如果可以和公司里的任何人互换一天的工作，你会选择谁？",
+      "你最讨厌会议中的哪一点？",
+      "你有没有把别人的创意据为己有？",
+      "你做过的最糟糕的工作是什么？",
+      "如果你可以改变我们工作场所的一件事，那会是什么？",
+      "你对团队建设活动有什么真实看法？",
+      "你有没有在听演讲时睡着过？",
+      "你在工作邮件中遇到过最搞笑的自动纠错错误是什么？",
+      "如果你不在这里工作，你的梦想职业是什么？",
+      "你上班迟到过最久的一次是多久？用了什么借口？",
+      "你最佩服公司里的谁？为什么？",
+      "你每天的午休时间真实在做什么？",
+      "你在家办公期间最尴尬的经历是什么？",
+      "如果你的工位要被永久搬到老板对面，你的第一反应？"
+   ],
+   "青少年校园类": [
+      "谁是你的第一次暗恋对象？",
+      "你曾经在考试中作弊过吗？怎么作弊的？",
+      "如果可以，你会改变自己什么？",
+      "你最近一次在社交媒体上偷看的人是谁？",
+      "你有没有谎报过年龄？",
+      "你在学校最尴尬的时刻是什么？",
+      "你有没有装病不去上学的经历？",
+      "你考过的最低分是多少？什么科目？",
+      "在班里你最讨厌的人是谁？",
+      "你最讨厌哪个老师？为什么？",
+      "你最喜欢班里的哪个异性同学？",
+      "你学的最好的一门功课是什么？最差呢？",
+      "你有没有抄过别人的作业？",
+      "你在班里被老师当众批评过吗？因为什么？",
+      "你小时候最想从事的职业变了吗？",
+      "如果再给你一次机会回到毕业那天，你会对那个ta说什么？",
+      "你最近一次哭是因为什么？",
+      "你觉得自己在学校是受欢迎的人吗？",
+      "有没有被校园霸凌或孤立过的经历？",
+      "你最羡慕班上哪个同学？为什么？"
+   ]
+};
+        const dareData  = {
+   "破冰热身类": [
+      "模仿一位在座朋友的经典动作或口头禅。",
+      "用五种不同的语调说“我爱你”。",
+      "让大家选一个超级沙雕的滤镜，用来自拍并发朋友圈（保留1小时）。",
+      "模仿在场3个不同人的笑声。",
+      "做一个大家都满意的鬼脸。",
+      "闭眼左转三圈右转三圈，睁眼大喊“我没晕！”",
+      "模仿一种动物，直到大家猜中为止。",
+      "用五种不同情绪读一段天气预报。",
+      "接下来的三轮，请用小组选定的口音说话。",
+      "无音乐跳舞1分钟。",
+      "真诚赞美房间里的三个人。",
+      "接下来10分钟只能说押韵的话。",
+      "一边大声数数一边做30个深蹲。",
+      "让右边的人用可洗笔在你脸上画一个图案。",
+      "接下来的10分钟用第三人称称呼自己。"
+   ],
+   "情侣专属类": [
+      "给你的伴侣做2分钟的肩部按摩，必须认真！",
+      "分享一下关于你们关系中最让你尴尬的故事。",
+      "现在就给你的伴侣写一封简短的情书，然后大声朗读出来。",
+      "教你的伴侣一件你擅长但ta不会的事。",
+      "用3分钟重现你们的第一次约会场景。",
+      "让你的伴侣在你的社交媒体上发布任何ta想发的内容。",
+      "真诚地赞美你的伴侣三句（不能重复、不能敷衍）。",
+      "（充满爱意地）模仿一下你的伴侣的小动作或口头禅。",
+      "为下周安排一次惊喜约会，并分享细节。",
+      "明天让你的伴侣帮你挑选衣服。"
+   ],
+   "职场团建类": [
+      "用你最喜欢的电影角色的风格，发表一段30秒的励志演讲。",
+      "在团队聊天中只用表情符号发送一条消息，看大家能不能猜出来。",
+      "（友好地）模仿一下你的直属领导。",
+      "请仅用歌曲名描述你的工作内容。",
+      "带领大家进行1分钟的引导冥想。",
+      "在两分钟内教会小组一项你掌握的技能（工作无关也可以）。",
+      "当场创作并展示公司新标语。",
+      "真诚地赞美房间里的三个人（必须涉及工作方面）。",
+      "以快进模式重现你的晨间日常。",
+      "用最夸张的方式演示你接客户电话时的语气。"
+   ],
+   "青少年校园类": [
+      "一边唱字母歌一边做20个开合跳。",
+      "让别人浏览你的手机相册30秒。",
+      "在你的社交平台分享一张童年时期的尴尬照片。",
+      "接下来10分钟请用英式口音（或其他方言）说话。",
+      "尽力模仿一位老师（不要说出名字！让大家猜）。",
+      "尽量忍住5分钟不笑（小组会想方设法逗你）。",
+      "吃一勺由小组选定的调味品。",
+      "在下一轮之前，扮演你最喜欢的动物。",
+      "把你最尴尬的舞步教给大家。",
+      "对你的同桌/室友来一段即兴的“颁奖致辞”。"
+   ],
+   "表演才艺类": [
+      "对你选择的人进行一次真挚的友情告白（或假爱情告白），必须有眼神接触！",
+      "用夸张哑剧表演你最大的缺点/优点，让大家猜。",
+      "放一首嗨歌，用你最性感（或最沙雕）的方式跳30秒。",
+      "模仿在场的某个人，直到大家猜出是谁。",
+      "直视着由大家选出的某个人，唱一首情歌。",
+      "模仿一个以性感/古怪著称的名人。",
+      "脱下一只袜子，把它当手偶讲一个小故事。",
+      "假装你是在执行任务的特工，用想象的对讲机描述房间和这里的人。",
+      "假装因为输掉游戏而戏剧性地大哭起来。",
+      "就一个完全荒谬的话题（如“甜甜圈中间洞的重要性”）发表严肃激情的演讲。",
+      "用一个鞠躬或“扔麦”动作来结束游戏。",
+      "唱《青藏高原》最后一句。",
+      "学超级名模走秀，绕桌子一圈。",
+      "重温《大话西游》经典对白，现场满意为止！",
+      "跳草裙舞。",
+      "用家乡话表演《大话西游》经典段落。",
+      "躺在床上摆pose说“饭在锅里，我在床上”。",
+      "表演一段即兴rap，内容是夸赞在场的某个人。",
+      "唱一首老男孩（或你拿手的歌）的高潮部分。",
+      "深情朗诵骆宾王的《鹅》。",
+      "表演张倾城之“我脱我穿我再脱我再穿”。",
+      "模仿奥特曼经典造型，对指定的人说“我要代表月亮消灭你！”",
+      "背对着大家扭屁股唱“洗刷刷”。",
+      "学水兵月做动作，对某人大喊“我要代替月亮惩罚你！”",
+      "扮演你的角色被抽到“最烂演员奖”时的获奖感言。"
+   ],
+   "手机/社交媒体类": [
+      "大声读出你和你暗恋对象/前任的最后一段聊天记录。",
+      "让你右边的人在你手机相册里选一张糗照，展示给大家看。",
+      "展示你音乐App上最近5个播放记录。",
+      "把你解锁的手机交右边的人，让他/她给通讯录第一个联系人发一个奇怪emoji。",
+      "展示你手机备忘录最近写的一条。",
+      "给最近聊过天的人发一张你做鬼脸的自拍。",
+      "展示你手机的壁纸（如果很奇怪，要解释为什么！）。",
+      "在社交平台发一条超级神秘的状态（如：“有时候，眼见不一定为实……”），至少保留1小时。",
+      "给暗恋的人（或微信第3个联系人）发一条语音，唱一首土味情歌副歌。",
+      "给爸妈打电话，试着让他们相信一个疯狂的故事，至少持续1分钟。",
+      "给家庭群发送一段你唱歌的语音消息。",
+      "在社交平台发一张你现在的照片，配文“感觉自己很可爱，可能会删”。",
+      "让别人在你的社交媒体上发布一条状态。",
+      "给一年多没联系的人发短信，然后截图对方的回复。",
+      "把你手机相册里第42张照片发到群里。",
+      "打电话给朋友，用尽可能复杂的方式解释“真心话大冒险”的规则。",
+      "让别人随机帮你设计一个微信头像，用24小时。",
+      "给你最近通话记录里的第一个人发一个🍆或🤡emoji。",
+      "搜索你自己的名字，把最搞笑的结果念出来。",
+      "把手机解锁后交给右边的人自由操作1分钟。"
+   ],
+   "互动接触类": [
+      "给在场最不熟的人一个持续10秒的真正拥抱。",
+      "和你对面的人交换一件显眼饰品（戒指、手链、帽子等），直到游戏结束。",
+      "给左边的人来个30秒的手部按摩。",
+      "蒙上眼睛，猜谁亲了你的脸颊（或碰了你的手臂）。",
+      "和对面的人进行“死亡对视挑战”，谁先笑谁喝一口。",
+      "和你右边的人深情对视，并对他/她唱《老鼠爱大米》高潮部分。",
+      "和离你最近的一位同性十指相扣10秒，含情脉脉说“我爱你”。",
+      "背起现场某个异性绕场一圈。",
+      "与本桌离你最近的一位异性拥抱十秒钟。",
+      "邀请一位异性为你唱情歌（或与你情歌对唱）。",
+      "抱一位异性直到下一轮游戏结束。",
+      "找离你最近的人喝交杯酒。",
+      "选一个人，对他/她表白一分钟。",
+      "和右边第一个异性关在厕所/小房间里等一轮游戏结束。",
+      "把右边第一个异性横抱起来。",
+      "两人面对面作搓澡状，屁股一扭一扭，唱“洗刷刷”。",
+      "男生单腿下跪，女生伸手，男生亲女生手背。",
+      "与你对面的人交换一件上衣（限方便穿脱的情况下）。",
+      "拥抱你觉得今晚穿得最好看的人。",
+      "让你右边的人在你身上任何一个地方写字，保留到游戏结束。"
+   ],
+   "喊话/街头类": [
+      "站起来，大喊“我是超人，我要回家了！”，并以飞行姿势跑出去。",
+      "对窗外大喊“我好寂寞啊！”",
+      "抓着铁门/门框大喊“放我出去！”",
+      "到街上大喊“卖拖鞋啦～2块一双，买一送3！”",
+      "对一个陌生人说：“打扰了，我不会看表，请您看一下我的手表上显示的是几点。”",
+      "找一个附近不认识的异性，问对方“你喜不喜欢我？”",
+      "对陌生人大声说两遍“我喜欢你！”",
+      "在厕所里唱歌，让外面的人能听到。",
+      "大喊“燃烧吧，小宇宙！”",
+      "面对墙壁大喊三声“我爱你！”",
+      "对窗外大喊“我是火星来的！”",
+      "去问一个路过的陌生人要QQ号或手机号。",
+      "对一个陌生异性挤眉弄眼，必须让对方看到。",
+      "大喊“我中了500万！”然后假装晕倒。",
+      "在阳台/窗户边大声唱国歌第一句。"
+   ],
+   "搞笑动作类": [
+      "快速原地转三圈，然后不结巴地对左边的人说一句真诚的赞美。",
+      "头上顶一本书，做10个弓步。",
+      "从其他人腿下爬过去换座位。",
+      "模仿某人的走路姿势走到墙边再回来。",
+      "试着用双眼同时做一个“性感眨眼”动作。",
+      "用嘴发出最尴尬的声音。",
+      "右手捏左耳垂，弯腰顺时针转10圈，再金鸡独立15秒。",
+      "俯卧撑15下（或20下，视体力）。",
+      "站到凳子上表演大猩猩捶胸呐喊动作。",
+      "蹲在凳子上作便秘状。",
+      "头顶簸箕手拿笤帚，边跳边唱“我爱劳动，我爱卫生”。",
+      "背对着大家一边扭屁股一边唱“洗刷刷”。",
+      "左手拉右耳，右手拉左耳，从桌子底下爬过去。",
+      "用舌头舔自己的肘部（几乎不可能的任务！）。",
+      "右手跨过后脑勺从左边摸右眼。",
+      "原地转10圈，然后试着走一条直线。",
+      "在下一轮之前表现得像只鸡（含叫声和动作）。",
+      "仅用脚趾剥一根香蕉。",
+      "不照镜子化完妆，带着这个妆容打完剩下的游戏。",
+      "让另一个玩家挠你痒痒30秒，不许躲。",
+      "假装你是一只在求偶的孔雀，绕场一圈。",
+      "用膝盖走路从房间这头到那头。",
+      "倒立（靠墙也行）坚持10秒，如果做不到就罚酒。",
+      "模仿机器人做所有动作，直到下一个人抽到你。",
+      "把你的两只鞋的左右脚换过来穿，直到游戏结束。"
+   ],
+   "经典惩罚与整蛊类": [
+      "深情吻墙10秒。",
+      "让某人用可洗的笔在你额头上写一个词，保留到游戏结束。",
+      "吃下在场每个人为你夹的菜（可能混入奇怪组合！）。",
+      "模仿脑白金广告，边唱边跳。",
+      "选一个男生一边捶他胸一边说“你好讨厌哦～～”",
+      "读“凤姐体”自白：我从9岁起博览群书，20岁达到顶峰，智商前300年后300年无人能及……",
+      "用笔在额头上画一个乌龟，直到游戏结束。",
+      "把外套脱掉给某个人穿上。",
+      "模仿古代特殊职业女子拉客。",
+      "学水兵月做动作，对某人说“我要代替月亮惩罚你！”",
+      "模仿芙蓉姐姐S造型。",
+      "认真模仿动物叫声，直到被猜中。",
+      "和一件没有生命的物体（植物、台灯……）疯狂调情1分钟。",
+      "假装你在面试一个完全不懂的领域，保持严肃！",
+      "如果戴太阳镜，把它倒着戴直到下一轮。",
+      "把手纸当围巾围在脖子上持续一轮。",
+      "任选两个男生一起摆芙蓉姐姐S形。",
+      "男生摸自己胸说“唉，太小了”。",
+      "慢慢地、性感地把上衣撩起到不能再撩，并柔声说“我好寂寞啊”。",
+      "喝一小口泡菜汁、醋或由小组指定的奇怪液体。",
+      "情景剧表演：“锄禾日当午”桥段（一男一女）。",
+      "一人用嘴吸住纸牌，另一人用嘴从另一面吸住移走。",
+      "让右边的人用发胶给你设计一个新发型。",
+      "给别人任意涂指甲油。",
+      "吃一勺由大家投票选出的最黑暗料理组合。"
+   ],
+   "有趣搞笑向": [
+      "打电话给最近的披萨店，认真地问他们卖不卖墨西哥卷饼。",
+      "在别人的“为你推荐”页面尝试跳第一个舞蹈动作。",
+      "接下来15分钟只能用第三人称称呼自己。",
+      "用你最浮夸的方式表演你早晨起床的全过程。",
+      "让大家给你指定一个奇怪的走路姿势，保持到下一轮。",
+      "用Rap的方式介绍今天的天气状况。",
+      "假装你是一个正在直播的带货主播，推销你脚上的袜子。",
+      "用TVB配音腔朗读一段食品包装上的配料表。",
+      "表演“第一次见到雪/见到海”的夸张反应。",
+      "假装手机响了，接起来进行一段完全虚构的1分钟对话。",
+      "用最慢的慢动作表演你打喷嚏的全过程。",
+      "把在场某个人的名字编成一首五言绝句念出来。",
+      "模仿抖音/快手上最火的一个梗/动作。",
+      "“不小心”把一杯水打翻，然后用最浮夸的方式收拾。",
+      "给在场的每个人起一个江湖外号，并解释为什么。"
+   ],
+   "大胆成年人向": [
+      "与右侧的玩家交换一件衣服。",
+      "在其他人试图用谈话分散你注意力的情况下，保持平板支撑1分钟。",
+      "真诚地赞美房间里某人的外貌/身材（必须具体）。",
+      "现在就做20个俯卧撑（做不了就脱一件外套）。",
+      "为房间里的某人演唱一首浪漫歌曲，必须深情对视。",
+      "分享一张你手机里最不想让人看到的照片。",
+      "让群组成员阅读你最近的一段聊天记录（你可以屏蔽一个人）。",
+      "给你的前任发一条“最近还好吗”，展示回复。",
+      "和对面的人用嘴撕一张纸，直到撕到不能再小。",
+      "选择一个人，在他/她耳边用气声说一句让对方脸红的话。",
+      "讲一个“未成年人不宜”的段子（视气氛而定）。",
+      "详细描述你最糟糕的一次约会/恋爱糗事，有劲爆细节但不说名字。",
+      "公开你最近一次买的、你觉得丢人或没用的东西。",
+      "让某人用眼罩/布蒙住你的眼睛，猜谁碰了你的哪个部位。",
+      "跪地对在场某人进行30秒的“求婚演练”。"
+   ]
+};
+        let currentMode = 'truth';
+        let selectedCategory = null;
 
-    const truthData = {
-        "破冰热身类": [
-            "你觉得在座谁今天穿搭最好看？",
-            "用三个词形容你左边的玩家。",
-            "你最近单曲循环的一首歌是什么？",
-            "你最擅长的一道菜是什么？",
-            "你最近看过的一部电影/一本书是什么？",
-            "你小时候最想从事的职业是什么？",
-            "你最喜欢自己性格中的哪一点？",
-            "说出一件你明年最想完成的事情。",
-            "如果你能拥有一种超能力，你希望是什么？",
-            "你最近遇到过的最开心的一件事是什么？",
-            "当你最不知道穿什么颜色的时候，你会选择什么颜色？",
-            "如果给你一个机会去世界上任何一个地方旅行，你会去哪里？",
-            "最喜欢哪部电影？最喜欢的食物是什么？",
-            "无聊的时候一般做什么？",
-            "你每天睡多少个小时？",
-            "你最擅长什么运动？",
-            "你喜欢听什么类型的音乐？",
-            "请用三个词形容你自己。",
-            "你收到过最难忘的礼物是什么？",
-            "如果必须选一种动物代表自己，你选什么？"
-        ],
-        "感情与暗恋类": [
-            "你为爱（或为某个暗恋对象）做过的最疯狂/最傻的事是什么？",
-            "你有没有暗恋过在场的某个人？（必须回答"有"或"没有"！）",
-            "你经历过的最糟糕的约会是哪次？讲讲细节！",
-            "你年轻时，哪个明星是你不太可能承认的暗恋对象？",
-            "如果用一部电影来形容你现在的感情生活，会是哪部？",
-            "你会选择你爱的人还是爱你的人？",
-            "现在你心里最喜欢的人是谁？",
-            "第一次爱的人对你有什么影响？",
-            "如果请你从在座的人里面选一位做你的男女朋友，你会选谁？",
-            "上一次接吻是什么时候？和谁？",
-            "暗恋过几个异性？有主动追求过吗？",
-            "理想中的另一半是什么样子？",
-            "你听过/说过的最感人的情话是什么？",
-            "愿意为爱情牺牲到什么程度？",
-            "你最愿意和在场哪个异性私奔？",
-            "有没有那么一瞬间，让你对同性动了心？",
-            "请讲述第一次恋爱的情景。",
-            "谈过几次恋爱？",
-            "你和前任是因为什么分手的？",
-            "第一次约会是多少岁？和谁？",
-            "你有没有对喜欢的人说过谎？",
-            "你为了爱情做过最傻的一件事？",
-            "有没有一直偷偷喜欢的人？",
-            "你会因为什么原因放弃一段感情？",
-            "你对姐弟恋/异地恋有什么看法？",
-            "你相信一见钟情还是日久生情？",
-            "你有没有发过某条信息后马上就后悔了？是哪条？",
-            "说一个你后悔接吻的人。",
-            "你有没有为了让某人吃醋而故意做过什么？",
-            "你觉得一个人身上最奇怪的吸引点是什么？"
-        ],
-        "秘密与谎言类": [
-            "你对父母撒过的、他们至今都不知道的最大谎言是什么？",
-            "你曾答应保守并且至今仍在保守的一个小秘密是什么？（不用说秘密本身！）",
-            "你曾经制造/帮忙传播过的最疯狂的谣言是什么？",
-            "你有没有未经允许偷看过别人的日记或信息？",
-            "你无意中发现的关于某人的最大秘密是什么？",
-            "你有没有为了得到什么而谎报过年龄？",
-            "你最近撒的一个谎是什么（即使是很小的谎）？",
-            "你有没有深度"扒"过某人的社交账号（前任、暗恋对象等）？扒到什么程度？",
-            "你用搜索引擎搜过自己的名字吗？搜到了什么？",
-            "你有没有为了装酷假装自己了解某件事（电影、书、话题）？",
-            "你曾在游戏或比赛中作弊过吗？怎么作弊的？",
-            "你有没有装病来避免和某人出去玩？",
-            "你很庆幸你妈妈不知道你的什么事？",
-            "你有没有把别人的创意/成果据为己有过？",
-            "你曾经在考试中作弊吗？",
-            "你有没有在小時候偷过东西？偷了什么？",
-            "你有没有对前任说过"我还爱你"但其实已经不爱了？",
-            "你最近一次对某人撒谎是为什么？"
-        ],
-        "尴尬与糗事类": [
-            "你被别人撞见的、最尴尬的一件事是什么？",
-            "你在极度疲惫时说过/做过的最尴尬的事是什么？",
-            "你最近做过的最奇怪/最尴尬的梦是什么？",
-            "如果你能从记忆中抹去一件尴尬的事，会是哪一件？",
-            "你出于礼貌而吃过的最难吃的东西是什么？",
-            "你有没有在完全不合适的场合（葬礼、严肃会议……）爆笑过？",
-            "你有没有看一部公认的烂片看哭过？",
-            "你浏览器搜索历史里现在最尴尬的一条是什么？",
-            "从小到大最丢脸出丑的事情是什么？",
-            "最伤心的经历？上次哭是什么时候？",
-            "大学/中学到现在共挂过几门课？",
-            "你上过厕所最奇怪的地方是哪里？",
-            "在公共交通工具上做过的最尴尬的事？",
-            "有没有向一个没有向你挥手的人挥过手？",
-            "有没有把短信发错人？后来发生了什么？",
-            "你在学校最尴尬的时刻是什么？",
-            "你父母在你朋友面前做过的最尴尬的事是什么？",
-            "你考过的最低分是多少？什么科目？",
-            "你童年时期最尴尬的回忆是什么？",
-            "你有没有在听演讲/开会时睡着过？"
-        ],
-        "自我认知类": [
-            "你私下里最引以为豪的一件事是什么，即使这件事可能很奇怪？",
-            "你最不合常理/最不敢承认的恐惧是什么？",
-            "如果你现在可以立刻改变你性格中的一点，会是什么？",
-            "你至今仍在偷偷做的最幼稚的一件事是什么？",
-            "当你以为没人看的时候，你一定会做的事是什么？",
-            "你非常想拥有但又完全不擅长的技能是什么？",
-            "如果给自己的舞技打分（10分制），诚实说几分？",
-            "你那个绝对不敢公开的终极"罪恶快感"（Guilty Pleasure）是什么？",
-            "如果你必须一个星期不用手机，说实话，你会怎么样？",
-            "如果能预知未来，你最不希望看见的是什么？",
-            "觉得失去什么最可怕？",
-            "你觉得你最受不了别人的一件事是什么？",
-            "最欣赏自己哪个部位？对自己哪个部位最不满意？",
-            "如果让自己做电影中的角色，你会选谁？",
-            "你最想实现的三个愿望是什么？",
-            "你最长多久没洗澡？（诚实回答！）",
-            "你有没有对着镜子练习过接吻？",
-            "你给自己打几分（10分制）？为什么？",
-            "如果能改变自己的一件事，你会改变什么？",
-            "你是不是一个外向的人？还是假装外向？",
-            "你对现在的生活满意吗？为什么？",
-            "你认为自己最聪明吗？还是最傻？",
-            "你有什么怪癖是别人不知道的？",
-            "你睡觉要抱玩偶吗？",
-            "你是不是很懒？诚实回答！"
-        ],
-        "他人与社交类": [
-            "你对你左边那个人的第一印象（最真实的）是什么？",
-            "如果你可以读在场某人的心思5分钟，你会选谁？为什么？",
-            "如果必须将在场的人按"僵尸末日生存能力"排名，前三名是谁？",
-            "如果要选在场某人一起搞个砸锅的计划，你会选谁当同伙？",
-            "你私下里最羡慕在场某人的哪个才能或品质？",
-            "别人给你起过的最沙雕、并且流传开来的外号是什么？",
-            "如果可以从在座的人里面选一位交换一天生活，你会选谁？",
-            "你在乎别人看你的眼光吗？会为了众人反对而放弃自己想要的东西吗？",
-            "你觉得在座哪个男生最帅/哪个女生最美？",
-            "选择一个人，诚实告诉他/她你第一次见到时的想法。",
-            "在你心中谁最可信？",
-            "你最讨厌什么样的人？",
-            "你觉得这个房间里谁穿得最糟糕？",
-            "你最讨厌谁？为什么？",
-            "如果你必须选在场一个人跟你一起流落荒岛，你选谁？",
-            "你身边的朋友谁最八卦？",
-            "你最近一次在社交媒体上跟踪的人是谁？",
-            "如果我和其他人同时约你，你会选谁？",
-            "有没有一直喜欢你但你不喜欢的异性？",
-            "你会给在座的谁发"好人卡"？"
-        ],
-        "深度灵魂拷问类": [
-            "你最后悔没有对某人说出口/做过的事是什么？",
-            "你最后悔的一次冲动消费是什么？",
-            "你弄坏/弄丢过的最贵的东西是什么？",
-            "如果你可以向10年后的自己问一个问题，你会问什么？",
-            "如果你能知道一个未解之谜的答案，你会选哪个？",
-            "如果时间能倒流，你希望回到哪一时间？",
-            "世界末日，你可以救一个人，你会救谁？",
-            "如果看到自己最爱的人熟睡在你面前，你会做什么？",
-            "曾经有过最被感动的事是什么？",
-            "如果从天而降99枚金币，你的第一反应是什么？",
-            "讲出你"人生愿望清单"上最疯狂的一项。",
-            "如果能穿越过去，你想回到什么年纪？",
-            "如果有来生，你选择当什么？",
-            "讲述未来5年的事业规划。",
-            "你觉得最美的画面是什么？",
-            "如果明天是世界末日，你现在最想做的是什么？",
-            "如果能让你选择性别，你希望是男还是女？",
-            "如果你爱的人不爱你怎么办？",
-            "你对爱情有什么看法？",
-            "你认为男生就该养家吗？",
-            "你希望谁得到幸福？",
-            "如果你遇到一个精灵，你的三个愿望是什么？",
-            "如果请你从在座的人里面选一个送走（再也不用见到），你选谁？",
-            "如果一天内要用光十万元，你怎么花？",
-            "有没有想过自杀？（⚠️ 慎用，需在绝对安全信任的氛围中）"
-        ],
-        "情侣专属类": [
-            "在我们的关系中，你一直想尝试但还没提过的事情是什么？",
-            "你有没有为了顾及我的感受而对我撒谎？撒谎的内容是什么？",
-            "你最喜欢关于我们的哪段回忆？",
-            "关于我，还有什么让你感到惊讶的吗？",
-            "你对我的第一印象是什么？",
-            "你有没有嫉妒过我的某段友谊？",
-            "我为你做过的最浪漫的事是什么？",
-            "你希望我多做的一件事是什么？",
-            "你最害怕的感情关系是什么样的？",
-            "如果我们现在可以一起去任何地方旅行，你会选择哪里？",
-            "你最喜欢我身上哪个部位？",
-            "你什么时候发现自己喜欢上我的？",
-            "如果让你用一首歌形容我们的关系，你选哪首？",
-            "你有没有梦到过我？梦到了什么？",
-            "你觉得我们之间最需要改善的是什么？",
-            "你第一次见我的时候心里在想什么？",
-            "如果我们分手了，你最怀念的是什么？",
-            "你最想和我一起完成的一件事是什么？",
-            "你相信我们能走多远？",
-            "如果给你一小时当我的男/女朋友，你会做什么？"
-        ],
-        "职场团建类": [
-            "在工作会议中，你遇到过最尴尬的事情是什么？",
-            "如果可以和公司里的任何人互换一天的工作，你会选择谁？",
-            "你最讨厌会议中的哪一点？",
-            "你有没有把别人的创意据为己有？",
-            "你做过的最糟糕的工作是什么？",
-            "如果你可以改变我们工作场所的一件事，那会是什么？",
-            "你对团队建设活动有什么真实看法？",
-            "你有没有在听演讲时睡着过？",
-            "你在工作邮件中遇到过最搞笑的自动纠错错误是什么？",
-            "如果你不在这里工作，你的梦想职业是什么？",
-            "你上班迟到过最久的一次是多久？用了什么借口？",
-            "你最佩服公司里的谁？为什么？",
-            "你每天的午休时间真实在做什么？",
-            "你在家办公期间最尴尬的经历是什么？",
-            "如果你的工位要被永久搬到老板对面，你的第一反应？"
-        ],
-        "青少年校园类": [
-            "谁是你的第一次暗恋对象？",
-            "你曾经在考试中作弊过吗？怎么作弊的？",
-            "如果可以，你会改变自己什么？",
-            "你最近一次在社交媒体上偷看的人是谁？",
-            "你有没有谎报过年龄？",
-            "你在学校最尴尬的时刻是什么？",
-            "你有没有装病不去上学的经历？",
-            "你考过的最低分是多少？什么科目？",
-            "在班里你最讨厌的人是谁？",
-            "你最讨厌哪个老师？为什么？",
-            "你最喜欢班里的哪个异性同学？",
-            "你学的最好的一门功课是什么？最差呢？",
-            "你有没有抄过别人的作业？",
-            "你在班里被老师当众批评过吗？因为什么？",
-            "你小时候最想从事的职业变了吗？",
-            "如果再给你一次机会回到毕业那天，你会对那个ta说什么？",
-            "你最近一次哭是因为什么？",
-            "你觉得自己在学校是受欢迎的人吗？",
-            "有没有被校园霸凌或孤立过的经历？",
-            "你最羡慕班上哪个同学？为什么？"
-        ]
-    };
+        function getCurrentData() { return currentMode === 'truth' ? truthData : dareData; }
+        function getCategories() { return Object.keys(getCurrentData()); }
 
-    const dareData = {
-        "破冰热身类": [
-            "模仿一位在座朋友的经典动作或口头禅。",
-            "用五种不同的语调说"我爱你"。",
-            "让大家选一个超级沙雕的滤镜，用来自拍并发朋友圈（保留1小时）。",
-            "模仿在场3个不同人的笑声。",
-            "做一个大家都满意的鬼脸。",
-            "闭眼左转三圈右转三圈，睁眼大喊"我没晕！"",
-            "模仿一种动物，直到大家猜中为止。",
-            "用五种不同情绪读一段天气预报。",
-            "接下来的三轮，请用小组选定的口音说话。",
-            "无音乐跳舞1分钟。",
-            "真诚赞美房间里的三个人。",
-            "接下来10分钟只能说押韵的话。",
-            "一边大声数数一边做30个深蹲。",
-            "让右边的人用可洗笔在你脸上画一个图案。",
-            "接下来的10分钟用第三人称称呼自己。"
-        ],
-        "情侣专属类": [
-            "给你的伴侣做2分钟的肩部按摩，必须认真！",
-            "分享一下关于你们关系中最让你尴尬的故事。",
-            "现在就给你的伴侣写一封简短的情书，然后大声朗读出来。",
-            "教你的伴侣一件你擅长但ta不会的事。",
-            "用3分钟重现你们的第一次约会场景。",
-            "让你的伴侣在你的社交媒体上发布任何ta想发的内容。",
-            "真诚地赞美你的伴侣三句（不能重复、不能敷衍）。",
-            "（充满爱意地）模仿一下你的伴侣的小动作或口头禅。",
-            "为下周安排一次惊喜约会，并分享细节。",
-            "明天让你的伴侣帮你挑选衣服。"
-        ],
-        "职场团建类": [
-            "用你最喜欢的电影角色的风格，发表一段30秒的励志演讲。",
-            "在团队聊天中只用表情符号发送一条消息，看大家能不能猜出来。",
-            "（友好地）模仿一下你的直属领导。",
-            "请仅用歌曲名描述你的工作内容。",
-            "带领大家进行1分钟的引导冥想。",
-            "在两分钟内教会小组一项你掌握的技能（工作无关也可以）。",
-            "当场创作并展示公司新标语。",
-            "真诚地赞美房间里的三个人（必须涉及工作方面）。",
-            "以快进模式重现你的晨间日常。",
-            "用最夸张的方式演示你接客户电话时的语气。"
-        ],
-        "青少年校园类": [
-            "一边唱字母歌一边做20个开合跳。",
-            "让别人浏览你的手机相册30秒。",
-            "在你的社交平台分享一张童年时期的尴尬照片。",
-            "接下来10分钟请用英式口音（或其他方言）说话。",
-            "尽力模仿一位老师（不要说出名字！让大家猜）。",
-            "尽量忍住5分钟不笑（小组会想方设法逗你）。",
-            "吃一勺由小组选定的调味品。",
-            "在下一轮之前，扮演你最喜欢的动物。",
-            "把你最尴尬的舞步教给大家。",
-            "对你的同桌/室友来一段即兴的"颁奖致辞"。"
-        ],
-        "表演才艺类": [
-            "对你选择的人进行一次真挚的友情告白（或假爱情告白），必须有眼神接触！",
-            "用夸张哑剧表演你最大的缺点/优点，让大家猜。",
-            "放一首嗨歌，用你最性感（或最沙雕）的方式跳30秒。",
-            "模仿在场的某个人，直到大家猜出是谁。",
-            "直视着由大家选出的某个人，唱一首情歌。",
-            "模仿一个以性感/古怪著称的名人。",
-            "脱下一只袜子，把它当手偶讲一个小故事。",
-            "假装你是在执行任务的特工，用想象的对讲机描述房间和这里的人。",
-            "假装因为输掉游戏而戏剧性地大哭起来。",
-            "就一个完全荒谬的话题（如"甜甜圈中间洞的重要性"）发表严肃激情的演讲。",
-            "用一个鞠躬或"扔麦"动作来结束游戏。",
-            "唱《青藏高原》最后一句。",
-            "学超级名模走秀，绕桌子一圈。",
-            "重温《大话西游》经典对白，现场满意为止！",
-            "跳草裙舞。",
-            "用家乡话表演《大话西游》经典段落。",
-            "躺在床上摆pose说"饭在锅里，我在床上"。",
-            "表演一段即兴rap，内容是夸赞在场的某个人。",
-            "唱一首老男孩（或你拿手的歌）的高潮部分。",
-            "深情朗诵骆宾王的《鹅》。",
-            "表演张倾城之"我脱我穿我再脱我再穿"。",
-            "模仿奥特曼经典造型，对指定的人说"我要代表月亮消灭你！"",
-            "背对着大家扭屁股唱"洗刷刷"。",
-            "学水兵月做动作，对某人大喊"我要代替月亮惩罚你！"",
-            "扮演你的角色被抽到"最烂演员奖"时的获奖感言。"
-        ],
-        "手机/社交媒体类": [
-            "大声读出你和你暗恋对象/前任的最后一段聊天记录。",
-            "让你右边的人在你手机相册里选一张糗照，展示给大家看。",
-            "展示你音乐App上最近5个播放记录。",
-            "把你解锁的手机交右边的人，让他/她给通讯录第一个联系人发一个奇怪emoji。",
-            "展示你手机备忘录最近写的一条。",
-            "给最近聊过天的人发一张你做鬼脸的自拍。",
-            "展示你手机的壁纸（如果很奇怪，要解释为什么！）。",
-            "在社交平台发一条超级神秘的状态（如："有时候，眼见不一定为实……"），至少保留1小时。",
-            "给暗恋的人（或微信第3个联系人）发一条语音，唱一首土味情歌副歌。",
-            "给爸妈打电话，试着让他们相信一个疯狂的故事，至少持续1分钟。",
-            "给家庭群发送一段你唱歌的语音消息。",
-            "在社交平台发一张你现在的照片，配文"感觉自己很可爱，可能会删"。",
-            "让别人在你的社交媒体上发布一条状态。",
-            "给一年多没联系的人发短信，然后截图对方的回复。",
-            "把你手机相册里第42张照片发到群里。",
-            "打电话给朋友，用尽可能复杂的方式解释"真心话大冒险"的规则。",
-            "让别人随机帮你设计一个微信头像，用24小时。",
-            "给你最近通话记录里的第一个人发一个🍆或🤡emoji。",
-            "搜索你自己的名字，把最搞笑的结果念出来。",
-            "把手机解锁后交给右边的人自由操作1分钟。"
-        ],
-        "互动接触类": [
-            "给在场最不熟的人一个持续10秒的真正拥抱。",
-            "和你对面的人交换一件显眼饰品（戒指、手链、帽子等），直到游戏结束。",
-            "给左边的人来个30秒的手部按摩。",
-            "蒙上眼睛，猜谁亲了你的脸颊（或碰了你的手臂）。",
-            "和对面的人进行"死亡对视挑战"，谁先笑谁喝一口。",
-            "和你右边的人深情对视，并对他/她唱《老鼠爱大米》高潮部分。",
-            "和离你最近的一位同性十指相扣10秒，含情脉脉说"我爱你"。",
-            "背起现场某个异性绕场一圈。",
-            "与本桌离你最近的一位异性拥抱十秒钟。",
-            "邀请一位异性为你唱情歌（或与你情歌对唱）。",
-            "抱一位异性直到下一轮游戏结束。",
-            "找离你最近的人喝交杯酒。",
-            "选一个人，对他/她表白一分钟。",
-            "和右边第一个异性关在厕所/小房间里等一轮游戏结束。",
-            "把右边第一个异性横抱起来。",
-            "两人面对面作搓澡状，屁股一扭一扭，唱"洗刷刷"。",
-            "男生单腿下跪，女生伸手，男生亲女生手背。",
-            "与你对面的人交换一件上衣（限方便穿脱的情况下）。",
-            "拥抱你觉得今晚穿得最好看的人。",
-            "让你右边的人在你身上任何一个地方写字，保留到游戏结束。"
-        ],
-        "喊话/街头类": [
-            "站起来，大喊"我是超人，我要回家了！"，并以飞行姿势跑出去。",
-            "对窗外大喊"我好寂寞啊！"",
-            "抓着铁门/门框大喊"放我出去！"",
-            "到街上大喊"卖拖鞋啦～2块一双，买一送3！"",
-            "对一个陌生人说："打扰了，我不会看表，请您看一下我的手表上显示的是几点。"",
-            "找一个附近不认识的异性，问对方"你喜不喜欢我？"",
-            "对陌生人大声说两遍"我喜欢你！"",
-            "在厕所里唱歌，让外面的人能听到。",
-            "大喊"燃烧吧，小宇宙！"",
-            "面对墙壁大喊三声"我爱你！"",
-            "对窗外大喊"我是火星来的！"",
-            "去问一个路过的陌生人要QQ号或手机号。",
-            "对一个陌生异性挤眉弄眼，必须让对方看到。",
-            "大喊"我中了500万！"然后假装晕倒。",
-            "在阳台/窗户边大声唱国歌第一句。"
-        ],
-        "搞笑动作类": [
-            "快速原地转三圈，然后不结巴地对左边的人说一句真诚的赞美。",
-            "头上顶一本书，做10个弓步。",
-            "从其他人腿下爬过去换座位。",
-            "模仿某人的走路姿势走到墙边再回来。",
-            "试着用双眼同时做一个"性感眨眼"动作。",
-            "用嘴发出最尴尬的声音。",
-            "右手捏左耳垂，弯腰顺时针转10圈，再金鸡独立15秒。",
-            "俯卧撑15下（或20下，视体力）。",
-            "站到凳子上表演大猩猩捶胸呐喊动作。",
-            "蹲在凳子上作便秘状。",
-            "头顶簸箕手拿笤帚，边跳边唱"我爱劳动，我爱卫生"。",
-            "背对着大家一边扭屁股一边唱"洗刷刷"。",
-            "左手拉右耳，右手拉左耳，从桌子底下爬过去。",
-            "用舌头舔自己的肘部（几乎不可能的任务！）。",
-            "右手跨过后脑勺从左边摸右眼。",
-            "原地转10圈，然后试着走一条直线。",
-            "在下一轮之前表现得像只鸡（含叫声和动作）。",
-            "仅用脚趾剥一根香蕉。",
-            "不照镜子化完妆，带着这个妆容打完剩下的游戏。",
-            "让另一个玩家挠你痒痒30秒，不许躲。",
-            "假装你是一只在求偶的孔雀，绕场一圈。",
-            "用膝盖走路从房间这头到那头。",
-            "倒立（靠墙也行）坚持10秒，如果做不到就罚酒。",
-            "模仿机器人做所有动作，直到下一个人抽到你。",
-            "把你的两只鞋的左右脚换过来穿，直到游戏结束。"
-        ],
-        "经典惩罚与整蛊类": [
-            "深情吻墙10秒。",
-            "让某人用可洗的笔在你额头上写一个词，保留到游戏结束。",
-            "吃下在场每个人为你夹的菜（可能混入奇怪组合！）。",
-            "模仿脑白金广告，边唱边跳。",
-            "选一个男生一边捶他胸一边说"你好讨厌哦～～"",
-            "读"凤姐体"自白：我从9岁起博览群书，20岁达到顶峰，智商前300年后300年无人能及……",
-            "用笔在额头上画一个乌龟，直到游戏结束。",
-            "把外套脱掉给某个人穿上。",
-            "模仿古代特殊职业女子拉客。",
-            "学水兵月做动作，对某人说"我要代替月亮惩罚你！"",
-            "模仿芙蓉姐姐S造型。",
-            "认真模仿动物叫声，直到被猜中。",
-            "和一件没有生命的物体（植物、台灯……）疯狂调情1分钟。",
-            "假装你在面试一个完全不懂的领域，保持严肃！",
-            "如果戴太阳镜，把它倒着戴直到下一轮。",
-            "把手纸当围巾围在脖子上持续一轮。",
-            "任选两个男生一起摆芙蓉姐姐S形。",
-            "男生摸自己胸说"唉，太小了"。",
-            "慢慢地、性感地把上衣撩起到不能再撩，并柔声说"我好寂寞啊"。",
-            "喝一小口泡菜汁、醋或由小组指定的奇怪液体。",
-            "情景剧表演："锄禾日当午"桥段（一男一女）。",
-            "一人用嘴吸住纸牌，另一人用嘴从另一面吸住移走。",
-            "让右边的人用发胶给你设计一个新发型。",
-            "给别人任意涂指甲油。",
-            "吃一勺由大家投票选出的最黑暗料理组合。"
-        ],
-        "有趣搞笑向": [
-            "打电话给最近的披萨店，认真地问他们卖不卖墨西哥卷饼。",
-            "在别人的"为你推荐"页面尝试跳第一个舞蹈动作。",
-            "接下来15分钟只能用第三人称称呼自己。",
-            "用你最浮夸的方式表演你早晨起床的全过程。",
-            "让大家给你指定一个奇怪的走路姿势，保持到下一轮。",
-            "用Rap的方式介绍今天的天气状况。",
-            "假装你是一个正在直播的带货主播，推销你脚上的袜子。",
-            "用TVB配音腔朗读一段食品包装上的配料表。",
-            "表演"第一次见到雪/见到海"的夸张反应。",
-            "假装手机响了，接起来进行一段完全虚构的1分钟对话。",
-            "用最慢的慢动作表演你打喷嚏的全过程。",
-            "把在场某个人的名字编成一首五言绝句念出来。",
-            "模仿抖音/快手上最火的一个梗/动作。",
-            ""不小心"把一杯水打翻，然后用最浮夸的方式收拾。",
-            "给在场的每个人起一个江湖外号，并解释为什么。"
-        ],
-        "大胆成年人向": [
-            "与右侧的玩家交换一件衣服。",
-            "在其他人试图用谈话分散你注意力的情况下，保持平板支撑1分钟。",
-            "真诚地赞美房间里某人的外貌/身材（必须具体）。",
-            "现在就做20个俯卧撑（做不了就脱一件外套）。",
-            "为房间里的某人演唱一首浪漫歌曲，必须深情对视。",
-            "分享一张你手机里最不想让人看到的照片。",
-            "让群组成员阅读你最近的一段聊天记录（你可以屏蔽一个人）。",
-            "给你的前任发一条"最近还好吗"，展示回复。",
-            "和对面的人用嘴撕一张纸，直到撕到不能再小。",
-            "选择一个人，在他/她耳边用气声说一句让对方脸红的话。",
-            "讲一个"未成年人不宜"的段子（视气氛而定）。",
-            "详细描述你最糟糕的一次约会/恋爱糗事，有劲爆细节但不说名字。",
-            "公开你最近一次买的、你觉得丢人或没用的东西。",
-            "让某人用眼罩/布蒙住你的眼睛，猜谁碰了你的哪个部位。",
-            "跪地对在场某人进行30秒的"求婚演练"。"
-        ]
-    };
+        function switchMode(mode) {
+            currentMode = mode;
+            selectedCategory = null;
+            document.querySelectorAll('.mode-tab').forEach(function(tab) { tab.classList.remove('active'); });
+            document.querySelector('.mode-tab.' + (mode === 'truth' ? 'truth' : 'dare')).classList.add('active');
+            var drawBtn = document.getElementById('drawBtn');
+            drawBtn.className = 'draw-btn ' + (mode === 'truth' ? 'truth-btn' : 'dare-btn');
+            drawBtn.textContent = mode === 'truth' ? '🎲 抽取真心话' : '🎯 抽取大冒险';
+            document.getElementById('allBtn').classList.add('active');
+            document.querySelectorAll('.category-chip').forEach(function(c) { c.classList.remove('active', 'truth-chip', 'dare-chip'); });
+            renderCategoryChips();
+            updateStats();
+            resetResult();
+        }
 
-    // ==================== 游戏状态 ====================
-    let currentMode = 'truth';  // 'truth' | 'dare'
-    let selectedCategory = null;  // null means all categories
+        function renderCategoryChips() {
+            var cats = getCategories();
+            var data = getCurrentData();
+            var html = '';
+            for (var i = 0; i < cats.length; i++) {
+                var c = cats[i];
+                html += '<button class="category-chip" data-category="' + c + '" onclick="selectCategory(\'' + c.replace(/'/g, '\\\'') + '\')">' + c + '<span class="count">(' + data[c].length + ')</span></button>';
+            }
+            document.getElementById('categoryChips').innerHTML = html;
+        }
 
-    // ==================== 初始化 ====================
-    function init() {
-        renderCategoryChips();
-        updateStats();
-    }
+        function selectCategory(category) {
+            if (selectedCategory === category) {
+                selectedCategory = null;
+                document.getElementById('allBtn').classList.add('active');
+                document.querySelectorAll('.category-chip').forEach(function(c) { c.classList.remove('active', 'truth-chip', 'dare-chip'); });
+            } else {
+                selectedCategory = category;
+                document.getElementById('allBtn').classList.remove('active');
+                document.querySelectorAll('.category-chip').forEach(function(c) {
+                    c.classList.remove('active', 'truth-chip', 'dare-chip');
+                    if (c.dataset.category === category) {
+                        c.classList.add('active');
+                        c.classList.add(currentMode === 'truth' ? 'truth-chip' : 'dare-chip');
+                    }
+                });
+            }
+            updateStats();
+            resetResult();
+        }
 
-    function getCurrentData() {
-        return currentMode === 'truth' ? truthData : dareData;
-    }
-
-    function getCategories() {
-        return Object.keys(getCurrentData());
-    }
-
-    // ==================== 模式切换 ====================
-    function switchMode(mode) {
-        currentMode = mode;
-        selectedCategory = null;
-
-        // 更新标签样式：只移除 active，保留 truth/dare 标识类
-        document.querySelectorAll('.mode-tab').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        document.querySelector(`.mode-tab.${mode === 'truth' ? 'truth' : 'dare'}`).classList.add('active');
-
-        // 更新抽取按钮
-        const drawBtn = document.getElementById('drawBtn');
-        drawBtn.className = 'draw-btn ' + (mode === 'truth' ? 'truth-btn' : 'dare-btn');
-        drawBtn.textContent = mode === 'truth' ? '🎲 抽取真心话' : '🎯 抽取大冒险';
-
-        // 重置全部按钮
-        document.getElementById('allBtn').classList.add('active');
-        document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active', 'truth-chip', 'dare-chip'));
-
-        // 重新渲染类别
-        renderCategoryChips();
-        updateStats();
-
-        // 清空结果
-        resetResult();
-    }
-
-    // ==================== 类别选择 ====================
-    function renderCategoryChips() {
-        const container = document.getElementById('categoryChips');
-        const categories = getCategories();
-        const data = getCurrentData();
-
-        container.innerHTML = categories.map(cat => {
-            const count = data[cat].length;
-            return `<button class="category-chip" data-category="${cat}" onclick="selectCategory('${cat.replace(/'/g, "\\'")}')">
-                ${cat}<span class="count">(${count})</span>
-            </button>`;
-        }).join('');
-    }
-
-    function selectCategory(category) {
-        if (selectedCategory === category) {
-            // 取消选择，回到全部
+        function selectAllCategories() {
             selectedCategory = null;
             document.getElementById('allBtn').classList.add('active');
-            document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active', 'truth-chip', 'dare-chip'));
-        } else {
-            selectedCategory = category;
-            document.getElementById('allBtn').classList.remove('active');
-            document.querySelectorAll('.category-chip').forEach(c => {
-                c.classList.remove('active', 'truth-chip', 'dare-chip');
-                if (c.dataset.category === category) {
-                    c.classList.add('active');
-                    c.classList.add(currentMode === 'truth' ? 'truth-chip' : 'dare-chip');
+            document.querySelectorAll('.category-chip').forEach(function(c) { c.classList.remove('active', 'truth-chip', 'dare-chip'); });
+            updateStats();
+            resetResult();
+        }
+
+        function draw() {
+            var data = getCurrentData();
+            var pool = [];
+            if (selectedCategory) {
+                pool = data[selectedCategory] || [];
+            } else {
+                Object.values(data).forEach(function(items) { pool = pool.concat(items); });
+            }
+            if (pool.length === 0) {
+                showResult('暂无内容，请选择其他类别', '', '');
+                return;
+            }
+            var idx = Math.floor(Math.random() * pool.length);
+            var item = pool[idx];
+            var catName = selectedCategory || '';
+            if (!selectedCategory) {
+                for (var k in data) {
+                    if (data[k].indexOf(item) >= 0) { catName = k; break; }
                 }
-            });
-        }
-        updateStats();
-        resetResult();
-    }
-
-    function selectAllCategories() {
-        selectedCategory = null;
-        document.getElementById('allBtn').classList.add('active');
-        document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active', 'truth-chip', 'dare-chip'));
-        updateStats();
-        resetResult();
-    }
-
-    // ==================== 抽取逻辑 ====================
-    function draw() {
-        const data = getCurrentData();
-        let pool = [];
-
-        if (selectedCategory) {
-            pool = data[selectedCategory] || [];
-        } else {
-            // 合并所有类别
-            Object.values(data).forEach(items => {
-                pool = pool.concat(items);
-            });
+            }
+            var btn = document.getElementById('drawBtn');
+            btn.classList.add('spinning');
+            setTimeout(function() { btn.classList.remove('spinning'); }, 500);
+            var card = document.getElementById('resultCard');
+            card.classList.remove('filled');
+            void card.offsetWidth;
+            setTimeout(function() {
+                showResult(item, catName, currentMode);
+                card.classList.add('filled');
+            }, 300);
         }
 
-        if (pool.length === 0) {
-            showResult('暂无内容，请选择其他类别', '', '');
-            return;
+        function showResult(text, category, mode) {
+            document.getElementById('resultPlaceholder').style.display = 'none';
+            var content = document.getElementById('resultContent');
+            content.style.display = 'block';
+            var badge = document.getElementById('resultBadge');
+            badge.textContent = mode === 'truth' ? '💬 真心话' : '🎯 大冒险';
+            badge.className = 'result-badge ' + (mode === 'truth' ? 'truth-badge' : 'dare-badge');
+            document.getElementById('resultText').textContent = text;
+            document.getElementById('resultCategory').textContent = category ? '📂 ' + category : '';
+            document.getElementById('resultCard').classList.remove('empty');
         }
 
-        // 随机抽取
-        const randomIndex = Math.floor(Math.random() * pool.length);
-        const drawnItem = pool[randomIndex];
+        function resetResult() {
+            document.getElementById('resultPlaceholder').style.display = 'block';
+            document.getElementById('resultContent').style.display = 'none';
+            var card = document.getElementById('resultCard');
+            card.classList.add('empty');
+            card.classList.remove('filled');
+        }
 
-        // 找出所属类别
-        let categoryName = selectedCategory || '';
-        if (!selectedCategory) {
-            for (const [cat, items] of Object.entries(data)) {
-                if (items.includes(drawnItem)) {
-                    categoryName = cat;
-                    break;
-                }
+        function updateStats() {
+            var data = getCurrentData();
+            var total = 0;
+            var catCount = Object.keys(data).length;
+            if (selectedCategory) {
+                total = (data[selectedCategory] || []).length;
+                document.getElementById('statsBar').textContent = '📂 ' + selectedCategory + ' · 共 ' + total + ' 条 · ' + (currentMode === 'truth' ? '真心话' : '大冒险');
+            } else {
+                Object.values(data).forEach(function(items) { total += items.length; });
+                document.getElementById('statsBar').textContent = '📦 全部 ' + catCount + ' 个类别 · 共 ' + total + ' 条 · ' + (currentMode === 'truth' ? '真心话' : '大冒险');
             }
         }
 
-        // 动画效果
-        const drawBtn = document.getElementById('drawBtn');
-        drawBtn.classList.add('spinning');
-        setTimeout(() => drawBtn.classList.remove('spinning'), 500);
+        document.addEventListener('keydown', function(e) {
+            if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); draw(); }
+            else if (e.key === '1') { switchMode('truth'); }
+            else if (e.key === '2') { switchMode('dare'); }
+        });
 
-        // 短暂延迟后显示结果
-        const resultCard = document.getElementById('resultCard');
-        resultCard.classList.remove('filled');
-        void resultCard.offsetWidth; // trigger reflow
-
-        setTimeout(() => {
-            showResult(drawnItem, categoryName, currentMode);
-            resultCard.classList.add('filled');
-        }, 300);
-    }
-
-    function showResult(text, category, mode) {
-        document.getElementById('resultPlaceholder').style.display = 'none';
-        const content = document.getElementById('resultContent');
-        content.style.display = 'block';
-
-        const badge = document.getElementById('resultBadge');
-        badge.textContent = mode === 'truth' ? '💬 真心话' : '🎯 大冒险';
-        badge.className = 'result-badge ' + (mode === 'truth' ? 'truth-badge' : 'dare-badge');
-
-        document.getElementById('resultText').textContent = text;
-        document.getElementById('resultCategory').textContent = category ? `📂 ${category}` : '';
-
-        const card = document.getElementById('resultCard');
-        card.classList.remove('empty');
-    }
-
-    function resetResult() {
-        document.getElementById('resultPlaceholder').style.display = 'block';
-        document.getElementById('resultContent').style.display = 'none';
-        const card = document.getElementById('resultCard');
-        card.classList.add('empty');
-        card.classList.remove('filled');
-    }
-
-    function updateStats() {
-        const data = getCurrentData();
-        let totalCount = 0;
-        let catCount = Object.keys(data).length;
-
-        if (selectedCategory) {
-            totalCount = (data[selectedCategory] || []).length;
-            document.getElementById('statsBar').textContent =
-                `📂 ${selectedCategory} · 共 ${totalCount} 条 · ${currentMode === 'truth' ? '真心话' : '大冒险'}`;
-        } else {
-            Object.values(data).forEach(items => { totalCount += items.length; });
-            document.getElementById('statsBar').textContent =
-                `📦 全部 ${catCount} 个类别 · 共 ${totalCount} 条 · ${currentMode === 'truth' ? '真心话' : '大冒险'}`;
-        }
-    }
-
-    // 键盘快捷键
-    document.addEventListener('keydown', function(e) {
-        if (e.key === ' ' || e.code === 'Space') {
-            e.preventDefault();
-            draw();
-        } else if (e.key === '1') {
-            switchMode('truth');
-        } else if (e.key === '2') {
-            switchMode('dare');
-        }
-    });
-
-    // 初始化
-    init();
+        renderCategoryChips();
+        updateStats();
     </script>
 </body>
 </html>
