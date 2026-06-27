@@ -1011,16 +1011,11 @@
         currentMode = mode;
         selectedCategory = null;
 
-        // 更新标签样式
+        // 更新标签样式：只移除 active，保留 truth/dare 标识类
         document.querySelectorAll('.mode-tab').forEach(tab => {
-            tab.classList.remove('active', 'truth', 'dare');
+            tab.classList.remove('active');
         });
-        const activeTab = document.querySelector(`.mode-tab.${mode === 'truth' ? 'truth' : 'dare'}`);
-        if (mode === 'truth') {
-            document.querySelector('.mode-tab.truth').classList.add('active', 'truth');
-        } else {
-            document.querySelector('.mode-tab.dare').classList.add('active', 'dare');
-        }
+        document.querySelector(`.mode-tab.${mode === 'truth' ? 'truth' : 'dare'}`).classList.add('active');
 
         // 更新抽取按钮
         const drawBtn = document.getElementById('drawBtn');
